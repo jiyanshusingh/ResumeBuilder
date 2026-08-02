@@ -1,0 +1,12 @@
+{
+  "name": "Fractal",
+  "website": "https://fractal.ai",
+  "job_roles": {
+    "Decision Analytics Associate": {
+      "resume_type": "analytics",
+      "required_skills": ["statistical models", "predictive models", "simulation", "data analysis", "optimization", "Python", "presentation"],
+      "keywords": ["statistical", "predictive", "simulation", "decision analytics", "optimization", "actionable insights", "stakeholder presentation", "AI", "generative AI"],
+      "emphasize_metrics": ["Trading engine ROI", "A/B testing statistical methods", "38,500+ labeled trades"]
+    }
+  }
+}

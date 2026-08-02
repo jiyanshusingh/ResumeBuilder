@@ -1,0 +1,12 @@
+{
+  "name": "Biocon",
+  "website": "https://www.bioconworld.com",
+  "job_roles": {
+    "Associate Data Scientist - Biotech": {
+      "resume_type": "biotech",
+      "required_skills": ["Python", "ML", "statistical analysis", "biotech domain", "R&D", "data analysis"],
+      "keywords": ["biotechnology", "ML", "statistical analysis", "R&D", "drug discovery", "biotech data", "modeling"],
+      "emphasize_metrics": ["Hydrogel ROC-AUC", "364-sample benchmark", "SHAP interpretability"]
+    }
+  }
+}

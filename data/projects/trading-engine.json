@@ -1,0 +1,26 @@
+{
+  "name": "AI Trading Engine",
+  "github": "https://github.com/jiyanshusingh/trading-engine",
+  "tags": ["ml", "analytics", "finance", "deployment", "gcp", "docker", "python", "backend"],
+  "short_description": "ML-filtered trading engine where XGBoost predicts P(trade net-profitable after costs). Turned a -₹225k simulated loss into +₹93k profit. 6 parallel strategies on Google Cloud.",
+  "detailed_description": "An ML-filtered multi-strategy trading system where an XGBoost classifier predicts whether each trade will be net-profitable after transaction costs. Deployed 6 parallel strategies on Google Cloud Platform with PostgreSQL logging of 38,500+ labeled trades. Validated with walk-forward testing across 3 disjoint bull/bear market windows.",
+  "metrics": {
+    "software": ["Deployed 6 parallel strategies on GCP", "PostgreSQL logging of 38,500+ labeled trades", "Dockerized architecture", "FastAPI backend"],
+    "analytics": ["₹225k → +₹93k profit turnaround", "95% false-signal reduction via ML filter", "Walk-forward validated across 3 market windows", "38,500+ trades labeled with cost-aware net P&L"],
+    "biotech": ["Cost-aware ML validation framework", "43-feature walk-forward OOS analysis", "Statistical modeling with real-world constraints"],
+    "finance": ["₹225k → +₹93k profit turnaround", "Cost-filtered trade selection", "Walk-forward OOS validated across bear/bull regimes", "Live paper trading with broker reconciliation"],
+    "freelance": ["End-to-end ML trading system deployment", "GCP + Docker + PostgreSQL infrastructure", "Walk-forward validation methodology", "Cost-aware ML filtering"]
+  },
+  "highlights": [
+    "ML trade filter turned ₹225k drawdown into +₹93k profit — 95% false-signal reduction",
+    "Walk-forward validated across 3 disjoint market windows (bear → consolidation → rally)",
+    "Built and deployed scalable infrastructure: XGBoost + FastAPI + GCP Compute Engine + PostgreSQL",
+    "43-feature engineering for cost-aware trade classification",
+    "Paper trading with broker reconciliation + real-time market data integration"
+  ],
+  "technologies": ["Python", "XGBoost", "FastAPI", "GCP", "Docker", "PostgreSQL", "SciPy", "pandas"],
+  "links": {
+    "code": "https://github.com/jiyanshusingh/trading-engine",
+    "live": null
+  }
+}

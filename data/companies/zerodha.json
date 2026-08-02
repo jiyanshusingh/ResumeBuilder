@@ -1,0 +1,18 @@
+{
+  "name": "Zerodha",
+  "website": "https://zerodha.com",
+  "job_roles": {
+    "Quant Developer": {
+      "resume_type": "finance",
+      "required_skills": ["Python", "ML", "statistical modeling", "FastAPI", "GCP", "Docker"],
+      "keywords": ["quant", "algorithmic trading", "ML", "statistical models", "GCP", "Docker"],
+      "emphasize_metrics": ["Trading engine ROI", "Walk-forward validation", "38,500+ labeled trades"]
+    },
+    "Data Scientist": {
+      "resume_type": "analytics",
+      "required_skills": ["Python", "statistical modeling", "ML", "pandas", "A/B testing"],
+      "keywords": ["statistical analysis", "machine learning", "data-driven", "modeling", "A/B testing"],
+      "emphasize_metrics": ["A/B testing dashboard", "38,500+ labeled trades"]
+    }
+  }
+}

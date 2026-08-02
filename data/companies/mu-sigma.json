@@ -1,0 +1,12 @@
+{
+  "name": "Mu Sigma",
+  "website": "https://www.musigma.com",
+  "job_roles": {
+    "Decision Scientist": {
+      "resume_type": "analytics",
+      "required_skills": ["problem solving", "statistical modeling", "data analysis", "decision frameworks", "Python", "R", "SQL"],
+      "keywords": ["decision science", "statistical modeling", "problem solving", "data-driven", "optimization", "analytics consulting"],
+      "emphasize_metrics": ["A/B testing dashboard", "Trading engine validation", "350-sample benchmark"]
+    }
+  }
+}

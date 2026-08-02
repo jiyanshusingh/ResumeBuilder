@@ -1,0 +1,18 @@
+{
+  "name": "Microsoft",
+  "website": "https://microsoft.com",
+  "job_roles": {
+    "Software Engineer": {
+      "resume_type": "software",
+      "required_skills": ["Python", "programming", "software engineering", "system design", "FastAPI", "Docker", "cloud"],
+      "keywords": ["software engineer", "full-stack", "system design", "cloud", "Docker", "FastAPI", "REST API", "scalable"],
+      "emphasize_metrics": ["5 deployed applications", "GCP deployment", "FastAPI backend"]
+    },
+    "Data Scientist": {
+      "resume_type": "analytics",
+      "required_skills": ["Python", "ML", "data analysis", "statistical modeling", "cloud", "Docker"],
+      "keywords": ["cloud", "machine learning", "data science", "statistical", "modeling", "scalable"],
+      "emphasize_metrics": ["ML trading engine", "A/B testing dashboard", "GCP deployment"]
+    }
+  }
+}

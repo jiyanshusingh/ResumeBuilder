@@ -1,0 +1,141 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=1.2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{helvet}
+\usepackage{fontawesome5}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+% Colors
+\definecolor{darkblue}{HTML}{1a1a2e}
+\definecolor{midblue}{HTML}{2c2c4a}
+\definecolor{sectionbg}{HTML}{f0f0f8}
+
+% Section formatting
+\titleformat{\section}{\Large\bfseries\color{darkblue}}{}{0em}{}
+\titlespacing{\section}{0pt}{10pt}{6pt}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    urlcolor=darkblue,
+    linkcolor=darkblue
+}
+
+% List spacing
+\setlist{itemsep=2pt, topsep=2pt}
+
+% No page numbers
+\pagestyle{empty}
+
+\begin{document}
+
+% Header
+\begin{center}
+    {\LARGE \bfseries Jiyanshu Singh}
+    
+    \vspace{4pt}
+    {\small +91 8218608077 \textbullet\ jiyanshusingh1@gmail.com \textbullet\ \href{https://github.com/jiyanshusingh}{\faGithub\ jiyanshusingh} \textbullet\ \href{https://linkedin.com/in/jiyanshusingh}{\faLinkedin\ LinkedIn}}
+    
+    \vspace{2pt}
+    {\footnotesize Rourkela, India (Open to relocation/travel) | Available for relocation and domestic travel}
+    
+    \rule{\textwidth}{0.4pt}
+\end{center}
+
+% Headline
+\begin{center}
+    {\large \color{midblue} B.Tech Biotechnology student | ML Trading Strategist | XGBoost-filtered trading engine (+₹93k) | GCP deployment}
+\end{center}
+
+\vspace{6pt}
+% Summary
+\section*{Summary}
+Quant-leaning builder with B.Tech in Biotechnology. Designed an ML-filtered trading engine (XGBoost, walk-forward validated across 3 market windows) that improved performance from −₹225k to +₹93k. Deployed on GCP with PostgreSQL logging of 38,500+ trades. Strong in statistical modeling and cost-aware optimization.
+
+% Experience
+\section*{Experience}
+\noindent\textbf{Generative AI Intern} \hfill \textit{May 2026 – July 2026}
+
+\noindent\textit{Digitaaztrans Technologies Pvt. Ltd.} \hfill Remote
+\begin{itemize}
+    \item Deployed ML trading system on GCP (Compute Engine + Cloud SQL), serving live market data to 6 parallel strategies
+    \item Built and validated cost-aware trade filters: labeled 38,500+ historical trades, applied walk-forward validation across 3 market windows
+    \item Implemented Bayesian A/B testing dashboard with p-values, power analysis, and PDF report generation for client decision-making
+\end{itemize}
+
+% Projects
+\section*{Projects}
+\noindent\textbf{AI Trading Engine} \hfill \href{https://github.com/jiyanshusingh/trading-engine}{\faGithub}
+\begin{itemize}
+    \item ML trade filter turned ₹225k drawdown into +₹93k profit — 95\% false-signal reduction
+    \item Walk-forward validated across 3 disjoint market windows (bear → consolidation → rally)
+    \item Built and deployed scalable infrastructure: XGBoost + FastAPI + GCP Compute Engine + PostgreSQL
+    \item 43-feature engineering for cost-aware trade classification
+\end{itemize}
+
+\noindent\textbf{A/B Testing Dashboard} \hfill \href{https://ab-testing-dashboard.onrender.com}{\faGlobe} \href{https://github.com/jiyanshusingh/ab-testing-dashboard}{\faGithub}
+\begin{itemize}
+    \item Implements Bayesian Monte Carlo for probabilistic decision-making
+    \item Statistical power analysis and sample size calculation
+    \item Generates consulting-grade PDF reports with visualizations
+    \item Deployed live at ab-testing-dashboard.onrender.com
+\end{itemize}
+
+\noindent\textbf{Invoice Generator} \hfill \href{https://github.com/jiyanshusingh/invoice-generator}{\faGithub}
+\begin{itemize}
+    \item Production-ready invoice generation with PDF export
+    \item Template-based rendering for customizable invoices
+    \item SQLAlchemy ORM for structured data management
+    \item Dockerized deployment ready for scaling
+\end{itemize}
+
+\noindent\textbf{Peptide Hydrogel Prediction} \hfill \href{https://peptide-hydrogel-portal.onrender.com}{\faGlobe} \href{https://github.com/jiyanshusingh/hydrogel_project}{\faGithub}
+\begin{itemize}
+    \item ROC-AUC 0.888 for amyloid classification (WALTZ-DB, 1,415 samples)
+    \item ROC-AUC 0.720 for hydrogel classification (sealed 70-sample test)
+    \item Strict leakage prevention on 364-sample benchmark
+    \item SHAP-based interpretability and cross-phenotype analysis
+\end{itemize}
+
+% Skills
+\section*{Skills}
+\noindent\textbf{ML \& Trading: XGBoost, scikit-learn, pandas, NumPy, SciPy, Statistical Modeling, A/B Testing, Bayesian Methods, Walk-forward Validation}
+
+\noindent\textbf{Cloud \& DevOps: Docker, Docker Compose, Render, Google Cloud Platform, Git, FastAPI, Flask, REST APIs, JINJA2, ReportLab}
+
+\noindent\textbf{Programming: Python (proficient), SQL, JavaScript (basic), C++ (basic)}
+
+\noindent\textbf{Tools: PostgreSQL, SQLAlchemy, SQLite}
+
+% Education
+\section*{Education}
+\noindent\textbf{B.Tech Biotechnology} \hfill \textbf{7.09 / 10.0 (ongoing)}
+
+\noindent National Institute of Technology, Rourkela -- 2023 – 2027
+
+% Certifications
+\section*{Certifications}
+\begin{itemize}
+    \item AI and Medical Image Informatics for Cross-scale Disease Characterisation and Precision Medicine, IET, Banaras Hindu University (UGC 2.0) (2026)
+    \item Advances in Wearable Molecular Sensors for Continuous Monitoring and Point-of-Care Diagnostic Applications, IET, Banaras Hindu University (UGC 2.0) (2026)
+    \item Microbial Decontamination through Emerging Technologies for Ensuring Food Safety and Quality, IET, Banaras Hindu University (UGC 2.0) (2026)
+    \item Hands-on Training in 3D Design and 3D Printing, IOTA Design \& Innovations Lab, NIT Rourkela (2025)
+\end{itemize}
+
+% Achievements
+\section*{Key Achievements}
+\begin{itemize}
+    \item ML trading engine: turned ₹225k drawdown into +₹93k profit; 38,500+ trades labeled for ML filter, walk-forward OOS validated across 3 market windows
+    \item Deployed 5 production web applications (FastAPI/Flask + Docker + GCP/Render) with live links
+    \item Peptide hydrogel ML research: ROC-AUC 0.888 (amyloid), 0.720 (hydrogel); SHAP explanations; strict leakage prevention on 350-sample benchmark
+\end{itemize}
+
+\end{document}

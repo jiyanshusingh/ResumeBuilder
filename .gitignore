@@ -1,0 +1,15 @@
+# Generated files
+output/*.log
+output/*.aux
+output/*.out
+output/*.toc
+output/*.fls
+output/*.fdb_latexmk
+output/*.pdf
+
+# Tools
+tectonic/
+__pycache__/
+*.pyc
+*.egg-info/
+.DS_Store
