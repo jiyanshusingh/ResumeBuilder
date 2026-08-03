@@ -4,11 +4,12 @@ Resume Analyzer Module
 Handles PDF parsing, skill/keyword extraction, ATS scoring, and gap chart generation.
 Used by web_ui.py for the Analyze Resume tab.
 """
+
+import json
 import os
 import re
-import json
 import tempfile
-from typing import List, Dict, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
 
 try:
     import pdfplumber
@@ -17,16 +18,18 @@ except ImportError:
 
 try:
     import matplotlib
-    matplotlib.use('Agg')
+
+    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.patches import Patch
+
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
 
-from resume_builder import load_company_profile
-from config import DATA_DIR, OUTPUT_DIR
 from ats_scorer import ATSScorer
+from config import DATA_DIR, OUTPUT_DIR
+from resume_builder import load_company_profile
 
 
 class ResumeAnalyzer:
@@ -58,10 +61,19 @@ class ResumeAnalyzer:
     def _detect_sections(self):
         """Detect presence of standard resume sections."""
         lower = self.text.lower()
-        sections = ["experience", "education", "skills", "projects", "summary",
-                     "certifications", "leadership", "awards", "publications"]
+        sections = [
+            "experience",
+            "education",
+            "skills",
+            "projects",
+            "summary",
+            "certifications",
+            "leadership",
+            "awards",
+            "publications",
+        ]
         for sec in sections:
-            self.sections_found[sec] = bool(re.search(rf'\b{sec}\b', lower))
+            self.sections_found[sec] = bool(re.search(rf"\b{sec}\b", lower))
 
     def analyze(self, company: str, role: str) -> Dict:
         """
@@ -147,15 +159,23 @@ def format_analysis_report(result: Dict) -> str:
     lines.append("SKILLS MATCH")
     lines.append("-" * 60)
     total_skills = len(result["matched_skills"]) + len(result["missing_skills"])
-    lines.append(f"Matched: {len(result['matched_skills'])}/{total_skills} — {', '.join(result['matched_skills']) if result['matched_skills'] else 'None'}")
-    lines.append(f"Missing: {len(result['missing_skills'])} — {', '.join(result['missing_skills']) if result['missing_skills'] else 'None'}")
+    lines.append(
+        f"Matched: {len(result['matched_skills'])}/{total_skills} — {', '.join(result['matched_skills']) if result['matched_skills'] else 'None'}"
+    )
+    lines.append(
+        f"Missing: {len(result['missing_skills'])} — {', '.join(result['missing_skills']) if result['missing_skills'] else 'None'}"
+    )
 
     lines.append("\n" + "-" * 60)
     lines.append("KEYWORD MATCH")
     lines.append("-" * 60)
     total_kw = len(result["present_keywords"]) + len(result["missing_keywords"])
-    lines.append(f"Present: {len(result['present_keywords'])}/{total_kw} — {', '.join(result['present_keywords']) if result['present_keywords'] else 'None'}")
-    lines.append(f"Missing: {len(result['missing_keywords'])} — {', '.join(result['missing_keywords']) if result['missing_keywords'] else 'None'}")
+    lines.append(
+        f"Present: {len(result['present_keywords'])}/{total_kw} — {', '.join(result['present_keywords']) if result['present_keywords'] else 'None'}"
+    )
+    lines.append(
+        f"Missing: {len(result['missing_keywords'])} — {', '.join(result['missing_keywords']) if result['missing_keywords'] else 'None'}"
+    )
 
     lines.append("\n" + "-" * 60)
     lines.append("ATS SCORE")
@@ -169,7 +189,9 @@ def format_analysis_report(result: Dict) -> str:
         lines.append("\nRule Breakdown:")
         for rule in ats["rules"]:
             status = "✅" if rule["passed"] else "⚠️"
-            lines.append(f"  {status} {rule['rule_name']}: {rule['score']:.0f}% (weight: {rule['weight']:.0%})")
+            lines.append(
+                f"  {status} {rule['rule_name']}: {rule['score']:.0f}% (weight: {rule['weight']:.0%})"
+            )
             lines.append(f"      {rule['feedback']}")
 
     lines.append("\n" + "-" * 60)
@@ -188,8 +210,12 @@ def format_analysis_report(result: Dict) -> str:
     return "\n".join(lines)
 
 
-def create_skill_gap_chart(matched_skills: List[str], missing_skills: List[str],
-                           present_kw: List[str], missing_kw: List[str]) -> Optional[str]:
+def create_skill_gap_chart(
+    matched_skills: List[str],
+    missing_skills: List[str],
+    present_kw: List[str],
+    missing_kw: List[str],
+) -> Optional[str]:
     """
     Generate a horizontal bar chart comparing matched vs missing skills and keywords.
     Returns the path to the saved PNG, or None on failure.
@@ -198,52 +224,76 @@ def create_skill_gap_chart(matched_skills: List[str], missing_skills: List[str],
         return None
 
     try:
-        fig, axes = plt.subplots(1, 2, figsize=(12, max(6, len(matched_skills + missing_skills) * 0.4)))
+        fig, axes = plt.subplots(
+            1, 2, figsize=(12, max(6, len(matched_skills + missing_skills) * 0.4))
+        )
 
         # --- Skills Chart ---
         all_skills = matched_skills + missing_skills
         if all_skills:
-            colors = ['#4CAF50'] * len(matched_skills) + ['#F44336'] * len(missing_skills)
-            axes[0].barh(range(len(all_skills)), [1] * len(all_skills),
-                         color=colors, height=0.6)
+            colors = ["#4CAF50"] * len(matched_skills) + ["#F44336"] * len(
+                missing_skills
+            )
+            axes[0].barh(
+                range(len(all_skills)), [1] * len(all_skills), color=colors, height=0.6
+            )
             axes[0].set_yticks(range(len(all_skills)))
             axes[0].set_yticklabels(all_skills, fontsize=8)
             axes[0].invert_yaxis()
-            axes[0].set_title('Skills', fontweight='bold', fontsize=11)
-            axes[0].set_xlabel('Present')
+            axes[0].set_title("Skills", fontweight="bold", fontsize=11)
+            axes[0].set_xlabel("Present")
         else:
-            axes[0].text(0.5, 0.5, 'No skills data', ha='center', va='center', transform=axes[0].transAxes)
-            axes[0].set_title('Skills', fontweight='bold')
+            axes[0].text(
+                0.5,
+                0.5,
+                "No skills data",
+                ha="center",
+                va="center",
+                transform=axes[0].transAxes,
+            )
+            axes[0].set_title("Skills", fontweight="bold")
 
         # --- Keywords Chart ---
         all_kw = present_kw + missing_kw
         if all_kw:
-            colors_kw = ['#2196F3'] * len(present_kw) + ['#FF9800'] * len(missing_kw)
-            axes[1].barh(range(len(all_kw)), [1] * len(all_kw),
-                         color=colors_kw, height=0.6)
+            colors_kw = ["#2196F3"] * len(present_kw) + ["#FF9800"] * len(missing_kw)
+            axes[1].barh(
+                range(len(all_kw)), [1] * len(all_kw), color=colors_kw, height=0.6
+            )
             axes[1].set_yticks(range(len(all_kw)))
             axes[1].set_yticklabels(all_kw, fontsize=8)
             axes[1].invert_yaxis()
-            axes[1].set_title('Keywords', fontweight='bold', fontsize=11)
-            axes[1].set_xlabel('Present')
+            axes[1].set_title("Keywords", fontweight="bold", fontsize=11)
+            axes[1].set_xlabel("Present")
         else:
-            axes[1].text(0.5, 0.5, 'No keyword data', ha='center', va='center', transform=axes[1].transAxes)
-            axes[1].set_title('Keywords', fontweight='bold')
+            axes[1].text(
+                0.5,
+                0.5,
+                "No keyword data",
+                ha="center",
+                va="center",
+                transform=axes[1].transAxes,
+            )
+            axes[1].set_title("Keywords", fontweight="bold")
 
         # Legend for both
         for ax in axes:
-            legend_elements = [
-                Patch(facecolor='#4CAF50', label='Matched'),
-                Patch(facecolor='#F44336', label='Missing'),
-            ] if ax == axes[0] else [
-                Patch(facecolor='#2196F3', label='Present'),
-                Patch(facecolor='#FF9800', label='Missing'),
-            ]
-            ax.legend(handles=legend_elements, loc='lower right', fontsize=8)
+            legend_elements = (
+                [
+                    Patch(facecolor="#4CAF50", label="Matched"),
+                    Patch(facecolor="#F44336", label="Missing"),
+                ]
+                if ax == axes[0]
+                else [
+                    Patch(facecolor="#2196F3", label="Present"),
+                    Patch(facecolor="#FF9800", label="Missing"),
+                ]
+            )
+            ax.legend(handles=legend_elements, loc="lower right", fontsize=8)
 
         plt.tight_layout()
         chart_path = str(OUTPUT_DIR / "skill_gap_chart.png")
-        plt.savefig(chart_path, dpi=150, bbox_inches='tight')
+        plt.savefig(chart_path, dpi=150, bbox_inches="tight")
         plt.close()
         return chart_path
     except Exception as e:
@@ -259,11 +309,11 @@ def analyze_pdf_resume(pdf_file, company: str, role: str) -> Tuple[str, Optional
     (report_string, chart_path).
     """
     # Resolve the PDF file path
-    if hasattr(pdf_file, 'name'):
+    if hasattr(pdf_file, "name"):
         pdf_path = pdf_file.name
     elif isinstance(pdf_file, str):
         pdf_path = pdf_file
-    elif hasattr(pdf_file, 'read'):
+    elif hasattr(pdf_file, "read"):
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
             tmp.write(pdf_file.read())
             pdf_path = tmp.name
@@ -278,13 +328,13 @@ def analyze_pdf_resume(pdf_file, company: str, role: str) -> Tuple[str, Optional
             result["matched_skills"],
             result["missing_skills"],
             result["present_keywords"],
-            result["missing_keywords"]
+            result["missing_keywords"],
         )
         return report, chart_path
     except Exception as e:
         return f"Analysis error: {str(e)}", None
     finally:
-        if not hasattr(pdf_file, 'name') and isinstance(pdf_file, str) is False:
+        if not hasattr(pdf_file, "name") and isinstance(pdf_file, str) is False:
             try:
                 os.unlink(pdf_path)
             except Exception:

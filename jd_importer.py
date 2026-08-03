@@ -13,9 +13,10 @@ Usage:
     result = extract_from_jd_text("We're looking for a Python developer with FastAPI experience...")
     result = extract_from_jd_url("https://example.com/jobs/123")
 """
+
 import re
-from typing import List, Dict, Optional
 from pathlib import Path
+from typing import Dict, List, Optional
 
 try:
     import requests
@@ -30,6 +31,7 @@ except ImportError:
 try:
     import spacy
     from rake_nltk import Rake
+
     HAS_SPACY = True
 except ImportError:
     spacy = None
@@ -40,13 +42,33 @@ except ImportError:
 # Common skill categories for classification
 SKILL_CATEGORIES = {
     "programming": [
-        "python", "java", "c++", "c#", "javascript", "typescript",
-        "sql", "r", "scala", "go", "rust", "kotlin", "swift",
+        "python",
+        "java",
+        "c++",
+        "c#",
+        "javascript",
+        "typescript",
+        "sql",
+        "r",
+        "scala",
+        "go",
+        "rust",
+        "kotlin",
+        "swift",
     ],
     "cloud": ["aws", "gcp", "azure", "google cloud", "amazon web services"],
     "ml": [
-        "machine learning", "deep learning", "ml", "ai", "nlp", "computer vision",
-        "tensorflow", "pytorch", "scikit-learn", "xgboost", "statistical modeling",
+        "machine learning",
+        "deep learning",
+        "ml",
+        "ai",
+        "nlp",
+        "computer vision",
+        "tensorflow",
+        "pytorch",
+        "scikit-learn",
+        "xgboost",
+        "statistical modeling",
     ],
     "backend": ["fastapi", "flask", "django", "node.js", "rest api", "graphql"],
     "devops": ["docker", "kubernetes", "ci/cd", "terraform", "ansible", "jenkins"],
@@ -54,30 +76,69 @@ SKILL_CATEGORIES = {
     "frontend": ["react", "angular", "vue", "html", "css", "javascript"],
     "tools": ["git", "docker", "kubernetes", "tableau", "power bi", "looker"],
     "analytics": [
-        "a/b testing", "statistics", "data analysis", "statistical modeling",
-        "bayesian", "hypothesis testing", "regression", "forecasting",
+        "a/b testing",
+        "statistics",
+        "data analysis",
+        "statistical modeling",
+        "bayesian",
+        "hypothesis testing",
+        "regression",
+        "forecasting",
     ],
     "finance": [
-        "trading", "quantitative", "risk management", "algorithmic trading",
-        "financial modeling", "derivatives", "portfolio management",
+        "trading",
+        "quantitative",
+        "risk management",
+        "algorithmic trading",
+        "financial modeling",
+        "derivatives",
+        "portfolio management",
     ],
-    "biotech": ["biopython", "biotechnology", "bioinformatics", "genomics", "proteomics"],
+    "biotech": [
+        "biopython",
+        "biotechnology",
+        "bioinformatics",
+        "genomics",
+        "proteomics",
+    ],
 }
 
 # Common action verbs found in job descriptions
 ACTION_VERBS = [
-    "develop", "build", "implement", "design", "create", "manage",
-    "lead", "execute", "analyze", "optimize", "improve", "deploy",
-    "collaborate", "coordinate", "mentor", "advise", "consult",
-    "recommend", "evaluate", "research", "test", "validate",
-    "automate", "streamline", "integrate", "configure", "maintain",
+    "develop",
+    "build",
+    "implement",
+    "design",
+    "create",
+    "manage",
+    "lead",
+    "execute",
+    "analyze",
+    "optimize",
+    "improve",
+    "deploy",
+    "collaborate",
+    "coordinate",
+    "mentor",
+    "advise",
+    "consult",
+    "recommend",
+    "evaluate",
+    "research",
+    "test",
+    "validate",
+    "automate",
+    "streamline",
+    "integrate",
+    "configure",
+    "maintain",
 ]
 
 # Metrics patterns commonly found in job descriptions
 METRIC_PATTERNS = [
-    r"(\d+[\d,]*\s*%)",          # Percentages: 25%, 50%
+    r"(\d+[\d,]*\s*%)",  # Percentages: 25%, 50%
     r"(₹\s*\d+[\d,]*\s*(?:k|K|lakh|crore)?)",  # Indian Rupees
-    r"(\$\s*\d+[\d,]*\s*(?:k|K|m|M)?)",        # US Dollars
+    r"(\$\s*\d+[\d,]*\s*(?:k|K|m|M)?)",  # US Dollars
     r"(\d+[\d,]*\s*(?:users|trades|requests|transactions|records))",
     r"(\d+[\d,]*\s*(?:%+))",  # Multiple % signs
 ]
@@ -95,7 +156,7 @@ def fetch_url_content(url: str, timeout: int = 10) -> str:
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                      "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
 
     try:
@@ -111,7 +172,11 @@ def fetch_url_content(url: str, timeout: int = 10) -> str:
         element.decompose()
 
     # Try to find main content area
-    main_content = soup.find("main") or soup.find("article") or soup.find("div", class_="job-description")
+    main_content = (
+        soup.find("main")
+        or soup.find("article")
+        or soup.find("div", class_="job-description")
+    )
     content = main_content if main_content else soup
 
     text = content.get_text(separator="\n", strip=True)
@@ -136,8 +201,10 @@ def extract_skills_nlp(text: str) -> List[str]:
         try:
             nlp = spacy.load("en_core_web_sm")
         except OSError:
-            print("WARNING: spaCy model 'en_core_web_sm' not found. "
-                  "Install with: python -m spacy download en_core_web_sm")
+            print(
+                "WARNING: spaCy model 'en_core_web_sm' not found. "
+                "Install with: python -m spacy download en_core_web_sm"
+            )
             HAS_SPACY_LOCAL = False
         else:
             HAS_SPACY_LOCAL = True
@@ -225,11 +292,36 @@ def _extract_keywords_fallback(text: str) -> List[str]:
 
     # Extract single-word technical keywords
     common_keywords = [
-        "python", "sql", "docker", "kubernetes", "aws", "gcp", "azure",
-        "fastapi", "flask", "react", "angular", "tensorflow", "pytorch",
-        "xgboost", "pandas", "numpy", "postgresql", "mongodb", "git",
-        "linux", "scala", "java", "javascript", "typescript", "statistics",
-        "analytics", "quantitative", "trading", "modeling", "deployment",
+        "python",
+        "sql",
+        "docker",
+        "kubernetes",
+        "aws",
+        "gcp",
+        "azure",
+        "fastapi",
+        "flask",
+        "react",
+        "angular",
+        "tensorflow",
+        "pytorch",
+        "xgboost",
+        "pandas",
+        "numpy",
+        "postgresql",
+        "mongodb",
+        "git",
+        "linux",
+        "scala",
+        "java",
+        "javascript",
+        "typescript",
+        "statistics",
+        "analytics",
+        "quantitative",
+        "trading",
+        "modeling",
+        "deployment",
     ]
 
     for keyword in common_keywords:
@@ -349,8 +441,10 @@ def extract_from_jd_url(url: str) -> Dict:
                         resume_type, action_verbs
     """
     if BeautifulSoup is None:
-        raise ImportError("beautifulsoup4 and requests are required: "
-                          "pip install beautifulsoup4 requests")
+        raise ImportError(
+            "beautifulsoup4 and requests are required: "
+            "pip install beautifulsoup4 requests"
+        )
 
     text = fetch_url_content(url)
     result = extract_from_jd_text(text)
@@ -419,8 +513,8 @@ def format_jd_result(result: Dict) -> str:
 
 
 if __name__ == "__main__":
-    import sys
     import json
+    import sys
 
     if len(sys.argv) < 2:
         print("Usage: python jd_importer.py <text|url|file> <content>")

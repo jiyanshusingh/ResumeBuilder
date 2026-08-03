@@ -10,31 +10,77 @@ Two enhancement paths:
   2. Rule-based fallback: when Ollama is unavailable, applies deterministic
      rewrites (strong action verbs, metric guidance) so the feature never errors.
 """
+
 import json
 import re
 import urllib.request
-from typing import List, Dict, Any, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 OLLAMA_BASE = "http://localhost:11434"
 
 # Weak / passive verb-start phrases that trigger "weak bullet" detection.
 WEAK_LEADINS = [
-    "responsible for", "responsible to", "worked on", "worked with",
-    "worked at", "assisted with", "assisted in", "helped with", "helped",
-    "was responsible", "was in charge", "was part of", "involved in",
-    "participated in", "tasked with", "had to", "needed to", "handled",
-    "supported", "i was", "i am",
+    "responsible for",
+    "responsible to",
+    "worked on",
+    "worked with",
+    "worked at",
+    "assisted with",
+    "assisted in",
+    "helped with",
+    "helped",
+    "was responsible",
+    "was in charge",
+    "was part of",
+    "involved in",
+    "participated in",
+    "tasked with",
+    "had to",
+    "needed to",
+    "handled",
+    "supported",
+    "i was",
+    "i am",
 ]
 
 # Strong action verbs (from ats_scorer vocabulary, extended).
 STRONG_VERBS = [
-    "managed", "led", "built", "created", "developed", "designed",
-    "implemented", "deployed", "optimized", "improved", "increased",
-    "reduced", "launched", "engineered", "analyzed", "established",
-    "generated", "initiated", "coordinated", "executed", "produced",
-    "supervised", "trained", "transformed", "converted", "delivered",
-    "automated", "architected", "streamlined", "scaled", "drove",
-    "spearheaded", "accelerated", "modernized", "expanded", "owned",
+    "managed",
+    "led",
+    "built",
+    "created",
+    "developed",
+    "designed",
+    "implemented",
+    "deployed",
+    "optimized",
+    "improved",
+    "increased",
+    "reduced",
+    "launched",
+    "engineered",
+    "analyzed",
+    "established",
+    "generated",
+    "initiated",
+    "coordinated",
+    "executed",
+    "produced",
+    "supervised",
+    "trained",
+    "transformed",
+    "converted",
+    "delivered",
+    "automated",
+    "architected",
+    "streamlined",
+    "scaled",
+    "drove",
+    "spearheaded",
+    "accelerated",
+    "modernized",
+    "expanded",
+    "owned",
 ]
 
 # Lead-in phrase -> strong replacement verb.
@@ -96,8 +142,12 @@ def detect_weak_bullet(bullet: str) -> Dict[str, Any]:
     """
     bullet = (bullet or "").strip()
     if not bullet:
-        return {"is_weak": True, "has_metric": False, "has_strong_lead": False,
-                "reasons": ["empty bullet"]}
+        return {
+            "is_weak": True,
+            "has_metric": False,
+            "has_strong_lead": False,
+            "reasons": ["empty bullet"],
+        }
 
     has_metric = bool(METRIC_RE.search(bullet))
     has_strong = _has_strong_lead(bullet)
@@ -112,8 +162,12 @@ def detect_weak_bullet(bullet: str) -> Dict[str, Any]:
         reasons.append("no quantified metric")
 
     is_weak = weak_leadin is not None or not has_strong or not has_metric
-    return {"is_weak": is_weak, "has_metric": has_metric,
-            "has_strong_lead": has_strong, "reasons": reasons}
+    return {
+        "is_weak": is_weak,
+        "has_metric": has_metric,
+        "has_strong_lead": has_strong,
+        "reasons": reasons,
+    }
 
 
 def _normalize(bullet: str) -> str:
@@ -174,13 +228,18 @@ def enhance_with_llm(bullet: str, model: str = "gemma2:2b") -> Optional[str]:
         "[metric] placeholder. Output ONLY the rewritten bullet.\n\n"
         "Bullet: {bullet}".format(bullet=bullet)
     )
-    payload = json.dumps({
-        "model": model, "prompt": prompt, "stream": False,
-        "options": {"temperature": 0.4, "num_predict": 120},
-    }).encode()
+    payload = json.dumps(
+        {
+            "model": model,
+            "prompt": prompt,
+            "stream": False,
+            "options": {"temperature": 0.4, "num_predict": 120},
+        }
+    ).encode()
 
     req = urllib.request.Request(
-        f"{OLLAMA_BASE}/api/generate", data=payload,
+        f"{OLLAMA_BASE}/api/generate",
+        data=payload,
         headers={"Content-Type": "application/json"},
     )
     try:
@@ -191,9 +250,9 @@ def enhance_with_llm(bullet: str, model: str = "gemma2:2b") -> Optional[str]:
         return None
 
 
-def enhance_bullets(bullets: List[str],
-                    use_llm: bool = True,
-                    model: str = "gemma2:2b") -> Dict[str, Any]:
+def enhance_bullets(
+    bullets: List[str], use_llm: bool = True, model: str = "gemma2:2b"
+) -> Dict[str, Any]:
     """
     Enhance a list of resume bullets.
 
@@ -208,8 +267,15 @@ def enhance_bullets(bullets: List[str],
         info = detect_weak_bullet(bullet)
 
         if not info["is_weak"]:
-            results.append({"original": bullet, "improved": bullet,
-                            "is_weak": False, "method": "unchanged", "reasons": []})
+            results.append(
+                {
+                    "original": bullet,
+                    "improved": bullet,
+                    "is_weak": False,
+                    "method": "unchanged",
+                    "reasons": [],
+                }
+            )
             continue
 
         improved = None
@@ -223,20 +289,30 @@ def enhance_bullets(bullets: List[str],
             improved = _normalize(bullet)
             method = "rule-based"
 
-        results.append({"original": bullet, "improved": improved,
-                        "is_weak": True, "method": method, "reasons": info["reasons"]})
+        results.append(
+            {
+                "original": bullet,
+                "improved": improved,
+                "is_weak": True,
+                "method": method,
+                "reasons": info["reasons"],
+            }
+        )
 
     weak_count = sum(1 for r in results if r["is_weak"])
-    engine = "Ollama local LLM" if llm_ready else "rule-based fallback (Ollama unavailable)"
-    summary = (f"Processed {len(bullets)} bullet(s). Enhanced {weak_count} weak "
-                f"bullet(s) using {engine}.")
+    engine = (
+        "Ollama local LLM" if llm_ready else "rule-based fallback (Ollama unavailable)"
+    )
+    summary = (
+        f"Processed {len(bullets)} bullet(s). Enhanced {weak_count} weak "
+        f"bullet(s) using {engine}."
+    )
     return {"results": results, "used_llm": llm_ready, "summary": summary}
 
 
 def format_enhancement_report(payload: Dict[str, Any]) -> str:
     """Render enhancement results for the UI."""
-    lines = ["=" * 60, "BULLET ENHANCEMENT", "=" * 60,
-             payload.get("summary", "")]
+    lines = ["=" * 60, "BULLET ENHANCEMENT", "=" * 60, payload.get("summary", "")]
     for item in payload.get("results", []):
         if item["method"] == "unchanged":
             lines.append("\n• (already strong) %s" % item["original"])

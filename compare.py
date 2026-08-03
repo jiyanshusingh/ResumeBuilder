@@ -4,12 +4,13 @@ Resume Comparison Module
 Runs ATS scoring for the same resume against multiple companies and/or roles,
 producing a side-by-side comparison table and an optional bar chart.
 """
-import os
-from typing import List, Dict, Any, Tuple, Optional
 
+import os
+from typing import Any, Dict, List, Optional, Tuple
+
+from ats_scorer import ATSScorer
 from config import DATA_DIR
 from resume_builder import load_company_profile
-from ats_scorer import ATSScorer
 
 COMPANY_DIR = DATA_DIR / "companies"
 
@@ -19,9 +20,7 @@ def list_company_slugs() -> List[str]:
     if not os.path.isdir(COMPANY_DIR):
         return []
     return [
-        f.replace(".json", "")
-        for f in os.listdir(COMPANY_DIR)
-        if f.endswith(".json")
+        f.replace(".json", "") for f in os.listdir(COMPANY_DIR) if f.endswith(".json")
     ]
 
 
@@ -37,9 +36,11 @@ def list_company_roles() -> Dict[str, List[str]]:
     return out
 
 
-def compare_resume(resume_text: str,
-                   companies: Optional[List[str]] = None,
-                   roles: Optional[Dict[str, str]] = None) -> List[Dict[str, Any]]:
+def compare_resume(
+    resume_text: str,
+    companies: Optional[List[str]] = None,
+    roles: Optional[Dict[str, str]] = None,
+) -> List[Dict[str, Any]]:
     """
     Score the same resume text against one or more companies.
     companies: list of company slugs. Defaults to all.
@@ -68,31 +69,35 @@ def compare_resume(resume_text: str,
         try:
             result = ATSScorer(resume_text, file_extension=".pdf").score(slug, role)
         except Exception as e:
-            results.append({
-                "slug": slug,
-                "company": profile.get("name", slug),
-                "role": role,
-                "ats_score": None,
-                "passed_rules": 0,
-                "total_rules": 0,
-                "suggestions": [f"Error scoring: {e}"],
-                "error": True,
-            })
+            results.append(
+                {
+                    "slug": slug,
+                    "company": profile.get("name", slug),
+                    "role": role,
+                    "ats_score": None,
+                    "passed_rules": 0,
+                    "total_rules": 0,
+                    "suggestions": [f"Error scoring: {e}"],
+                    "error": True,
+                }
+            )
             continue
 
         passed = result.get("passed_rules", 0)
         total = result.get("total_rules", 0)
         suggestions = result.get("suggestions", [])[:3]
-        results.append({
-            "slug": slug,
-            "company": profile.get("name", slug),
-            "role": role,
-            "ats_score": round(result.get("overall_score", 0), 1),
-            "passed_rules": passed,
-            "total_rules": total,
-            "suggestions": suggestions,
-            "error": False,
-        })
+        results.append(
+            {
+                "slug": slug,
+                "company": profile.get("name", slug),
+                "role": role,
+                "ats_score": round(result.get("overall_score", 0), 1),
+                "passed_rules": passed,
+                "total_rules": total,
+                "suggestions": suggestions,
+                "error": False,
+            }
+        )
 
     # Sort by score descending (None last)
     results.sort(key=lambda r: (r["ats_score"] is None, -(r["ats_score"] or 0)))
@@ -105,22 +110,29 @@ def comparison_header(results: List[Dict[str, Any]]) -> List[list]:
     rows = []
     for r in results:
         sug = "; ".join(r["suggestions"]) if r["suggestions"] else ""
-        rows.append([
-            r["company"],
-            r["role"],
-            r["ats_score"] if r["ats_score"] is not None else "—",
-            f"{r['passed_rules']}/{r['total_rules']}"
-            if r.get("passed_rules") is not None else "—",
-            sug,
-        ])
+        rows.append(
+            [
+                r["company"],
+                r["role"],
+                r["ats_score"] if r["ats_score"] is not None else "—",
+                (
+                    f"{r['passed_rules']}/{r['total_rules']}"
+                    if r.get("passed_rules") is not None
+                    else "—"
+                ),
+                sug,
+            ]
+        )
     return headers, rows
 
 
-def create_comparison_chart(results: List[Dict[str, Any]],
-                            output_dir: Optional[str] = None) -> Optional[str]:
+def create_comparison_chart(
+    results: List[Dict[str, Any]], output_dir: Optional[str] = None
+) -> Optional[str]:
     """Build a bar chart of ATS scores per company. Returns chart filepath."""
     try:
         import matplotlib
+
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
     except Exception:
@@ -142,8 +154,13 @@ def create_comparison_chart(results: List[Dict[str, Any]],
     ax.axvline(80, color="green", linestyle="--", linewidth=1, label="Target 80+")
     ax.axvline(50, color="orange", linestyle=":", linewidth=1, label="Moderate 50")
     for bar, val in zip(bars, values):
-        ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height() / 2,
-                f"{val}%", va="center", fontsize=9)
+        ax.text(
+            bar.get_width() + 1,
+            bar.get_y() + bar.get_height() / 2,
+            f"{val}%",
+            va="center",
+            fontsize=9,
+        )
     ax.set_xlim(0, max(values) + 20)
     ax.set_xlabel("ATS Score (%)")
     ax.set_title("Resume ATS Score by Company")

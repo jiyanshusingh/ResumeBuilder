@@ -8,26 +8,31 @@ resume so users can verify their resume is machine-readable.
 Pure stdlib - reuses skill/action-verb vocabularies from jd_importer and
 ats_scorer where available.
 """
+
 import re
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 STANDARD_SECTIONS = [
-    "Contact", "Summary", "Objective", "Experience", "Education",
-    "Skills", "Projects", "Certifications", "Awards", "Languages",
-    "Interests", "Publications", "References",
+    "Contact",
+    "Summary",
+    "Objective",
+    "Experience",
+    "Education",
+    "Skills",
+    "Projects",
+    "Certifications",
+    "Awards",
+    "Languages",
+    "Interests",
+    "Publications",
+    "References",
 ]
 
 # Contact regexes
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
-PHONE_RE = re.compile(
-    r"(?:\+?\d{1,3}[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}"
-)
-LINKEDIN_RE = re.compile(
-    r"linkedin\.com/in/[\w-]+", re.IGNORECASE
-)
-GITHUB_RE = re.compile(
-    r"github\.com/[\w-]+", re.IGNORECASE
-)
+PHONE_RE = re.compile(r"(?:\+?\d{1,3}[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}")
+LINKEDIN_RE = re.compile(r"linkedin\.com/in/[\w-]+", re.IGNORECASE)
+GITHUB_RE = re.compile(r"github\.com/[\w-]+", re.IGNORECASE)
 YEARS_RE = re.compile(
     r"(\d{1,2})\s*\+?\s*years?\s*(?:of)?\s*(?:professional\s*)?experience",
     re.IGNORECASE,
@@ -37,7 +42,8 @@ YEARS_RE = re.compile(
 def _load_skill_vocab():
     """Return skill categories and action verbs (with graceful fallback)."""
     try:
-        from jd_importer import SKILL_CATEGORIES, ACTION_VERBS
+        from jd_importer import ACTION_VERBS, SKILL_CATEGORIES
+
         return SKILL_CATEGORIES, ACTION_VERBS
     except Exception:
         return {}, []
@@ -81,6 +87,7 @@ def extract_skills(text: str) -> List[str]:
     """Extract recognized skill tokens from the text, preserving order."""
     try:
         from ats_scorer import ATSScorer
+
         found = ATSScorer._extract_skills_from_text(text)
         if found:
             return found
@@ -90,6 +97,7 @@ def extract_skills(text: str) -> List[str]:
     # Fallback: use jd_importer vocabulary
     try:
         from jd_importer import SKILL_CATEGORIES
+
         lower = text.lower()
         found = []
         for skills in SKILL_CATEGORIES.values():
@@ -121,7 +129,7 @@ def extract_metrics(text: str) -> List[str]:
     found = []
     combined = r"|".join(patterns)
     for m in re.finditer(combined, text):
-        s = text[max(0, m.start() - 30):m.end() + 10].replace("\n", " ")
+        s = text[max(0, m.start() - 30) : m.end() + 10].replace("\n", " ")
         if s not in found:
             found.append(s)
         if len(found) >= 20:
@@ -161,8 +169,7 @@ def parse_resume_for_ats(text: str) -> Dict[str, Any]:
         "contact": contact,
         "sections_found": sections,
         "missing_sections": [
-            s for s in STANDARD_SECTIONS
-            if s not in sections and s != "Contact"
+            s for s in STANDARD_SECTIONS if s not in sections and s != "Contact"
         ],
         "skills_extracted": skills,
         "action_verbs": action_verbs,

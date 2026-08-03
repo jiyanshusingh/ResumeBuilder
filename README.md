@@ -1,78 +1,112 @@
-# Company-Specific Resume Builder
+# Resume Builder Pro
 
-A tool that generates LaTeX resumes tailored to specific companies and job roles, using your project portfolio, certificates, and achievements.
+A company-specific resume builder: generate tailored LaTeX resumes, analyze them
+against job descriptions, get ATS scores, and track your job applications — all
+from a single web app.
 
-## Quick Start
+## Features
+
+**Phase 1 — Foundation**
+- Core LaTeX resume builder with 5 resume types (analytics, software, biotech, finance, freelance)
+- Company profile system with role-specific keywords & metrics
+- CI/CD (GitHub Actions), containerization (Docker), Render deployment config
+
+**Phase 2 — Core Features**
+- 4 LaTeX templates: `default`, `modern`, `minimalist`, `academic`
+- ⚖️ Import a Job Description (text or URL) to auto-extract skills, keywords & metrics
+- 📄 On-page `.tex` editor with compile-to-PDF (Tectonic)
+- 🔍 16-rule ATS scoring engine (skills, keywords, action verbs, metrics, format…)
+
+**Phase 3 — Intelligence**
+- ✨ Bullet enhancement: rewrites weak bullets into strong, quantified ones (local Ollama LLM, with a rule-based fallback)
+- 🔍 Simulated ATS parse preview — see exactly what a parser extracts
+- ⚖️ Compare the same resume across all saved companies (table + chart)
+- 📌 Job application tracker (SQLite) with status funnel, ATS scores, and resume versioning
+
+**Phase 4 — Market Readiness**
+- Production server (`app.py`): FastAPI wrapper with a `/health` endpoint, structured logging
+- Optional basic auth via `APP_USERNAME` / `APP_PASSWORD` env vars
+- Local development with Docker Compose
+
+## Quick Start (local)
 
 ```bash
-# List available company profiles
-python3 resume_builder.py --list
-
-# Build a resume for a specific company + role
-python3 resume_builder.py --company Zerodha --role "Quant Developer"
-
-# Build for Microsoft software role
-python3 resume_builder.py --company Microsoft --role "Software Engineer"
-
-# Build for a biotech company
-python3 resume_builder.py --company Biocon --role "Associate Data Scientist - Biotech"
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm   # optional, enables spaCy skills extraction
+python web_ui.py                          # local Gradio (no auth)
+# http://127.0.0.1:7860
 ```
 
-## Output
+To enable basic auth locally:
 
-Generated resumes are saved to `./output/` as both `.tex` (editable source) and `.pdf` (final resume).
-
-## Adding New Companies
-
-Add `data/companies/<company-name>.json`:
-
-```json
-{
-  "name": "Company Name",
-  "website": "https://company.com",
-  "job_roles": {
-    "Job Title": {
-      "resume_type": "analytics|software|biotech|finance|freelance",
-      "required_skills": ["skill1", "skill2"],
-      "keywords": ["keyword1", "keyword2"],
-      "emphasize_metrics": ["metric 1", "metric 2"]
-    }
-  }
-}
+```bash
+APP_USERNAME=admin APP_PASSWORD=secret python web_ui.py
 ```
 
-Supported `resume_type` values:
-- `analytics` - Emphasizes statistical methods, A/B testing
-- `software` - Focuses on deployment, system design, full-stack
-- `biotech` - Highlights domain expertise, research, modeling
-- `finance` - Stresses trading systems, ROI, risk modeling
-- `freelance` - Generalist summary for client work
+## Quick Start (production)
 
-## How It Works
+Serves the Gradio UI behind FastAPI with `/health` and optional auth:
 
-1. **Profile data** (`data/profile.json`): Your static info (experience, skills, certs, projects)
-2. **Company profiles** (`data/companies/`): Job-specific keyword maps and resume types
-3. **Template engine** (`templates/resume_template.tex.j2`): LaTeX template with placeholder replacement
+```bash
+APP_USERNAME=admin APP_PASSWORD=secret python app.py
+```
 
-The builder:
-- Ranks your projects by relevance to the job keywords
-- Filters certificates to those most relevant
-- Reorders skills by category based on resume type
-- Generates a tailored summary based on the role
-- Outputs both `.tex` source (for manual edits) and compiled `.pdf`
+Health check: `GET /health` → `{"status":"ok",...}` (always public).
+
+### Docker
+
+```bash
+docker compose up --build      # build + run
+# or
+docker build -t resume-builder .
+docker run -p 7860:7860 resume-builder
+```
+
+## Building a resume (CLI)
+
+```bash
+python resume_builder.py --list                                   # companies
+python resume_builder.py --company Zerodha --role "Quant Developer"
+```
+
+Outputs `.tex` + `.pdf` to `./output/`.
 
 ## Requirements
 
-- Python 3.x (`--break-system-packages` may be needed for pip)
-- [Tectonic](https://tectonic.info/) (`brew install tectonic`) for LaTeX compilation
-- `jinja2` Python package
+- Python 3.10+
+- [Tectonic](https://tectonic.info/) (`brew install tectonic`) for PDF compilation
+- Optional: a local [Ollama](https://ollama.com/library/gemma2) install for LLM bullet enhancement
 
-## Project Data
+## Project Structure
 
-Projects are defined in `data/projects/` as individual JSON files with:
-- `name`, `github`, `tags` - identification + categorization  
-- `short_description`, `detailed_description` - copy for different resume types
-- `metrics` - per-resume-type metric mappings
-- `highlights` - always-shown bullet points
-- `technologies` - tech stack
-- `links` - code + live URLs
+```
+app.py          # production server (FastAPI + /health + auth)
+web_ui.py       # Gradio UI (all tabs)
+resume_builder.py   # core template builder
+resume_analyzer.py  # PDF parsing + analysis
+ats_scorer.py       # 16-rule ATS scoring
+jd_importer.py      # JD skill/keyword extraction
+parse_preview.py    # simulated ATS parse
+compare.py          # cross-company ATS comparison + charts
+bullet_enhancer.py  # LLM + rule-based bullet rewriting
+tracker.py          # SQLite job application tracker + versioning
+config.py           # env-driven settings
+data/companies/     # company profiles (JSON)
+data/projects/      # project portfolio (JSON)
+templates/          # LaTeX templates (Jinja2)
+tests/              # pytest suite
+```
+
+## Running tests & lint
+
+```bash
+pytest tests/ -q
+black --check <modules>
+isort --check <modules>
+```
+
+## Data persistence
+
+SQLite (`data/job_applications.db`) is ephemeral on the Render free tier and is
+re-seeded at startup by `tracker.py`. For persistent storage, mount a volume or
+swap to a managed DB.

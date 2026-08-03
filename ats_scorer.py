@@ -5,18 +5,20 @@ Provides comprehensive resume scoring with 15+ rules.
 
 Used by resume_analyzer.py and web_ui.py for the Analyze Resume and Optimize tabs.
 """
-import re
-import os
-from typing import List, Dict, Any, Tuple
-from dataclasses import dataclass, field
 
-from resume_builder import load_company_profile
+import os
+import re
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
+
 from config import OUTPUT_DIR
+from resume_builder import load_company_profile
 
 
 @dataclass
 class ATSRuleResult:
     """Result of a single ATS rule evaluation."""
+
     rule_name: str
     passed: bool
     score: float  # 0-100
@@ -28,7 +30,7 @@ class ATSRuleResult:
 class ATSScorer:
     """
     Comprehensive ATS scoring engine with 15+ rules.
-    
+
     Each rule evaluates a specific aspect of ATS-friendliness:
     1. Skills match (required skills present)
     2. Keyword density (target keywords found)
@@ -50,19 +52,50 @@ class ATSScorer:
 
     # Common action verbs that strengthen resumes
     ACTION_VERBS = [
-        "managed", "led", "built", "created", "developed", "designed",
-        "implemented", "deployed", "optimized", "improved", "increased",
-        "reduced", "launched", "engineered", "analyzed", "designed",
-        "established", "generated", "initiated", "coordinated", "executed",
-        "produced", "supervised", "trained", "transformed", "converted",
+        "managed",
+        "led",
+        "built",
+        "created",
+        "developed",
+        "designed",
+        "implemented",
+        "deployed",
+        "optimized",
+        "improved",
+        "increased",
+        "reduced",
+        "launched",
+        "engineered",
+        "analyzed",
+        "designed",
+        "established",
+        "generated",
+        "initiated",
+        "coordinated",
+        "executed",
+        "produced",
+        "supervised",
+        "trained",
+        "transformed",
+        "converted",
     ]
 
     # Soft skills keywords
     SOFT_SKILLS = [
-        "communication", "leadership", "teamwork", "collaboration",
-        "problem-solving", "critical thinking", "adaptability",
-        "time management", "organization", "attention to detail",
-        "creativity", "critical thinking", "strategic", "analytical",
+        "communication",
+        "leadership",
+        "teamwork",
+        "collaboration",
+        "problem-solving",
+        "critical thinking",
+        "adaptability",
+        "time management",
+        "organization",
+        "attention to detail",
+        "creativity",
+        "critical thinking",
+        "strategic",
+        "analytical",
     ]
 
     # ATS-unfriendly patterns (complex formatting that breaks ATS parsing)
@@ -97,12 +130,12 @@ class ATSScorer:
     def _check_action_verb_usage(self) -> Tuple[int, int]:
         """Count action verbs used in the resume text."""
         # Split into bullet-like lines
-        lines = self.text_lower.split('\n')
+        lines = self.text_lower.split("\n")
         verb_count = 0
         total_bullet_lines = 0
 
         for line in lines:
-            line = line.strip().lstrip('•*-').strip()
+            line = line.strip().lstrip("•*-").strip()
             if len(line) < 10:
                 continue
             total_bullet_lines = max(total_bullet_lines, 1)
@@ -129,15 +162,57 @@ class ATSScorer:
         """Extract potential skills from the resume text using pattern matching."""
         # Common skill keywords
         skill_keywords = [
-            "python", "sql", "java", "c++", "javascript", "typescript",
-            "react", "angular", "vue", "node.js", "django", "flask",
-            "fastapi", "docker", "kubernetes", "aws", "gcp", "azure",
-            "machine learning", "deep learning", "nlp", "computer vision",
-            "statistics", "pandas", "numpy", "scikit-learn", "tensorflow",
-            "pytorch", "xgboost", "postgresql", "mysql", "mongodb",
-            "git", "ci/cd", "agile", "scrum", "tableau", "power bi",
-            "excel", "r", "scala", "go", "rust", "kotlin", "swift",
-            "linux", "bash", "terraform", "ansible", "spark", "hadoop",
+            "python",
+            "sql",
+            "java",
+            "c++",
+            "javascript",
+            "typescript",
+            "react",
+            "angular",
+            "vue",
+            "node.js",
+            "django",
+            "flask",
+            "fastapi",
+            "docker",
+            "kubernetes",
+            "aws",
+            "gcp",
+            "azure",
+            "machine learning",
+            "deep learning",
+            "nlp",
+            "computer vision",
+            "statistics",
+            "pandas",
+            "numpy",
+            "scikit-learn",
+            "tensorflow",
+            "pytorch",
+            "xgboost",
+            "postgresql",
+            "mysql",
+            "mongodb",
+            "git",
+            "ci/cd",
+            "agile",
+            "scrum",
+            "tableau",
+            "power bi",
+            "excel",
+            "r",
+            "scala",
+            "go",
+            "rust",
+            "kotlin",
+            "swift",
+            "linux",
+            "bash",
+            "terraform",
+            "ansible",
+            "spark",
+            "hadoop",
         ]
         found = []
         for skill in skill_keywords:
@@ -216,14 +291,16 @@ class ATSScorer:
         feedback = f"Matched {len(matched)}/{len(required_skills)} required skills"
         if missing:
             feedback += f". Missing: {', '.join(missing[:5])}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Skills Match",
-            passed=passed,
-            score=score,
-            weight=0.15,
-            feedback=feedback,
-            details={"matched": matched, "missing": missing}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Skills Match",
+                passed=passed,
+                score=score,
+                weight=0.15,
+                feedback=feedback,
+                details={"matched": matched, "missing": missing},
+            )
+        )
 
     def _rule_keyword_density(self, keywords: List[str]):
         """Rule 2: Check keyword density (not just presence, but frequency)."""
@@ -246,14 +323,20 @@ class ATSScorer:
         feedback = f"Found {len(present)}/{len(keywords)} keywords ({total_occurrences} total occurrences)"
         if missing:
             feedback += f". Missing: {', '.join(missing[:5])}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Keyword Density",
-            passed=passed,
-            score=score,
-            weight=0.15,
-            feedback=feedback,
-            details={"present": present, "missing": missing, "total_occurrences": total_occurrences}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Keyword Density",
+                passed=passed,
+                score=score,
+                weight=0.15,
+                feedback=feedback,
+                details={
+                    "present": present,
+                    "missing": missing,
+                    "total_occurrences": total_occurrences,
+                },
+            )
+        )
 
     def _rule_document_format(self):
         """Rule 3: Check document format (PDF preferred)."""
@@ -269,14 +352,18 @@ class ATSScorer:
         else:
             score = 40
             passed = False
-            feedback = f"Format: {self.file_ext} (ATS may have trouble parsing this format)"
-        self.rules.append(ATSRuleResult(
-            rule_name="Document Format",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback
-        ))
+            feedback = (
+                f"Format: {self.file_ext} (ATS may have trouble parsing this format)"
+            )
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Document Format",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+            )
+        )
 
     def _rule_section_headers(self):
         """Rule 4: Check for standard resume section headers."""
@@ -289,14 +376,16 @@ class ATSScorer:
         feedback = f"Found {len(found_sections)}/{len(standard_sections)} key sections"
         if missing_sections:
             feedback += f". Missing: {', '.join(missing_sections)}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Section Headers",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback,
-            details={"found": found_sections, "missing": missing_sections}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Section Headers",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+                details={"found": found_sections, "missing": missing_sections},
+            )
+        )
 
     def _rule_section_completeness(self):
         """Rule 5: Check that each section has adequate content."""
@@ -317,7 +406,9 @@ class ATSScorer:
                         break
                 word_count = len(section_text.split())
                 if word_count < 20:
-                    issues.append(f"{section.title()} section is short ({word_count} words)")
+                    issues.append(
+                        f"{section.title()} section is short ({word_count} words)"
+                    )
             else:
                 issues.append(f"{section.title()} section missing")
 
@@ -326,13 +417,15 @@ class ATSScorer:
         feedback = f"{len(issues)} section issues"
         if issues:
             feedback += f": {'; '.join(issues)}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Section Completeness",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Section Completeness",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+            )
+        )
 
     def _rule_action_verbs(self):
         """Rule 6: Check for action verbs in bullet points."""
@@ -345,16 +438,20 @@ class ATSScorer:
             ratio = verb_count / bullet_count
             score = ratio * 100
             passed = ratio >= 0.5
-            feedback = f"Found {verb_count} action verbs in {bullet_count} bullet-like lines"
+            feedback = (
+                f"Found {verb_count} action verbs in {bullet_count} bullet-like lines"
+            )
 
-        self.rules.append(ATSRuleResult(
-            rule_name="Action Verbs",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback,
-            details={"verb_count": verb_count, "bullet_count": bullet_count}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Action Verbs",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+                details={"verb_count": verb_count, "bullet_count": bullet_count},
+            )
+        )
 
     def _rule_metrics(self):
         """Rule 7: Check for quantifiable metrics in resume."""
@@ -364,13 +461,15 @@ class ATSScorer:
         feedback = f"Found {metric_count} quantifiable metrics"
         if metric_count < 3:
             feedback += " (aim for 5+ for optimal impact)"
-        self.rules.append(ATSRuleResult(
-            rule_name="Metrics Presence",
-            passed=passed,
-            score=score,
-            weight=0.08,
-            feedback=feedback
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Metrics Presence",
+                passed=passed,
+                score=score,
+                weight=0.08,
+                feedback=feedback,
+            )
+        )
 
     def _rule_resume_length(self):
         """Rule 8: Check resume length (200-700 words optimal)."""
@@ -387,13 +486,15 @@ class ATSScorer:
             passed = True
             feedback = f"Optimal length ({self.word_count} words)"
 
-        self.rules.append(ATSRuleResult(
-            rule_name="Resume Length",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Resume Length",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+            )
+        )
 
     def _rule_company_name_match(self, company_name: str):
         """Rule 9: Check if company name appears in resume (relevant for cover letter context)."""
@@ -405,13 +506,15 @@ class ATSScorer:
             score = 0
             passed = False
             feedback = f"Company name '{company_name}' not mentioned in resume"
-        self.rules.append(ATSRuleResult(
-            rule_name="Company Name Match",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Company Name Match",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+            )
+        )
 
     def _rule_role_match(self, role: str):
         """Rule 10: Check if role title or similar appears in resume."""
@@ -438,15 +541,21 @@ class ATSScorer:
 
         score = 100 if found_roles else 0
         passed = bool(found_roles)
-        feedback = f"Role-related terms found: {', '.join(found_roles)}" if found_roles else "No role-specific terms found"
-        self.rules.append(ATSRuleResult(
-            rule_name="Role Title Match",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback,
-            details={"found_roles": found_roles}
-        ))
+        feedback = (
+            f"Role-related terms found: {', '.join(found_roles)}"
+            if found_roles
+            else "No role-specific terms found"
+        )
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Role Title Match",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+                details={"found_roles": found_roles},
+            )
+        )
 
     def _rule_education_relevance(self, company: str):
         """Rule 11: Check for relevant education keywords (e.g., CS, Statistics, Biotech)."""
@@ -455,10 +564,30 @@ class ATSScorer:
         resume_type = role_cfg.get("resume_type", "analytics")
 
         education_keywords = {
-            "analytics": ["statistics", "mathematics", "computer science", "data science", "ml"],
-            "software": ["computer science", "software engineering", "information technology"],
-            "biotech": ["biotechnology", "bioinformatics", "computational biology", "biology"],
-            "finance": ["finance", "economics", "quantitative", "financial engineering"],
+            "analytics": [
+                "statistics",
+                "mathematics",
+                "computer science",
+                "data science",
+                "ml",
+            ],
+            "software": [
+                "computer science",
+                "software engineering",
+                "information technology",
+            ],
+            "biotech": [
+                "biotechnology",
+                "bioinformatics",
+                "computational biology",
+                "biology",
+            ],
+            "finance": [
+                "finance",
+                "economics",
+                "quantitative",
+                "financial engineering",
+            ],
             "freelance": ["computer science", "data science", "business"],
         }
 
@@ -466,29 +595,47 @@ class ATSScorer:
         found = [kw for kw in relevant_keywords if kw in self.text_lower]
         score = (len(found) / max(len(relevant_keywords), 1)) * 100
         passed = len(found) >= 1
-        feedback = f"Found {len(found)}/{len(relevant_keywords)} relevant education keywords"
+        feedback = (
+            f"Found {len(found)}/{len(relevant_keywords)} relevant education keywords"
+        )
         if found:
             feedback += f": {', '.join(found)}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Education Relevance",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback,
-            details={"found": found, "resume_type": resume_type}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Education Relevance",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+                details={"found": found, "resume_type": resume_type},
+            )
+        )
 
     def _rule_certification_match(self, keywords: List[str]):
         """Rule 12: Check for certifications related to job keywords."""
         cert_keywords = []
         for kw in keywords:
             kw_lower = kw.lower()
-            if any(term in kw_lower for term in ["ml", "cloud", "aws", "gcp", "data", "analytics"]):
+            if any(
+                term in kw_lower
+                for term in ["ml", "cloud", "aws", "gcp", "data", "analytics"]
+            ):
                 cert_keywords.append(kw_lower)
 
         # Also check for common tech certs
-        common_certs = ["aws", "gcp", "azure", "google cloud", "amazon web services",
-                        "tensorflow", "pytorch", "kubernetes", "docker", "coursera", "udemy"]
+        common_certs = [
+            "aws",
+            "gcp",
+            "azure",
+            "google cloud",
+            "amazon web services",
+            "tensorflow",
+            "pytorch",
+            "kubernetes",
+            "docker",
+            "coursera",
+            "udemy",
+        ]
 
         all_cert_terms = cert_keywords + common_certs
         found_certs = [term for term in all_cert_terms if term in self.text_lower]
@@ -499,21 +646,42 @@ class ATSScorer:
         feedback = f"Found {len(found_certs)} certification-related terms"
         if found_certs:
             feedback += f": {', '.join(found_certs[:5])}"
-        self.rules.append(ATSRuleResult(
-            rule_name="Certification Match",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Certification Match",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+            )
+        )
 
     def _rule_industry_keywords(self, keywords: List[str]):
         """Rule 13: Check for industry-specific keywords."""
         industry_maps = {
-            "tech": ["software", "engineering", "development", "tech", "coding", "full-stack"],
+            "tech": [
+                "software",
+                "engineering",
+                "development",
+                "tech",
+                "coding",
+                "full-stack",
+            ],
             "finance": ["trading", "quantitative", "financial", "investment", "risk"],
-            "analytics": ["analytics", "statistical", "modeling", "predictive", "data-driven"],
-            "biotech": ["biotech", "biotechnology", "research", "scientific", "bioinformatics"],
+            "analytics": [
+                "analytics",
+                "statistical",
+                "modeling",
+                "predictive",
+                "data-driven",
+            ],
+            "biotech": [
+                "biotech",
+                "biotechnology",
+                "research",
+                "scientific",
+                "bioinformatics",
+            ],
         }
 
         found_industries = []
@@ -529,29 +697,37 @@ class ATSScorer:
         feedback = f"Found {len(found_industries)} industry keyword categories: {', '.join(found_industries)}"
         if kw_matches:
             feedback += f" ({len(kw_matches)} job keywords matched)"
-        self.rules.append(ATSRuleResult(
-            rule_name="Industry Keywords",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback,
-            details={"industries": found_industries, "keyword_matches": kw_matches}
-        ))
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Industry Keywords",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+                details={"industries": found_industries, "keyword_matches": kw_matches},
+            )
+        )
 
     def _rule_soft_skills(self):
         """Rule 14: Check for soft skills keywords."""
         found_skills = [skill for skill in self.SOFT_SKILLS if skill in self.text_lower]
         score = (len(found_skills) / max(len(self.SOFT_SKILLS), 1)) * 100
         passed = len(found_skills) >= 2
-        feedback = f"Found {len(found_skills)} soft skills: {', '.join(found_skills[:5])}" if found_skills else "Few or no soft skills mentioned"
-        self.rules.append(ATSRuleResult(
-            rule_name="Soft Skills",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback,
-            details={"found_skills": found_skills}
-        ))
+        feedback = (
+            f"Found {len(found_skills)} soft skills: {', '.join(found_skills[:5])}"
+            if found_skills
+            else "Few or no soft skills mentioned"
+        )
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Soft Skills",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+                details={"found_skills": found_skills},
+            )
+        )
 
     def _rule_ats_friendly_format(self):
         """Rule 15: Check for ATS-friendly formatting (no tables, images, headers/footers)."""
@@ -563,44 +739,60 @@ class ATSScorer:
 
         score = 100 if not found_unfriendly else 100 - len(found_unfriendly) * 15
         passed = not found_unfriendly
-        feedback = "ATS-friendly formatting" if passed else f"ATS-unfriendly elements found: {', '.join(found_unfriendly[:3])}"
-        self.rules.append(ATSRuleResult(
-            rule_name="ATS-Friendly Format",
-            passed=passed,
-            score=score,
-            weight=0.05,
-            feedback=feedback,
-            details={"unfriendly_elements": found_unfriendly}
-        ))
+        feedback = (
+            "ATS-friendly formatting"
+            if passed
+            else f"ATS-unfriendly elements found: {', '.join(found_unfriendly[:3])}"
+        )
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="ATS-Friendly Format",
+                passed=passed,
+                score=score,
+                weight=0.05,
+                feedback=feedback,
+                details={"unfriendly_elements": found_unfriendly},
+            )
+        )
 
     def _rule_contact_info(self):
         """Rule 16: Check for complete contact information."""
         checks = {
-            "email": bool(re.search(r'\b[\w.-]+@[\w.-]+\.\w+\b', self.text)),
-            "phone": bool(re.search(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', self.text)),
+            "email": bool(re.search(r"\b[\w.-]+@[\w.-]+\.\w+\b", self.text)),
+            "phone": bool(re.search(r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b", self.text)),
             "linkedin": "linkedin" in self.text_lower,
             "github": "github" in self.text_lower or "git" in self.text_lower,
-            "location": bool(re.search(r'\b\w+\s*,?\s*(?:India|USA|UK|Remote)\b', self.text)),
+            "location": bool(
+                re.search(r"\b\w+\s*,?\s*(?:India|USA|UK|Remote)\b", self.text)
+            ),
         }
 
         found = [k for k, v in checks.items() if v]
         score = (len(found) / len(checks)) * 100
         passed = len(found) >= 3
-        feedback = f"Found {len(found)}/5 contact info items: {', '.join(found)}" if found else "Missing contact information"
-        self.rules.append(ATSRuleResult(
-            rule_name="Contact Info",
-            passed=passed,
-            score=score,
-            weight=0.03,
-            feedback=feedback,
-            details=checks
-        ))
+        feedback = (
+            f"Found {len(found)}/5 contact info items: {', '.join(found)}"
+            if found
+            else "Missing contact information"
+        )
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Contact Info",
+                passed=passed,
+                score=score,
+                weight=0.03,
+                feedback=feedback,
+                details=checks,
+            )
+        )
 
     def _compile_results(self) -> Dict[str, Any]:
         """Compile all rule results into a comprehensive score."""
         total_weight = sum(r.weight for r in self.rules)
         weighted_score = sum(r.score * r.weight for r in self.rules)
-        overall_score = round(weighted_score / total_weight, 1) if total_weight > 0 else 0
+        overall_score = (
+            round(weighted_score / total_weight, 1) if total_weight > 0 else 0
+        )
 
         # Count passed/failed rules
         passed_count = sum(1 for r in self.rules if r.passed)

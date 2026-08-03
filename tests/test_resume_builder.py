@@ -372,3 +372,39 @@ class TestBulletEnhancer:
         from bullet_enhancer import enhance_bullets
         r = enhance_bullets(["Responsible for sales", "Led team of 5"], use_llm=False)
         assert r["summary"].startswith("Processed 2 bullet(s)")
+
+
+class TestTrackerVersioning:
+    """Tests for tracker.py resume versioning."""
+
+    def test_add_and_list_versions(self):
+        from tracker import JobTracker
+        db = os.path.join(tempfile.mkdtemp(), "t.db")
+        t = JobTracker(db)
+        aid = t.add_application("Acme", "Engineer")
+        assert t.add_resume_version(aid, "/x/a.tex") == 1
+        assert t.add_resume_version(aid, "/x/b.tex") == 2
+        versions = t.list_resume_versions(aid)
+        assert [v["version_number"] for v in versions] == [1, 2]
+        assert t.get_application(aid)["resume_version"] == 2
+
+
+class TestConfigAuth:
+    """Tests for config.py auth + server helpers."""
+
+    def test_auth_disabled_by_default(self, monkeypatch):
+        import config
+        monkeypatch.delenv("APP_USERNAME", raising=False)
+        monkeypatch.delenv("APP_PASSWORD", raising=False)
+        import importlib
+        importlib.reload(config)
+        assert config.auth_enabled() is False
+
+    def test_auth_enabled(self, monkeypatch):
+        import importlib
+        import config
+        monkeypatch.setenv("APP_USERNAME", "u")
+        monkeypatch.setenv("APP_PASSWORD", "p")
+        importlib.reload(config)
+        assert config.auth_enabled() is True
+        assert config.auth_user() == "u"

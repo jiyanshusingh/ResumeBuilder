@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    image: resume-builder:latest
+    ports:
+      - "${PORT:-7860}:7860"
+    environment:
+      - DATA_DIR=/app/data
+      - OUTPUT_DIR=/app/output
+      - PORT=7860
+      - HOST=0.0.0.0
+      - SHARE=false
+      - DEBUG=false
+      # Uncomment to enable basic auth
+      # - APP_USERNAME=${APP_USERNAME:-admin}
+      # - APP_PASSWORD=${APP_PASSWORD:-change-me}
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+    restart: unless-stopped

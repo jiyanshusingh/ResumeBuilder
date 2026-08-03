@@ -3,13 +3,14 @@
 Company-Specific Resume Builder
 Builds tailored LaTeX resumes for different companies and roles.
 """
+
+import argparse
 import json
 import os
-import subprocess
-import argparse
 import re
+import subprocess
 
-from config import TEMPLATE_DIR, DATA_DIR, OUTPUT_DIR
+from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "resume_template.tex.j2")
@@ -22,7 +23,7 @@ def load_json(path):
 
 
 def slugify(s: str) -> str:
-    return re.sub(r'[^a-zA-Z0-9]+', '_', s.lower()).strip('_')
+    return re.sub(r"[^a-zA-Z0-9]+", "_", s.lower()).strip("_")
 
 
 def latex_escape(s: str) -> str:
@@ -31,16 +32,16 @@ def latex_escape(s: str) -> str:
         return ""
     s = str(s)
     # Replace special chars - order matters
-    s = s.replace('\\', '\\textbackslash ')
-    s = s.replace('$', '\\$')
-    s = s.replace('&', '\\&')
-    s = s.replace('%', '\\%')
-    s = s.replace('#', '\\#')
-    s = s.replace('_', '\\_')
-    s = s.replace('{', '\\{')
-    s = s.replace('}', '\\}')
-    s = s.replace('~', '\\textasciitilde ')
-    s = s.replace('^', '\\textasciicircum ')
+    s = s.replace("\\", "\\textbackslash ")
+    s = s.replace("$", "\\$")
+    s = s.replace("&", "\\&")
+    s = s.replace("%", "\\%")
+    s = s.replace("#", "\\#")
+    s = s.replace("_", "\\_")
+    s = s.replace("{", "\\{")
+    s = s.replace("}", "\\}")
+    s = s.replace("~", "\\textasciitilde ")
+    s = s.replace("^", "\\textasciicircum ")
     # Replace ₹ with INR if not using unicode
     # s = s.replace('₹', 'Rs.~')
     return s
@@ -66,8 +67,10 @@ def rank_projects(projects, keyword_weights):
     for proj in projects:
         score = 0
         for kw, weight in keyword_weights.items():
-            if kw.lower() in proj["short_description"].lower() or \
-               kw.lower() in " ".join(proj.get("tags", [])).lower():
+            if (
+                kw.lower() in proj["short_description"].lower()
+                or kw.lower() in " ".join(proj.get("tags", [])).lower()
+            ):
                 score += weight
             if kw.lower() in proj["name"].lower():
                 score += weight * 0.5
@@ -120,7 +123,13 @@ def build_skills_block(skills_dict):
     lines = []
     for category, skills in skills_dict.items():
         escaped = [latex_escape(s) for s in skills]
-        lines.append("\\noindent\\textbf{" + latex_escape(category) + ": " + ", ".join(escaped) + "}")
+        lines.append(
+            "\\noindent\\textbf{"
+            + latex_escape(category)
+            + ": "
+            + ", ".join(escaped)
+            + "}"
+        )
     return "\n\n".join(lines)
 
 
@@ -128,7 +137,12 @@ def build_certifications_block(certs):
     block = "\\begin{itemize}\n"
     for cert in certs:
         block += "    \\item " + latex_escape(cert["name"]) + ", "
-        block += latex_escape(cert["organization"]) + " (" + latex_escape(str(cert["date"])) + ")\n"
+        block += (
+            latex_escape(cert["organization"])
+            + " ("
+            + latex_escape(str(cert["date"]))
+            + ")\n"
+        )
     block += "\\end{itemize}"
     return block
 
@@ -184,9 +198,14 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
 
     # Select relevant certificates
     all_certs = profile["certificates"]
-    relevant_certs = [c for c in all_certs
-                      if any(r.lower() in " ".join(c["relevance"]).lower()
-                             for r in role_config.get("keywords", []))]
+    relevant_certs = [
+        c
+        for c in all_certs
+        if any(
+            r.lower() in " ".join(c["relevance"]).lower()
+            for r in role_config.get("keywords", [])
+        )
+    ]
     if len(relevant_certs) < 3:
         relevant_certs = all_certs[:4]
 
@@ -201,7 +220,8 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         }
     elif resume_type == "biotech":
         ordered_skills = {
-            "ML & Bioinformatics": skills.get("ml_data_science", []) + skills.get("biotech", []),
+            "ML & Bioinformatics": skills.get("ml_data_science", [])
+            + skills.get("biotech", []),
             "Programming": skills.get("programming", []),
             "Web & Deployment": skills.get("backend", []) + skills.get("devops", []),
             "Data Tools": skills.get("databases", []),
@@ -239,8 +259,10 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
     education_block = (
         "\\noindent\\textbf{" + latex_escape(profile["education"]["degree"]) + "}"
         " \\hfill \\textbf{" + latex_escape(profile["education"]["cgpa"]) + "}"
-        "\n\n\\noindent " + latex_escape(profile["education"]["institution"])
-        + " -- " + latex_escape(profile["education"]["duration"])
+        "\n\n\\noindent "
+        + latex_escape(profile["education"]["institution"])
+        + " -- "
+        + latex_escape(profile["education"]["duration"])
     )
 
     # Replace placeholders
@@ -252,8 +274,12 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         "(GITHUB_HANDLE)": github_handle,
         "(LINKEDIN_URL)": profile["linkedin"],
         "(LOCATION)": latex_escape(profile["location"]),
-        "(HEADLINE)": latex_escape(profile["headlines"].get(resume_type, profile["headlines"]["analytics"])),
-        "(SUMMARY)": latex_escape(profile["summaries"].get(resume_type, profile["summaries"]["analytics"])),
+        "(HEADLINE)": latex_escape(
+            profile["headlines"].get(resume_type, profile["headlines"]["analytics"])
+        ),
+        "(SUMMARY)": latex_escape(
+            profile["summaries"].get(resume_type, profile["summaries"]["analytics"])
+        ),
         "(EXPERIENCE_BLOCK)": experience_block,
         "(PROJECTS_BLOCK)": projects_block,
         "(SKILLS_BLOCK)": skills_block,
@@ -271,7 +297,9 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         output_dir = OUTPUT_DIR
     os.makedirs(output_dir, exist_ok=True)
 
-    tex_path = os.path.join(output_dir, f"resume_{slugify(company_name)}_{slugify(job_role)}.tex")
+    tex_path = os.path.join(
+        output_dir, f"resume_{slugify(company_name)}_{slugify(job_role)}.tex"
+    )
     with open(tex_path, "w") as f:
         f.write(rendered)
 
@@ -283,7 +311,9 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
     try:
         result = subprocess.run(
             ["tectonic", "--outdir", output_dir, tex_path],
-            capture_output=True, text=True, cwd=BASE_DIR
+            capture_output=True,
+            text=True,
+            cwd=BASE_DIR,
         )
         if result.returncode == 0 and os.path.exists(pdf_path):
             print(f"PDF saved to: {pdf_path}")
@@ -308,7 +338,9 @@ def main():
     parser = argparse.ArgumentParser(description="Company-Specific Resume Builder")
     parser.add_argument("--company", "-c", help="Target company name")
     parser.add_argument("--role", "-r", help="Job role (use with --company)")
-    parser.add_argument("--list", "-l", action="store_true", help="List available companies")
+    parser.add_argument(
+        "--list", "-l", action="store_true", help="List available companies"
+    )
     parser.add_argument("--output-dir", "-o", default=None, help="Output directory")
 
     args = parser.parse_args()
