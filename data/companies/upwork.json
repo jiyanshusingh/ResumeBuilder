@@ -1,0 +1,30 @@
+{
+  "name": "Upwork",
+  "website": "https://www.upwork.com",
+  "job_roles": {
+    "Full-Stack Freelancer": {
+      "resume_type": "freelance",
+      "required_skills": [
+        "Python",
+        "REST APIs",
+        "FastAPI",
+        "Frontend",
+        "Docker",
+        "PostgreSQL"
+      ],
+      "keywords": [
+        "client projects",
+        "SaaS",
+        "full-stack",
+        "delivery",
+        "API",
+        "deployment"
+      ],
+      "emphasize_metrics": [
+        "Invoice Generator SaaS",
+        "Sales CRM Dashboard",
+        "A/B testing dashboard"
+      ]
+    }
+  }
+}

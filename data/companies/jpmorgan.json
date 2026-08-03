@@ -1,0 +1,30 @@
+{
+  "name": "J.P. Morgan",
+  "website": "https://www.jpmorganchase.com",
+  "job_roles": {
+    "Quantitative Analyst": {
+      "resume_type": "finance",
+      "required_skills": [
+        "Python",
+        "Statistical Modeling",
+        "Machine Learning",
+        "Bayesian Methods",
+        "NumPy",
+        "pandas"
+      ],
+      "keywords": [
+        "quant",
+        "pricing",
+        "risk",
+        "ML",
+        "backtesting",
+        "financial modeling"
+      ],
+      "emphasize_metrics": [
+        "Trading engine ROI",
+        "38,500+ labeled trades",
+        "Walk-forward validation"
+      ]
+    }
+  }
+}

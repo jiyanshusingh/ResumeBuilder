@@ -1,0 +1,30 @@
+{
+  "name": "Novartis",
+  "website": "https://www.novartis.com",
+  "job_roles": {
+    "Clinical Data Analyst": {
+      "resume_type": "biotech",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "Statistical Analysis",
+        "Data Visualization",
+        "Machine Learning",
+        "A/B Testing"
+      ],
+      "keywords": [
+        "clinical trials",
+        "data quality",
+        "healthcare",
+        "analytics",
+        "reporting",
+        "regulatory"
+      ],
+      "emphasize_metrics": [
+        "A/B testing dashboard",
+        "Sales CRM insights",
+        "38,500+ labeled trades"
+      ]
+    }
+  }
+}

@@ -58,6 +58,24 @@ def load_company_profile(company_name):
         path = os.path.join(DATA_DIR, "companies", f"{candidate}.json")
         if os.path.exists(path):
             return load_json(path)
+
+    # Fallback: scan files and match by stored display name / slug.
+    companies_dir = os.path.join(DATA_DIR, "companies")
+    if os.path.isdir(companies_dir):
+        normalized = company_name.strip().lower()
+        norm_slug = re.sub(r"[^a-z0-9]+", "_", normalized).strip("_")
+        for fname in sorted(os.listdir(companies_dir)):
+            if not fname.endswith(".json"):
+                continue
+            fpath = os.path.join(companies_dir, fname)
+            try:
+                data = load_json(fpath)
+            except Exception:
+                continue
+            stored_name = str(data.get("name", ""))
+            stored_slug = re.sub(r"[^a-z0-9]+", "_", stored_name.lower()).strip("_")
+            if stored_name.lower() == normalized or stored_slug == norm_slug:
+                return data
     raise FileNotFoundError(f"Company profile not found for: {company_name}")
 
 

@@ -1,0 +1,30 @@
+{
+  "name": "Citadel",
+  "website": "https://www.citadel.com",
+  "job_roles": {
+    "Quant Developer": {
+      "resume_type": "finance",
+      "required_skills": [
+        "Python",
+        "C++",
+        "Machine Learning",
+        "FastAPI",
+        "Docker",
+        "GCP"
+      ],
+      "keywords": [
+        "quant",
+        "trading systems",
+        "low latency",
+        "algorithmic trading",
+        "backtesting",
+        "ML"
+      ],
+      "emphasize_metrics": [
+        "Trading engine ROI",
+        "38,500+ labeled trades",
+        "Walk-forward validation"
+      ]
+    }
+  }
+}

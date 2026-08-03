@@ -96,11 +96,66 @@ def slugify(s: str) -> str:
 
 
 def get_company_names() -> List[str]:
-    """Returns display names of all company profiles."""
+    """Returns display names (from each profile's `name` field) of all companies."""
     if not os.path.exists(COMPANY_DIR):
         return []
-    files = [f for f in os.listdir(COMPANY_DIR) if f.endswith(".json")]
-    return [f.replace(".json", "").replace("_", " ").title() for f in files]
+    names = []
+    for fname in os.listdir(COMPANY_DIR):
+        if not fname.endswith(".json"):
+            continue
+        path = os.path.join(COMPANY_DIR, fname)
+        try:
+            with open(path) as f:
+                names.append(json.load(f).get("name", ""))
+        except Exception:
+            names.append(fname.replace(".json", "").replace("_", " ").title())
+    return sorted([n for n in names if n])
+
+
+def resolve_company_key(company_display: str):
+    """Return the profile slug (matched_key) for a display name, or None."""
+    if not company_display:
+        return None
+    company_display = company_display.strip()
+    for fname in os.listdir(COMPANY_DIR):
+        if not fname.endswith(".json"):
+            continue
+        key = fname.replace(".json", "")
+        path = os.path.join(COMPANY_DIR, fname)
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+        stored_name = data.get("name", "")
+        display = key.replace("_", " ").title()
+        if (
+            display.lower() == company_display.lower()
+            or stored_name.lower() == company_display.lower()
+            or key == slugify(company_display)
+        ):
+            return key
+    return None
+
+
+def get_company_roles(company_display: str) -> List[str]:
+    """Return the list of saved job roles for a company display name."""
+    if not company_display:
+        return []
+    try:
+        from resume_builder import load_company_profile
+
+        profile = load_company_profile(company_display)
+    except Exception:
+        return []
+    return list(profile.get("job_roles", {}).keys())
+
+
+def _role_update(company: str):
+    """Build a gr.update for a role dropdown from the selected company."""
+    roles = get_company_roles(company)
+    value = roles[0] if roles else ""
+    return gr.update(choices=roles, value=value)
 
 
 def load_profile() -> Dict:
@@ -197,9 +252,9 @@ def list_all_companies() -> str:
 
 def delete_company(name: str) -> str:
     """Delete a company profile by name."""
-    slug = slugify(name)
-    path = os.path.join(COMPANY_DIR, f"{slug}.json")
-    if os.path.exists(path):
+    key = resolve_company_key(name)
+    path = os.path.join(COMPANY_DIR, f"{key}.json") if key else None
+    if key and os.path.exists(path):
         os.remove(path)
         return f"Deleted: {name}"
     return f"Not found: {name}"
@@ -210,17 +265,7 @@ def delete_company(name: str) -> str:
 
 def generate_resume_wrapper(company_display: str, role: str, template_type: str = None):
     """Generate resume and return (tex_string, pdf_file, status)."""
-    # Resolve company slug
-    slug = slugify(company_display)
-    # Try exact display -> file mapping
-    matched_key = None
-    for fname in os.listdir(COMPANY_DIR):
-        if fname.endswith(".json"):
-            key = fname.replace(".json", "")
-            display = key.replace("_", " ").title()
-            if display.lower() == company_display.strip().lower() or key == slug:
-                matched_key = key
-                break
+    matched_key = resolve_company_key(company_display)
 
     if not matched_key:
         return None, None, f"Company not found: {company_display}"
@@ -293,15 +338,7 @@ def analyze_resume_skills(
     resume_lower = resume_text.lower()
 
     # Load company profile
-    slug = slugify(company_display)
-    matched_key = None
-    for fname in os.listdir(COMPANY_DIR):
-        if fname.endswith(".json"):
-            key = fname.replace(".json", "")
-            display = key.replace("_", " ").title()
-            if display.lower() == company_display.strip().lower() or key == slug:
-                matched_key = key
-                break
+    matched_key = resolve_company_key(company_display)
 
     if not matched_key:
         return "Company not found.", None
@@ -495,15 +532,7 @@ def get_optimization_suggestions(
     Returns (suggestion_summary, project_reorder_suggestions).
     """
     # Load company profile
-    slug = slugify(company_display)
-    matched_key = None
-    for fname in os.listdir(COMPANY_DIR):
-        if fname.endswith(".json"):
-            key = fname.replace(".json", "")
-            display = key.replace("_", " ").title()
-            if display.lower() == company_display.strip().lower() or key == slug:
-                matched_key = key
-                break
+    matched_key = resolve_company_key(company_display)
 
     if not matched_key:
         return "Company not found.", []
@@ -688,15 +717,32 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                     label="Company",
                     value=get_company_names()[0] if get_company_names() else "",
                 )
-                role_input = gr.Textbox(
-                    label="Job Role",
-                    placeholder="Enter the role name (e.g. Quant Developer)",
+                role_value = (
+                    get_company_roles(get_company_names()[0])
+                    if get_company_names()
+                    else []
+                )
+                role_input = gr.Dropdown(
+                    choices=role_value,
+                    value=role_value[0] if role_value else "",
+                    label="Job Profile",
+                )
+                custom_role = gr.Textbox(
+                    label="Custom role (optional)",
+                    placeholder="Override role (optional)",
+                    interactive=True,
                 )
 
             with gr.Row():
                 template_selector = gr.Dropdown(
                     choices=TEMPLATE_TYPES, label="Resume Template", value="default"
                 )
+
+            company_dropdown.change(
+                fn=_role_update,
+                inputs=company_dropdown,
+                outputs=role_input,
+            )
 
             gen_btn = gr.Button("🚀 Generate Resume", variant="primary")
             with gr.Row():
@@ -708,16 +754,17 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
             pdf_file = gr.File(label="📥 Download PDF", visible=False)
             tex_file = gr.File(label="📥 Download .tex", visible=False)
 
-            def gen_wrapper(company_disp, role, template_type):
+            def gen_wrapper(company_disp, role, custom_role, template_type):
+                effective_role = (custom_role or "").strip() or role or ""
                 tex_content, pdf_path, status = generate_resume_wrapper(
-                    company_disp, role, template_type
+                    company_disp, effective_role, template_type
                 )
                 outputs = [
                     gr.update(value=tex_content or "No output"),
                     gr.update(value=status),
                 ]
                 safe_company = slugify(company_disp)
-                safe_role = slugify(role)
+                safe_role = slugify(effective_role)
                 tex_path = os.path.join(
                     OUTPUT_DIR_STR, f"resume_{safe_company}_{safe_role}.tex"
                 )
@@ -736,7 +783,7 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
 
             gen_btn.click(
                 fn=gen_wrapper,
-                inputs=[company_dropdown, role_input, template_selector],
+                inputs=[company_dropdown, role_input, custom_role, template_selector],
                 outputs=[tex_display, status_output, pdf_file, tex_file],
             )
 
@@ -764,9 +811,26 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                         label="Company",
                         value=get_company_names()[0] if get_company_names() else "",
                     )
-                    analyze_role = gr.Textbox(
-                        label="Job Role", placeholder="e.g. Quant Developer"
+                    analyze_role_choices = (
+                        get_company_roles(get_company_names()[0])
+                        if get_company_names()
+                        else []
                     )
+                    analyze_role = gr.Dropdown(
+                        choices=analyze_role_choices,
+                        value=analyze_role_choices[0] if analyze_role_choices else "",
+                        label="Job Profile",
+                    )
+                    analyze_custom_role = gr.Textbox(
+                        label="Custom role (optional)",
+                        placeholder="Override role (optional)",
+                    )
+
+            analyze_company.change(
+                fn=_role_update,
+                inputs=analyze_company,
+                outputs=analyze_role,
+            )
 
             analyze_btn = gr.Button("📊 Run Analysis", variant="primary")
             analysis_output = gr.Textbox(
@@ -774,12 +838,15 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
             )
             chart_output = gr.Image(label="Skill Gap Chart", visible=False)
 
-            def analyze_wrapper(pdf_file, company_disp, role):
+            def analyze_wrapper(pdf_file, company_disp, role, custom_role):
                 if pdf_file is None:
                     return gr.update(value="Please upload a PDF resume."), gr.update(
                         visible=False
                     )
-                report, chart_path = analyze_resume_skills(pdf_file, company_disp, role)
+                effective_role = (custom_role or "").strip() or role or ""
+                report, chart_path = analyze_resume_skills(
+                    pdf_file, company_disp, effective_role
+                )
                 chart_update = (
                     gr.update(value=chart_path, visible=chart_path is not None)
                     if chart_path
@@ -789,7 +856,7 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
 
             analyze_btn.click(
                 fn=analyze_wrapper,
-                inputs=[pdf_input, analyze_company, analyze_role],
+                inputs=[pdf_input, analyze_company, analyze_role, analyze_custom_role],
                 outputs=[analysis_output, chart_output],
             )
 
@@ -838,9 +905,26 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                     label="Company",
                     value=get_company_names()[0] if get_company_names() else "",
                 )
-                opt_role = gr.Textbox(
-                    label="Job Role", placeholder="e.g. Quant Developer"
+                opt_role_choices = (
+                    get_company_roles(get_company_names()[0])
+                    if get_company_names()
+                    else []
                 )
+                opt_role = gr.Dropdown(
+                    choices=opt_role_choices,
+                    value=opt_role_choices[0] if opt_role_choices else "",
+                    label="Job Profile",
+                )
+                opt_custom_role = gr.Textbox(
+                    label="Custom role (optional)",
+                    placeholder="Override role (optional)",
+                )
+
+            opt_company.change(
+                fn=_role_update,
+                inputs=opt_company,
+                outputs=opt_role,
+            )
 
             opt_btn = gr.Button("💡 Get Suggestions", variant="primary")
             suggestions_output = gr.Textbox(
@@ -850,9 +934,10 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                 label="Recommended Project Order", interactive=False
             )
 
-            def opt_wrapper(company_disp, role):
+            def opt_wrapper(company_disp, role, custom_role):
+                effective_role = (custom_role or "").strip() or role or ""
                 suggestions, project_order = get_optimization_suggestions(
-                    company_disp, role
+                    company_disp, effective_role
                 )
                 return gr.update(value=suggestions), gr.update(
                     value=(
@@ -862,7 +947,7 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
 
             opt_btn.click(
                 fn=opt_wrapper,
-                inputs=[opt_company, opt_role],
+                inputs=[opt_company, opt_role, opt_custom_role],
                 outputs=[suggestions_output, project_order_output],
             )
 

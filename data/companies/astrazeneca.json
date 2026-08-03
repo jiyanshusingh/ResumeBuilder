@@ -1,0 +1,30 @@
+{
+  "name": "AstraZeneca",
+  "website": "https://www.astrazeneca.com",
+  "job_roles": {
+    "Data Scientist - Drug Discovery": {
+      "resume_type": "biotech",
+      "required_skills": [
+        "Python",
+        "Machine Learning",
+        "XGBoost",
+        "Biopython",
+        "Research methods",
+        "Statistical analysis"
+      ],
+      "keywords": [
+        "drug discovery",
+        "biomarkers",
+        "ML",
+        "research",
+        "translational data",
+        "R&D"
+      ],
+      "emphasize_metrics": [
+        "Peptide Hydrogel prediction",
+        "Model accuracy",
+        "SHAP interpretability"
+      ]
+    }
+  }
+}

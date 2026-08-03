@@ -1,0 +1,53 @@
+{
+  "name": "Roche",
+  "website": "https://www.roche.com",
+  "job_roles": {
+    "Bioinformatics Data Scientist": {
+      "resume_type": "biotech",
+      "required_skills": [
+        "Python",
+        "Machine Learning",
+        "Statistical Analysis",
+        "Biopython",
+        "SHAP",
+        "NGS data analysis"
+      ],
+      "keywords": [
+        "genomics",
+        "bioinformatics",
+        "drug discovery",
+        "machine learning",
+        "clinical data",
+        "research"
+      ],
+      "emphasize_metrics": [
+        "Peptide Hydrogel prediction accuracy",
+        "38,500+ labeled trades",
+        "ESM2 embeddings"
+      ]
+    },
+    "Data Scientist - Healthcare": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "pandas",
+        "Machine Learning",
+        "A/B Testing",
+        "Statistical Modeling"
+      ],
+      "keywords": [
+        "healthcare analytics",
+        "patient outcomes",
+        "data-driven",
+        "predictive modeling",
+        "statistical analysis"
+      ],
+      "emphasize_metrics": [
+        "A/B testing dashboard",
+        "Model accuracy",
+        "38,500+ labeled trades"
+      ]
+    }
+  }
+}

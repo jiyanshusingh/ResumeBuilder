@@ -1,0 +1,30 @@
+{
+  "name": "Walmart",
+  "website": "https://www.walmart.com",
+  "job_roles": {
+    "Data Analyst": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "SQL",
+        "Python",
+        "Excel",
+        "pandas",
+        "Data Visualization",
+        "A/B Testing"
+      ],
+      "keywords": [
+        "retail analytics",
+        "supply chain",
+        "dashboards",
+        "reporting",
+        "data-driven",
+        "business intelligence"
+      ],
+      "emphasize_metrics": [
+        "Sales CRM Dashboard",
+        "A/B testing dashboard",
+        "38,500+ labeled trades"
+      ]
+    }
+  }
+}

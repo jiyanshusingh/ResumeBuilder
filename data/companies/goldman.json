@@ -1,0 +1,54 @@
+{
+  "name": "Goldman Sachs",
+  "website": "https://www.goldmansachs.com",
+  "job_roles": {
+    "Quant Developer": {
+      "resume_type": "finance",
+      "required_skills": [
+        "Python",
+        "Machine Learning",
+        "statistical modeling",
+        "FastAPI",
+        "GCP",
+        "Docker"
+      ],
+      "keywords": [
+        "quant",
+        "algorithmic trading",
+        "risk",
+        "ML",
+        "financial modeling",
+        "optimization"
+      ],
+      "emphasize_metrics": [
+        "Trading engine ROI",
+        "38,500+ labeled trades",
+        "Walk-forward validation"
+      ]
+    },
+    "Quantitative Analyst": {
+      "resume_type": "finance",
+      "required_skills": [
+        "Python",
+        "Statistical Modeling",
+        "Bayesian Methods",
+        "Machine Learning",
+        "NumPy",
+        "pandas"
+      ],
+      "keywords": [
+        "quant research",
+        "derivatives",
+        "risk models",
+        "backtesting",
+        "statistical analysis",
+        "modeling"
+      ],
+      "emphasize_metrics": [
+        "Trading engine ROI",
+        "38,500+ labeled trades",
+        "Walk-forward validation"
+      ]
+    }
+  }
+}

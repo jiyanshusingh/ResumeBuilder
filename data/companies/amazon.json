@@ -1,0 +1,55 @@
+{
+  "name": "Amazon",
+  "website": "https://www.amazon.com",
+  "job_roles": {
+    "Data Scientist": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "pandas",
+        "Machine Learning",
+        "A/B Testing",
+        "Statistical Modeling",
+        "NumPy"
+      ],
+      "keywords": [
+        "personalization",
+        "recommendation",
+        "experimentation",
+        "ML",
+        "data-driven",
+        "modeling"
+      ],
+      "emphasize_metrics": [
+        "A/B testing dashboard",
+        "Model accuracy improvement",
+        "38,500+ labeled trades"
+      ]
+    },
+    "Software Development Engineer": {
+      "resume_type": "software",
+      "required_skills": [
+        "Python",
+        "REST APIs",
+        "FastAPI",
+        "Docker",
+        "PostgreSQL",
+        "SQL"
+      ],
+      "keywords": [
+        "full-stack",
+        "cloud",
+        "microservices",
+        "system design",
+        "deployment",
+        "API"
+      ],
+      "emphasize_metrics": [
+        "Invoice Generator SaaS",
+        "Sales CRM",
+        "A/B testing dashboard"
+      ]
+    }
+  }
+}

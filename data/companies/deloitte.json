@@ -1,0 +1,30 @@
+{
+  "name": "Deloitte",
+  "website": "https://www2.deloitte.com",
+  "job_roles": {
+    "Analytics Consultant": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "Data Visualization",
+        "Statistical Modeling",
+        "A/B Testing",
+        "stakeholder communication"
+      ],
+      "keywords": [
+        "consulting",
+        "client delivery",
+        "analytics",
+        "insights",
+        "dashboarding",
+        "data-driven"
+      ],
+      "emphasize_metrics": [
+        "Sales CRM Dashboard",
+        "A/B testing dashboard",
+        "Invoice Generator"
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Google",
+  "website": "https://careers.google.com",
+  "job_roles": {
+    "Data Scientist": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning",
+        "Statistical Modeling",
+        "A/B Testing",
+        "pandas"
+      ],
+      "keywords": [
+        "experimentation",
+        "metrics",
+        "ML",
+        "data analysis",
+        "causal inference",
+        "modeling"
+      ],
+      "emphasize_metrics": [
+        "A/B testing dashboard",
+        "38,500+ labeled trades",
+        "Model accuracy"
+      ]
+    },
+    "Software Engineer": {
+      "resume_type": "software",
+      "required_skills": [
+        "Python",
+        "REST APIs",
+        "Docker",
+        "PostgreSQL",
+        "FastAPI",
+        "Frontend"
+      ],
+      "keywords": [
+        "distributed systems",
+        "full-stack",
+        "cloud",
+        "scalability",
+        "API design",
+        "deployment"
+      ],
+      "emphasize_metrics": [
+        "Invoice Generator SaaS",
+        "Sales CRM Dashboard",
+        "A/B testing dashboard"
+      ]
+    }
+  }
+}

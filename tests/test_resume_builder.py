@@ -408,3 +408,26 @@ class TestConfigAuth:
         importlib.reload(config)
         assert config.auth_enabled() is True
         assert config.auth_user() == "u"
+
+
+class TestCompanyResolution:
+    """Tests for clean display-name resolution (Phase 4 dropdowns)."""
+
+    def test_load_by_json_name(self):
+        from resume_builder import load_company_profile
+        prof = load_company_profile("J.P. Morgan")
+        assert prof["name"] in ("J.P. Morgan",)
+
+    def test_load_multi_word_name(self):
+        from resume_builder import load_company_profile
+        assert load_company_profile("Goldman Sachs")["name"] == "Goldman Sachs"
+
+    def test_company_roles_helper(self):
+        import web_ui
+        roles = web_ui.get_company_roles("Zerodha")
+        assert "Quant Developer" in roles
+
+    def test_resolve_company_key(self):
+        import web_ui
+        assert web_ui.resolve_company_key("Amazon") == "amazon"
+        assert web_ui.resolve_company_key("Goldman Sachs") == "goldman"
