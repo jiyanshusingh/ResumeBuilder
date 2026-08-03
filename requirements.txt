@@ -1,0 +1,11 @@
+gradio>=4.0.0
+pdfplumber>=0.11.0
+pypdf2>=3.0.0
+matplotlib>=3.7.0
+jinja2>=3.1.0
+spacy>=3.7.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+rake-nltk>=1.0.0
+
+# Run after install: python -m spacy download en_core_web_sm

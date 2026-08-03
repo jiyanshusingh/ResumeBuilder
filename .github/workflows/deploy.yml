@@ -1,0 +1,52 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests and Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install black isort
+
+    - name: Run tests
+      run: |
+        pytest tests/ -v
+
+    - name: Check code formatting (black)
+      run: |
+        black --check resume_builder.py web_ui.py resume_analyzer.py
+
+    - name: Check import sorting (isort)
+      run: |
+        isort --check-only resume_builder.py web_ui.py resume_analyzer.py
+
+  deploy:
+    name: Deploy to Render
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Deploy to Render
+      uses: johnbatista/render-action@v0.0.22
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        git-commit: ${{ github.sha }}
+        wait: true

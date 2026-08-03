@@ -1,0 +1,76 @@
+name: resume-builder
+
+region: us-east-1
+env: production
+buildCommand: pip install -r requirements.txt
+service:
+  - type: web
+    name: resume-builder
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python web_ui.py
+    envVars:
+      - key: DATA_DIR
+        value: /app/data
+      - key: OUTPUT_DIR
+        value: /app/output
+      - key: PORT
+        value: "7860"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: SHARE
+        value: "false"
+      - key: DEBUG
+        value: "false"
+
+  # Database for job application tracker (Phase 4)
+  - type: web
+    name: resume-builder-db
+    runtime: python
+    plan: free
+    startCommand: python3 -c "
+import sqlite3
+import os
+from pathlib import Path
+
+# Create database file
+DB_PATH = Path('/app/data/job_applications.db')
+DB_PATH.parent.mkdir(exist_ok=True)
+
+conn = sqlite3.connect(str(DB_PATH))
+cursor = conn.cursor()
+
+# Create applications table
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS applications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    company TEXT NOT NULL,
+    position TEXT NOT NULL,
+    applied_date TEXT,
+    status TEXT,
+    notes TEXT,
+    resume_version INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+''')
+
+# Create resume versions table for versioning (Phase 4)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS resume_versions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    application_id INTEGER,
+    version_number INTEGER NOT NULL,
+    file_path TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (application_id) REFERENCES applications(id)
+)
+''')
+
+conn.commit()
+conn.close()
+print('Database initialized successfully')
+"
+    envVars:
+      - key: DATA_DIR
+        value: /app/data

@@ -24,7 +24,9 @@ try:
 except ImportError:
     HAS_MATPLOTLIB = False
 
-from resume_builder import load_company_profile, DATA_DIR, OUTPUT_DIR
+from resume_builder import load_company_profile
+from config import DATA_DIR, OUTPUT_DIR
+from ats_scorer import ATSScorer
 
 
 class ResumeAnalyzer:
@@ -65,6 +67,7 @@ class ResumeAnalyzer:
         """
         Full analysis of resume against company/role.
         Returns structured dict with scores, matched/missing lists, and recommendations.
+        Uses the comprehensive ATSScorer with 15+ rules.
         """
         company_data = load_company_profile(company)
         if role not in company_data.get("job_roles", {}):
@@ -83,12 +86,14 @@ class ResumeAnalyzer:
         present_kw = [k for k in keywords if k.lower() in resume_lower]
         missing_kw = [k for k in keywords if k.lower() not in resume_lower]
 
-        # ATS Score: 60% skills, 40% keywords
-        skill_ratio = len(matched_skills) / max(len(required_skills), 1)
-        kw_ratio = len(present_kw) / max(len(keywords), 1)
-        ats_score = round((skill_ratio * 0.6 + kw_ratio * 0.4) * 100, 1)
+        # Use comprehensive ATSScorer for enhanced scoring
+        scorer = ATSScorer(self.text, file_extension=".pdf")
+        ats_result = scorer.score(company, role)
 
-        # Build recommendations
+        # Use the ATSScorer's overall score
+        ats_score = ats_result["overall_score"]
+
+        # Build recommendations from ATS rules
         recommendations: List[str] = []
         if missing_skills:
             recommendations.append(
@@ -100,25 +105,17 @@ class ResumeAnalyzer:
                 f"Incorporate these keywords naturally: {', '.join(top_missing)}"
             )
 
+        # Add ATS suggestions
+        for suggestion in ats_result.get("suggestions", []):
+            recommendations.append(suggestion)
+
+        # Legacy score feedback for backward compatibility
         if ats_score < 50:
             recommendations.append("Low ATS score — major revision needed.")
         elif ats_score < 80:
             recommendations.append("Moderate ATS score — optimize targeted keywords.")
         else:
             recommendations.append("Strong ATS alignment — minimal changes needed.")
-
-        # Length feedback
-        if self.word_count < 200:
-            recommendations.append("Resume may be too short (aim for 300-500 words).")
-        elif self.word_count > 700:
-            recommendations.append("Resume may be too long (aim for 300-500 words).")
-
-        # Section feedback
-        missing_sections = [s.title() for s, found in self.sections_found.items() if not found]
-        if missing_sections:
-            recommendations.append(
-                f"Consider adding sections: {', '.join(missing_sections[:4])}"
-            )
 
         return {
             "company": company_data["name"],
@@ -132,6 +129,7 @@ class ResumeAnalyzer:
             "word_count": self.word_count,
             "sections_found": self.sections_found,
             "recommendations": recommendations,
+            "ats_details": ats_result,
         }
 
 
@@ -163,6 +161,16 @@ def format_analysis_report(result: Dict) -> str:
     lines.append("ATS SCORE")
     lines.append("-" * 60)
     lines.append(f"Overall: {result['ats_score']}%")
+
+    # Add detailed ATS rule breakdown
+    if "ats_details" in result:
+        ats = result["ats_details"]
+        lines.append(f"Passing: {ats['passed_rules']}/{ats['total_rules']} rules")
+        lines.append("\nRule Breakdown:")
+        for rule in ats["rules"]:
+            status = "✅" if rule["passed"] else "⚠️"
+            lines.append(f"  {status} {rule['rule_name']}: {rule['score']:.0f}% (weight: {rule['weight']:.0%})")
+            lines.append(f"      {rule['feedback']}")
 
     lines.append("\n" + "-" * 60)
     lines.append("RECOMMENDATIONS")
@@ -234,7 +242,7 @@ def create_skill_gap_chart(matched_skills: List[str], missing_skills: List[str],
             ax.legend(handles=legend_elements, loc='lower right', fontsize=8)
 
         plt.tight_layout()
-        chart_path = os.path.join(OUTPUT_DIR, "skill_gap_chart.png")
+        chart_path = str(OUTPUT_DIR / "skill_gap_chart.png")
         plt.savefig(chart_path, dpi=150, bbox_inches='tight')
         plt.close()
         return chart_path

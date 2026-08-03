@@ -19,6 +19,7 @@ import re
 import io
 import subprocess
 import tempfile
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 
 try:
@@ -36,16 +37,48 @@ except ImportError:
 
 from resume_builder import (
     build_resume, load_company_profile,
-    DATA_DIR, OUTPUT_DIR
+    latex_escape, rank_projects, extract_bullets, build_experience_block,
+    get_template_path
 )
-from resume_builder import latex_escape, rank_projects, extract_bullets, build_experience_block
+from config import DATA_DIR, OUTPUT_DIR, PORT, HOST, SHARE, BASE_DIR
 
-# ─── Constants & Setup ────────────────────────────────────────────────
-COMPANY_DIR = os.path.join(DATA_DIR, "companies")
+try:
+    from jd_importer import extract_from_jd_text, extract_from_jd_url, format_jd_result
+except ImportError:
+    extract_from_jd_text = extract_from_jd_url = format_jd_result = None
+    HAS_JD_IMPORTER = False
+else:
+    HAS_JD_IMPORTER = True
+
+from tracker import (
+    JobTracker, APPLICATION_STATUSES, get_tracker, init_db as init_tracker_db,
+)
+
+from parse_preview import parse_resume_for_ats, format_parse_preview
+
+from compare import (
+    compare_resume, comparison_header, create_comparison_chart,
+    list_company_slugs, list_company_roles,
+)
+
+from bullet_enhancer import enhance_bullets, format_enhancement_report
+
+# Seed tracker DB schema on startup (safe to call multiple times)
+try:
+    init_tracker_db()
+except Exception:
+    pass
+
+_tracker = get_tracker()
+
+COMPANY_DIR = str(DATA_DIR / "companies")
+OUTPUT_DIR_STR = str(OUTPUT_DIR)
 os.makedirs(COMPANY_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR_STR, exist_ok=True)
 
 RESUME_TYPES = ["analytics", "software", "biotech", "finance", "freelance"]
+
+TEMPLATE_TYPES = ["default", "modern", "minimalist", "academic"]
 
 # ─── Utility Functions ────────────────────────────────────────────────
 
@@ -64,7 +97,7 @@ def get_company_names() -> List[str]:
 
 def load_profile() -> Dict:
     """Load the base profile data."""
-    path = os.path.join(DATA_DIR, "profile.json")
+    path = str(DATA_DIR / "profile.json")
     with open(path) as f:
         return json.load(f)
 
@@ -156,7 +189,7 @@ def delete_company(name: str) -> str:
 
 # ─── Resume Generation ──────────────────────────────────────────────────
 
-def generate_resume_wrapper(company_display: str, role: str):
+def generate_resume_wrapper(company_display: str, role: str, template_type: str = None):
     """Generate resume and return (tex_string, pdf_file, status)."""
     # Resolve company slug
     slug = slugify(company_display)
@@ -174,14 +207,14 @@ def generate_resume_wrapper(company_display: str, role: str):
         return None, None, f"Company not found: {company_display}"
 
     try:
-        build_resume(matched_key, role)
+        build_resume(matched_key, role, template_type=template_type)
     except Exception as e:
         return None, None, f"Build error: {str(e)}"
 
     safe_company = slugify(matched_key)
     safe_role = slugify(role)
-    tex_path = os.path.join(OUTPUT_DIR, f"resume_{safe_company}_{safe_role}.tex")
-    pdf_path = os.path.join(OUTPUT_DIR, f"resume_{safe_company}_{safe_role}.pdf")
+    tex_path = os.path.join(OUTPUT_DIR_STR, f"resume_{safe_company}_{safe_role}.tex")
+    pdf_path = os.path.join(OUTPUT_DIR_STR, f"resume_{safe_company}_{safe_role}.pdf")
 
     if not os.path.exists(tex_path):
         return None, None, "Failed to generate .tex file."
@@ -395,7 +428,7 @@ def create_skill_chart(matched: List[str], missing: List[str], present_kw: List[
         axes[1].legend(handles=legend_elements_kw, loc='lower right', fontsize=8)
 
         plt.tight_layout()
-        chart_path = os.path.join(OUTPUT_DIR, "skill_gap_chart.png")
+        chart_path = os.path.join(OUTPUT_DIR_STR, "skill_gap_chart.png")
         plt.savefig(chart_path, dpi=150, bbox_inches='tight')
         plt.close()
         return chart_path
@@ -440,7 +473,7 @@ def get_optimization_suggestions(company_display: str, role: str) -> Tuple[str, 
 
     # Load profile projects
     profile = load_profile()
-    projects_dir = os.path.join(DATA_DIR, "projects")
+    projects_dir = str(DATA_DIR / "projects")
     all_projects = []
     for fname in os.listdir(projects_dir):
         if fname.endswith(".json"):
@@ -514,14 +547,50 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                                    required_skills, keywords, emphasize_metrics],
                            outputs=save_output)
 
-        # ── Tab 2: Generate Resume ────────────────────────
+        # ── Tab 2: Import JD ────────────────────────────
+        with gr.Tab("📥 Import JD"):
+            gr.Markdown("### Import a job description to auto-extract skills & keywords")
+            gr.Markdown("Paste the job description **text** or a **URL**. NLP will extract required skills, keywords, and metrics you can save into a company profile.")
+            with gr.Row():
+                jd_text_input = gr.Textbox(label="Job Description", lines=15,
+                                           placeholder="Paste the full job description here...")
+                with gr.Column():
+                    jd_url_input = gr.Textbox(label="Or Job Description URL", placeholder="https://...")
+                    extract_btn = gr.Button("🔍 Extract Skills & Keywords", variant="primary")
+            jd_output = gr.Textbox(label="Extracted Results", lines=15, interactive=False)
+
+            if HAS_JD_IMPORTER:
+                def jd_extract_wrapper(text, url):
+                    try:
+                        if url and url.strip():
+                            if not extract_from_jd_url:
+                                return "Error: requests/beautifulsoup4 not installed. pip install requests beautifulsoup4"
+                            result = extract_from_jd_url(url.strip())
+                        elif text and text.strip():
+                            result = extract_from_jd_text(text)
+                        else:
+                            return "Please provide job description text or a URL."
+                        return format_jd_result(result)
+                    except Exception as e:
+                        return f"Extraction error: {str(e)}"
+
+                extract_btn.click(fn=jd_extract_wrapper,
+                                  inputs=[jd_text_input, jd_url_input],
+                                  outputs=jd_output)
+            else:
+                jd_output.value = "JD Importer unavailable. Install dependencies: pip install spacy requests beautifulsoup4 rake-nltk"
+
+# ── Tab 3: Generate Resume ────────────────────────
         with gr.Tab("📄 Generate Resume"):
             gr.Markdown("### Generate a tailored resume")
             with gr.Row():
                 company_dropdown = gr.Dropdown(choices=get_company_names(),
-                                             label="Company",
-                                             value=get_company_names()[0] if get_company_names() else "")
+                                              label="Company",
+                                              value=get_company_names()[0] if get_company_names() else "")
                 role_input = gr.Textbox(label="Job Role", placeholder="Enter the role name (e.g. Quant Developer)")
+
+            with gr.Row():
+                template_selector = gr.Dropdown(choices=TEMPLATE_TYPES, label="Resume Template", value="default")
 
             gen_btn = gr.Button("🚀 Generate Resume", variant="primary")
             with gr.Row():
@@ -531,15 +600,15 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
             pdf_file = gr.File(label="📥 Download PDF", visible=False)
             tex_file = gr.File(label="📥 Download .tex", visible=False)
 
-            def gen_wrapper(company_disp, role):
-                tex_content, pdf_path, status = generate_resume_wrapper(company_disp, role)
+            def gen_wrapper(company_disp, role, template_type):
+                tex_content, pdf_path, status = generate_resume_wrapper(company_disp, role, template_type)
                 outputs = [
                     gr.update(value=tex_content or "No output"),
                     gr.update(value=status),
                 ]
                 safe_company = slugify(company_disp)
                 safe_role = slugify(role)
-                tex_path = os.path.join(OUTPUT_DIR, f"resume_{safe_company}_{safe_role}.tex")
+                tex_path = os.path.join(OUTPUT_DIR_STR, f"resume_{safe_company}_{safe_role}.tex")
 
                 if pdf_path and os.path.exists(pdf_path):
                     outputs.append(gr.update(value=pdf_path, visible=True))
@@ -554,7 +623,7 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                 return outputs
 
             gen_btn.click(fn=gen_wrapper,
-                          inputs=[company_dropdown, role_input],
+                          inputs=[company_dropdown, role_input, template_selector],
                           outputs=[tex_display, status_output, pdf_file, tex_file])
 
             refresh_btn = gr.Button("🔄 Refresh Company List")
@@ -587,6 +656,24 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                               inputs=[pdf_input, analyze_company, analyze_role],
                               outputs=[analysis_output, chart_output])
 
+            gr.Markdown("### 🔍 ATS Parse Preview (simulated)")
+            gr.Markdown("See what an ATS parser would extract from the uploaded PDF — contact info, sections, skills, metrics, and length.")
+
+            def parse_preview_wrapper(pdf_file):
+                if pdf_file is None:
+                    return "Please upload a PDF resume.", gr.update(visible=False)
+                text = extract_text_from_pdf(pdf_file)
+                if not text or not text.strip():
+                    return "Could not extract text from this PDF. Is it a scanned/image PDF?", gr.update(visible=False)
+                result = parse_resume_for_ats(text)
+                return format_parse_preview(result), gr.update(visible=True)
+
+            with gr.Row():
+                preview_btn = gr.Button("🧩 Run ATS Parse Preview", variant="secondary")
+                preview_output = gr.Textbox(label="ATS Parse Preview", lines=28, interactive=False)
+
+            preview_btn.click(fn=parse_preview_wrapper, inputs=[pdf_input], outputs=preview_output)
+
             refresh_analyze_btn = gr.Button("🔄 Refresh Company List")
             refresh_analyze_btn.click(fn=lambda: gr.update(choices=get_company_names()),
                                       inputs=None, outputs=analyze_company)
@@ -616,6 +703,283 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
             refresh_opt_btn.click(fn=lambda: gr.update(choices=get_company_names()),
                                   inputs=None, outputs=opt_company)
 
+        # ── Tab: Compare Companies ───────────────────────
+        with gr.Tab("⚖️ Compare Companies"):
+            gr.Markdown("### Compare the same resume against multiple companies")
+            gr.Markdown("Upload one resume and see an ATS score for every saved company (first role per company by default).")
+
+            def _company_choice_items():
+                items = []
+                for slug in list_company_slugs():
+                    try:
+                        from resume_builder import load_company_profile
+                        display = load_company_profile(slug).get("name", slug)
+                    except Exception:
+                        display = slug
+                    items.append((f"{display} ({slug})", slug))
+                return items
+
+            _COMPARE_CHOICES = _company_choice_items()
+            _COMPARE_SLUGS = [slug for _, slug in _COMPARE_CHOICES]
+
+            with gr.Row():
+                cmp_pdf = gr.File(label="📄 Upload PDF Resume", file_count="single", file_types=[".pdf"])
+                cmp_company_group = gr.CheckboxGroup(
+                    choices=_COMPARE_CHOICES, label="Companies to compare (empty = all)",
+                    value=_COMPARE_SLUGS)
+                cmp_role_override = gr.Textbox(
+                    label="Role (optional; empty = each company's first role)")
+
+            cmp_btn = gr.Button("🏁 Run Comparison", variant="primary")
+            cmp_status = gr.Textbox(label="Status", interactive=False)
+            cmp_table = gr.Dataframe(
+                headers=["Company", "Role", "ATS Score", "Rules Passed", "Top Suggestions"],
+                datatype=["str", "str", "str", "str", "str"],
+                interactive=False,
+                label="ATS Score Comparison")
+            cmp_chart = gr.Image(label="Comparison Chart", visible=False)
+
+            def _compare_wrapper(pdf_file, slugs, role_override):
+                if pdf_file is None:
+                    return "Please upload a PDF resume.", [], gr.update(visible=False)
+                text = extract_text_from_pdf(pdf_file)
+                if not text or not text.strip():
+                    return "Could not extract text from this PDF.", [], gr.update(visible=False)
+
+                selected = list(slugs) if slugs else None
+                roles = {}
+                if role_override and role_override.strip():
+                    roles = {s: role_override.strip() for s in (selected or list_company_slugs())}
+
+                results = compare_resume(text, companies=selected, roles=roles)
+                if not results:
+                    return "No company profiles found to compare.", [], gr.update(visible=False)
+                headers, rows = comparison_header(results)
+                chart = create_comparison_chart(results)
+                summary = f"Compared {len(results)} company/role combo(s). "
+                summary += "Top match: " + results[0]["company"] + " (" + str(results[0]["ats_score"]) + "%)"
+                chart_update = gr.update(value=chart, visible=chart is not None) if chart else gr.update(visible=False)
+                return summary, rows, chart_update
+
+            cmp_btn.click(fn=_compare_wrapper,
+                          inputs=[cmp_pdf, cmp_company_group, cmp_role_override],
+                          outputs=[cmp_status, cmp_table, cmp_chart])
+
+        # ── Tab: Enhance Bullets ─────────────────────────
+        with gr.Tab("✨ Enhance Bullets"):
+            gr.Markdown("### Turn weak resume bullets into strong, metric-driven achievements")
+            gr.Markdown("Paste one bullet per line. Weak bullets are auto-detected and rewritten. If a local **Ollama** server is available it is used; otherwise a built-in rule-based enhancer applies (never errors).")
+
+            with gr.Row():
+                enh_input = gr.Textbox(
+                    label="Bullets (one per line)",
+                    lines=12,
+                    placeholder="Responsible for sales\nWorked on the A/B testing pipeline\nImproved model accuracy by 15%")
+                enh_output = gr.Textbox(label="Enhanced Bullets", lines=16, interactive=False)
+
+            with gr.Row():
+                enh_use_llm = gr.Checkbox(label="Try Ollama LLM first", value=True)
+                enh_model = gr.Dropdown(
+                    choices=["gemma2:2b", "llama3.2", "gemma2:9b", "llama3.1:8b"],
+                    value="gemma2:2b", label="Ollama Model")
+                enh_btn = gr.Button("🚀 Enhance Bullets", variant="primary")
+
+            enh_summary = gr.Textbox(label="Summary", interactive=False)
+            enh_copy = gr.Textbox(label="Enhanced Bullets (copy-friendly)", lines=10, interactive=True)
+
+            def _enhance_wrapper(bullets_text, use_llm, model):
+                if not bullets_text or not bullets_text.strip():
+                    return "Please paste at least one bullet.", "", ""
+                bullets = [b.strip() for b in bullets_text.splitlines() if b.strip()]
+                payload = enhance_bullets(bullets, use_llm=bool(use_llm), model=model)
+                report = format_enhancement_report(payload)
+                copy = "\n".join(r["improved"] for r in payload["results"])
+                return report, copy, payload["summary"]
+
+            enh_btn.click(fn=_enhance_wrapper,
+                          inputs=[enh_input, enh_use_llm, enh_model],
+                          outputs=[enh_output, enh_copy, enh_summary])
+
+        # ── Tab 6: .tex Editor ───────────────────────────
+        with gr.Tab("✏️ .tex Editor"):
+            gr.Markdown("### Edit LaTeX source and compile to PDF")
+            gr.Markdown("Write or paste LaTeX source. Click **Compile** to build a PDF, or **Load** an existing .tex / **Save** your work.")
+
+            def _list_tex_files():
+                if not os.path.exists(OUTPUT_DIR_STR):
+                    return []
+                tex_files = [f for f in os.listdir(OUTPUT_DIR_STR) if f.endswith(".tex")]
+                return sorted(tex_files)
+
+            with gr.Row():
+                tex_file_selector = gr.Dropdown(choices=_list_tex_files(), label="Select .tex file",
+                                                value=_list_tex_files()[0] if _list_tex_files() else "")
+
+            tex_editor = gr.Code(label="LaTeX Source", language="latex", lines=30,
+                                 value="% Paste or load LaTeX source here, then click Compile")
+
+            with gr.Row():
+                load_tex_btn = gr.Button("📂 Load Selected", variant="secondary")
+                save_tex_btn = gr.Button("💾 Save As", variant="secondary")
+                compile_tex_btn = gr.Button("🚀 Compile to PDF", variant="primary")
+            tex_editor_status = gr.Textbox(label="Status", interactive=False)
+            tex_editor_pdf = gr.File(label="📥 Generated PDF", visible=False)
+
+            def load_tex_wrapper(filename):
+                if not filename:
+                    return "Please select a .tex file to load.", gr.update(visible=False)
+                path = os.path.join(OUTPUT_DIR_STR, filename)
+                if not os.path.exists(path):
+                    return f"File not found: {filename}", gr.update(visible=False)
+                with open(path, "r") as f:
+                    content = f.read()
+                return content, gr.update(visible=False)
+
+            def save_tex_wrapper(content, name):
+                if not content:
+                    return "Editor is empty - nothing to save.", gr.update(visible=False)
+                if not name:
+                    return "Please provide a filename.", gr.update(visible=False)
+                fname = name if name.endswith(".tex") else name + ".tex"
+                os.makedirs(OUTPUT_DIR_STR, exist_ok=True)
+                path = os.path.join(OUTPUT_DIR_STR, fname)
+                with open(path, "w") as f:
+                    f.write(content)
+                return f"Saved: {path}", gr.update(visible=False)
+
+            def compile_tex_wrapper(content):
+                if not content or not content.strip():
+                    return "Editor is empty - nothing to compile.", gr.update(visible=False)
+                safe_name = "resume_editor_custom"
+                tex_path = os.path.join(OUTPUT_DIR_STR, f"{safe_name}.tex")
+                os.makedirs(OUTPUT_DIR_STR, exist_ok=True)
+                with open(tex_path, "w") as f:
+                    f.write(content)
+                try:
+                    result = subprocess.run(
+                        ["tectonic", "--outdir", OUTPUT_DIR_STR, tex_path],
+capture_output=True, text=True, cwd=BASE_DIR
+                )
+                except Exception as e:
+                    return f"Compile error: {str(e)}", gr.update(visible=False)
+
+                pdf_path = os.path.join(OUTPUT_DIR_STR, f"{safe_name}.pdf")
+                if result.returncode == 0 and os.path.exists(pdf_path):
+                    return f"PDF generated: {pdf_path}", gr.update(value=pdf_path, visible=True)
+                return f"Compilation issue: {result.stderr[:500]}", gr.update(visible=False)
+
+            load_tex_btn.click(fn=load_tex_wrapper, inputs=[tex_file_selector],
+                               outputs=[tex_editor, tex_editor_pdf])
+            save_tex_btn.click(fn=save_tex_wrapper, inputs=[tex_editor, tex_file_selector],
+                               outputs=[tex_editor_status, tex_editor_pdf])
+            compile_tex_btn.click(fn=compile_tex_wrapper, inputs=[tex_editor],
+                                   outputs=[tex_editor_status, tex_editor_pdf])
+
+        # ── Tab: Job Tracker ────────────────────────────
+        with gr.Tab("📌 Job Tracker"):
+            gr.Markdown("### Track job applications, interview status, and ATS scores")
+
+            def _applications_df(status):
+                apps = _tracker.list_applications(status_filter=status)
+                headers, rows = _tracker.to_dataframe_rows(apps)
+                return rows, f"Showing {len(apps)} application(s)"
+
+            def _counts_str():
+                counts = _tracker.get_status_counts()
+                if not counts:
+                    return "No applications yet."
+                return " | ".join(f"{k}: {v}" for k, v in counts.items())
+
+            with gr.Group():
+                with gr.Row():
+                    trk_company = gr.Textbox(label="Company", placeholder="e.g. Zerodha")
+                    trk_role = gr.Textbox(label="Role", placeholder="e.g. Quant Developer")
+                with gr.Row():
+                    trk_status = gr.Dropdown(choices=APPLICATION_STATUSES,
+                                             label="Status", value="Applied")
+                    trk_score = gr.Number(label="ATS Score (optional)", value=None)
+                    trk_date = gr.Textbox(label="Applied Date (YYYY-MM-DD, empty = today)")
+                trk_notes = gr.Textbox(label="Notes", lines=2)
+                trk_add_btn = gr.Button("➕ Add Application", variant="primary")
+                trk_add_out = gr.Textbox(label="Status", interactive=False)
+
+            def _add_application(company, role, status, score, date_val, notes):
+                try:
+                    aid = _tracker.add_application(
+                        company=company.strip(), role=role.strip(),
+                        status=status,
+                        ats_score=score if score is not None else None,
+                        applied_date=date_val.strip() if date_val.strip() else None,
+                        notes=notes.strip(),
+                    )
+                    return f"Added application #{aid} for {company} ({role})"
+                except Exception as e:
+                    return f"Error: {str(e)}"
+
+            trk_add_btn.click(fn=_add_application,
+                              inputs=[trk_company, trk_role, trk_status, trk_score, trk_date, trk_notes],
+                              outputs=trk_add_out)
+
+            with gr.Row():
+                trk_filter = gr.Dropdown(choices=["All"] + APPLICATION_STATUSES,
+                                         value="All", label="Filter By Status")
+                trk_counts = gr.Textbox(label="Status Counts", value=_counts_str(), interactive=False)
+                trk_refresh_btn = gr.Button("🔄 Refresh Table")
+
+            trk_table = gr.Dataframe(
+                headers=["ID", "Company", "Role", "Applied", "Status", "ATS", "Notes"],
+                datatype=["number", "str", "str", "str", "str", "number", "str"],
+                interactive=False,
+                label="Applications")
+            trk_summary = gr.Textbox(label="Summary", interactive=False)
+
+            def _refresh_display(status):
+                rows, summary = _applications_df(status)
+                return rows, summary, _counts_str()
+
+            trk_filter.change(fn=_applications_df, inputs=[trk_filter],
+                              outputs=[trk_table, trk_summary])
+            trk_refresh_btn.click(fn=_refresh_display,
+                                  inputs=[trk_filter],
+                                  outputs=[trk_table, trk_summary, trk_counts])
+
+            gr.Markdown("---")
+            gr.Markdown("### Update Status / Delete")
+            with gr.Row():
+                trk_update_id = gr.Number(label="Application ID", value=None, precision=0)
+                trk_update_status = gr.Dropdown(choices=APPLICATION_STATUSES,
+                                                value="Applied", label="New Status")
+                trk_update_btn = gr.Button("🔄 Update Status")
+            trk_update_out = gr.Textbox(label="Update/Delete Status", interactive=False)
+
+            def _update_status(aid, status):
+                if aid is None:
+                    return "Please provide an Application ID."
+                try:
+                    _tracker.update_status(int(aid), status=status)
+                    return f"Updated application {int(aid)} → {status}"
+                except Exception as e:
+                    return f"Error: {str(e)}"
+
+            def _delete_app(app_id):
+                if app_id is None:
+                    return "Please provide an Application ID."
+                try:
+                    _tracker.delete_application(int(app_id))
+                    return f"Deleted application #{int(app_id)}"
+                except Exception as e:
+                    return f"Error: {str(e)}"
+
+            with gr.Row():
+                trk_delete_id = gr.Number(label="Application ID to Delete", value=None, precision=0)
+                trk_delete_btn = gr.Button("🗑️ Delete Application", variant="danger")
+
+            trk_update_btn.click(fn=_update_status,
+                                 inputs=[trk_update_id, trk_update_status],
+                                 outputs=trk_update_out)
+            trk_delete_btn.click(fn=_delete_app, inputs=[trk_delete_id],
+                                 outputs=trk_update_out)
+
         # ── Tab 5: Manage Companies ───────────────────────
         with gr.Tab("📋 Manage Companies"):
             gr.Markdown("### Saved Company Profiles")
@@ -633,7 +997,7 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
 
 if __name__ == "__main__":
     demo.queue().launch(
-        server_name="0.0.0.0",
-        server_port=7860,
-        share=False,
+        server_name=HOST,
+        server_port=PORT,
+        share=SHARE,
     )

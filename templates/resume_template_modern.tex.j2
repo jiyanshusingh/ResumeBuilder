@@ -1,0 +1,93 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{helvet}
+\usepackage{fontawesome5}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+% Colors
+\definecolor{primary}{HTML}{2c3e50}
+\definecolor{accent}{HTML}{3498db}
+\definecolor{lightbg}{HTML}{ecf0f1}
+\definecolor{sectionbg}{HTML}{d5e8f0}
+
+% Section formatting - colored blocks
+\titleformat{\section}{\Large\bfseries\color{white}}{\colorbox{accent}{#1}}{0em}{}
+\titlespacing{\section}{0pt}{8pt}{4pt}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    urlcolor=primary,
+    linkcolor=primary
+}
+
+% List spacing
+\setlist{itemsep=1pt, topsep=1pt}
+
+% No page numbers
+\pagestyle{empty}
+
+\begin{document}
+
+% Header - two column
+\begin{multicols}{2}
+\begin{center}
+{\LARGE\bfseries (NAME)}
+
+\vspace{2pt}
+{\small (PHONE) $\cdot$ (EMAIL) $\cdot$ \href{(GITHUB_URL)}{\faGithub\ (GITHUB_HANDLE)} $\cdot$ \href{(LINKEDIN_URL)}{\faLinkedin\ LinkedIn}}
+
+\vspace{1pt}
+{\footnotesize (LOCATION) $\cdot$ Available for relocation}
+\end{center}
+\end{multicols}
+
+\vspace{4pt}
+% Headline
+\begin{tcolorbox}[colback=lightbg, colframe=accent, boxrule=0pt, left=6pt, right=6pt, top=2pt, bottom=2pt]
+{\large\color{primary} (HEADLINE)}
+\end{tcolorbox}
+
+\vspace{4pt}
+% Summary
+\section*{Summary}
+(SUMMARY)
+
+% Experience
+\section*{Experience}
+(EXPERIENCE_BLOCK)
+
+% Projects
+\section*{Projects}
+(PROJECTS_BLOCK)
+
+% Skills - in a two-column layout
+\section*{Skills}
+\begin{multicols}{2}
+(SKILLS_BLOCK)
+\end{multicols}
+
+% Education
+\section*{Education}
+(Education_BLOCK)
+
+% Certifications
+\section*{Certifications}
+(CERTIFICATIONS_BLOCK)
+
+% Achievements
+\section*{Key Achievements}
+(ACHIEVEMENTS_BLOCK)
+
+\end{document}

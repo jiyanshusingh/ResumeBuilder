@@ -9,8 +9,9 @@ import subprocess
 import argparse
 import re
 
+from config import TEMPLATE_DIR, DATA_DIR, OUTPUT_DIR
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
 TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "resume_template.tex.j2")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
@@ -133,6 +134,9 @@ def build_certifications_block(certs):
 
 
 def build_achievements_block(achievements):
+    if not achievements:
+        return "\\begin{itemize}\n\n\\end{itemize}"
+
     block = "\\begin{itemize}\n"
     for ach in achievements:
         block += "    \\item " + latex_escape(ach) + "\n"
@@ -140,7 +144,18 @@ def build_achievements_block(achievements):
     return block
 
 
-def build_resume(company_name, job_role, output_dir=None):
+def get_template_path(template_type=None):
+    """Get the path to a resume template file."""
+    if template_type is None or template_type == "default":
+        return TEMPLATE_DIR / "resume_template.tex.j2"
+    template_name = f"resume_template_{template_type}.tex.j2"
+    template_path = TEMPLATE_DIR / template_name
+    if template_path.exists():
+        return template_path
+    return TEMPLATE_DIR / "resume_template.tex.j2"
+
+
+def build_resume(company_name, job_role, output_dir=None, template_type=None):
     # Load data
     profile = load_json(os.path.join(DATA_DIR, "profile.json"))
     company = load_company_profile(company_name)
@@ -208,7 +223,8 @@ def build_resume(company_name, job_role, output_dir=None):
         }
 
     # Load template
-    with open(TEMPLATE_PATH, "r") as f:
+    template_path = get_template_path(template_type)
+    with open(template_path, "r") as f:
         template = f.read()
 
     github_handle = profile["github"].replace("https://github.com/", "")
