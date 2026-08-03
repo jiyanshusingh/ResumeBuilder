@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 EXPOSE 7860
-CMD ["python3", "web_ui.py"]
+CMD ["python3", "app.py"]

@@ -8,10 +8,10 @@ import os
 import subprocess
 import re
 
+from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
-TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "resume_template.tex.j2")
-OUTPUT_DIR = os.path.join(BASE_DIR, "output")
+TEMPLATE_PATH = TEMPLATE_DIR / "resume_template.tex.j2"
 
 
 def load_json(path):

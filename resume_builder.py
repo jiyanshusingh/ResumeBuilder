@@ -13,8 +13,6 @@ import subprocess
 from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "resume_template.tex.j2")
-OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 
 def load_json(path):
