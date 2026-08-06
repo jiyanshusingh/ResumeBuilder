@@ -9,6 +9,7 @@ import json
 import os
 import re
 import subprocess
+from typing import List
 
 from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
 from section_renderer import (
