@@ -1,0 +1,63 @@
+{
+  "name": "Prompt Engineering Toolkit",
+  "github": "",
+  "tags": [
+    "Python",
+    "LangChain",
+    "OpenAI API",
+    "FastAPI",
+    "Docker"
+  ],
+  "short_description": "Toolkit for building and testing prompts with LangChain. Includes prompt templates, evaluation metrics, and a web UI for comparing prompt versions.",
+  "detailed_description": "Toolkit for building and testing prompts with LangChain. Includes prompt templates, evaluation metrics, and a web UI for comparing prompt versions.",
+  "metrics": {
+    "software": [
+      "Built with Python, LangChain, OpenAI API, FastAPI, Docker",
+      "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, Prompt Engineering, LLMs, APIs, Python"
+    ],
+    "analytics": [
+      "Built with Python, LangChain, OpenAI API, FastAPI, Docker",
+      "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, Prompt Engineering, LLMs, APIs, Python"
+    ],
+    "finance": [
+      "Built with Python, LangChain, OpenAI API, FastAPI, Docker",
+      "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, Prompt Engineering, LLMs, APIs, Python"
+    ],
+    "freelance": [
+      "Built with Python, LangChain, OpenAI API, FastAPI, Docker",
+      "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, Prompt Engineering, LLMs, APIs, Python"
+    ],
+    "biotech": [
+      "Built with Python, LangChain, OpenAI API, FastAPI, Docker",
+      "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, Prompt Engineering, LLMs, APIs, Python"
+    ]
+  },
+  "highlights": [
+    "Directly targets ZS's prompt engineering + LLM requirements. Shows you can build AI-powered tools.",
+    "Tech stack: Python, LangChain, OpenAI API, FastAPI, Docker",
+    "Skills demonstrated: GenAI, Prompt Engineering, LLMs, APIs, Python"
+  ],
+  "technologies": [
+    "Python",
+    "LangChain",
+    "OpenAI API",
+    "FastAPI",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "ZS",
+  "is_user_project": false
+}

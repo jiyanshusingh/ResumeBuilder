@@ -192,6 +192,34 @@ def preprocess_text(text: str) -> str:
     return text.strip()
 
 
+def extract_skills_semantic(text: str) -> List[str]:
+    """Semantically detect skills/phrases in a JD via embeddings (optional).
+
+    Catches paraphrased skills (e.g. "forecasting" for "time series") that
+    exact matching misses. Returns [] when the offline model is unavailable.
+    """
+    try:
+        import embeddings
+    except ImportError:
+        return []
+    if not embeddings.available():
+        return []
+
+    text_lower = text.lower()
+    vocab = [
+        skill
+        for skills in SKILL_CATEGORIES.values()
+        for skill in skills
+        if skill.lower() not in text_lower
+    ]
+    matched = []
+    for skill in vocab:
+        sim = embeddings.similarity(skill, text)
+        if sim is not None and sim >= 0.5:
+            matched.append(skill)
+    return matched
+
+
 def extract_skills_nlp(text: str) -> List[str]:
     """
     Extract skills from job description text using NLP + pattern matching.
@@ -239,6 +267,12 @@ def extract_skills_nlp(text: str) -> List[str]:
                     if any(char.isalpha() for char in ent_text):
                         unique_skills.append(ent.text)
                         seen.add(ent_text)
+
+    # Semantic pass (embeddings): catch paraphrased skills
+    for skill in extract_skills_semantic(text):
+        if skill not in seen:
+            unique_skills.append(skill)
+            seen.add(skill.lower())
 
     return unique_skills
 
@@ -528,7 +562,7 @@ if __name__ == "__main__":
     elif mode == "url":
         result = extract_from_jd_url(content)
     elif mode == "file":
-        result = extract_from_jd_file(content)
+        result = extract_from_jd(content)
     else:
         print(f"Unknown mode: {mode}")
         sys.exit(1)

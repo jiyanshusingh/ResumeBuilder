@@ -1,15 +1,43 @@
 {
   "name": "A/B Testing Dashboard",
   "github": "https://github.com/ijiyanshusingh/ab-testing-dashboard",
-  "tags": ["analytics", "ml", "deployment", "python", "fastapi", "docker", "scipy"],
+  "tags": [
+    "analytics",
+    "ml",
+    "deployment",
+    "python",
+    "fastapi",
+    "docker",
+    "scipy"
+  ],
   "short_description": "Multi-page statistical analysis web app that analyzes experiment data and recommends Launch / Iterate / Kill using p-values, Bayesian Monte Carlo, power analysis, and sample size calculations. Generates consulting-grade PDF reports.",
   "detailed_description": "A comprehensive A/B testing dashboard that combines frequentist and Bayesian statistical methods to analyze experiment data and provide actionable recommendations (Launch, Iterate, Kill). Built with FastAPI, SciPy, and Bootstrap 5. Generates consulting-grade PDF reports for stakeholders.",
   "metrics": {
-    "software": ["FastAPI REST API", "Bootstrap 5 responsive UI", "Dockerized deployment on Render", "PDF report generation via ReportLab"],
-    "analytics": ["Bayesian Monte Carlo analysis", "Statistical hypothesis testing (p-values)", "Power analysis & sample size calculation", "Consulting-grade PDF report generation"],
-    "finance": ["Decision framework: Launch / Iterate / Kill recommendations", "Statistical significance testing", "Cost-aware experiment design"],
-    "freelance": ["Full-stack A/B testing dashboard from concept to deployment", "Statistical methods: Bayesian + frequentist + power analysis", "Client-ready PDF reporting"],
-    "biotech": ["Statistical validation framework applicable to biotech experiments"]
+    "software": [
+      "FastAPI REST API",
+      "Bootstrap 5 responsive UI",
+      "Dockerized deployment on Render",
+      "PDF report generation via ReportLab"
+    ],
+    "analytics": [
+      "Bayesian Monte Carlo analysis",
+      "Statistical hypothesis testing (p-values)",
+      "Power analysis & sample size calculation",
+      "Consulting-grade PDF report generation"
+    ],
+    "finance": [
+      "Decision framework: Launch / Iterate / Kill recommendations",
+      "Statistical significance testing",
+      "Cost-aware experiment design"
+    ],
+    "freelance": [
+      "Full-stack A/B testing dashboard from concept to deployment",
+      "Statistical methods: Bayesian + frequentist + power analysis",
+      "Client-ready PDF reporting"
+    ],
+    "biotech": [
+      "Statistical validation framework applicable to biotech experiments"
+    ]
   },
   "highlights": [
     "Implements Bayesian Monte Carlo for probabilistic decision-making",
@@ -17,9 +45,19 @@
     "Generates consulting-grade PDF reports with visualizations",
     "Deployed live at ab-testing-dashboard.onrender.com"
   ],
-  "technologies": ["FastAPI", "Bootstrap 5", "SciPy", "pandas", "ReportLab", "Docker", "Render"],
+  "technologies": [
+    "FastAPI",
+    "Bootstrap 5",
+    "SciPy",
+    "pandas",
+    "ReportLab",
+    "Docker",
+    "Render"
+  ],
   "links": {
     "code": "https://github.com/jiyanshusingh/ab-testing-dashboard",
     "live": "https://ab-testing-dashboard.onrender.com"
-  }
+  },
+  "company": "User Projects",
+  "is_user_project": true
 }

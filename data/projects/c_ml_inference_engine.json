@@ -1,0 +1,61 @@
+{
+  "name": "C++ ML Inference Engine",
+  "github": "",
+  "tags": [
+    "C++",
+    "ONNX Runtime",
+    "Python (training)",
+    "Linux"
+  ],
+  "short_description": "Lightweight ONNX runtime in C++ for running ML models on edge devices. Includes model loading, inference, and result post-processing.",
+  "detailed_description": "Lightweight ONNX runtime in C++ for running ML models on edge devices. Includes model loading, inference, and result post-processing.",
+  "metrics": {
+    "software": [
+      "Built with C++, ONNX Runtime, Python (training), Linux",
+      "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, ML, Embedded, Python, Linux"
+    ],
+    "analytics": [
+      "Built with C++, ONNX Runtime, Python (training), Linux",
+      "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, ML, Embedded, Python, Linux"
+    ],
+    "finance": [
+      "Built with C++, ONNX Runtime, Python (training), Linux",
+      "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, ML, Embedded, Python, Linux"
+    ],
+    "freelance": [
+      "Built with C++, ONNX Runtime, Python (training), Linux",
+      "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, ML, Embedded, Python, Linux"
+    ],
+    "biotech": [
+      "Built with C++, ONNX Runtime, Python (training), Linux",
+      "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, ML, Embedded, Python, Linux"
+    ]
+  },
+  "highlights": [
+    "Bridges Tesla's C++ + AI needs. Edge inference is core to Tesla's autonomous driving stack.",
+    "Tech stack: C++, ONNX Runtime, Python (training), Linux",
+    "Skills demonstrated: C++, ML, Embedded, Python, Linux"
+  ],
+  "technologies": [
+    "C++",
+    "ONNX Runtime",
+    "Python (training)",
+    "Linux"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

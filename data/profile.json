@@ -84,5 +84,46 @@
     "ML trading engine: turned ₹225k drawdown into +₹93k profit; 38,500+ trades labeled for ML filter, walk-forward OOS validated across 3 market windows",
     "Deployed 5 production web applications (FastAPI/Flask + Docker + GCP/Render) with live links",
     "Peptide hydrogel ML research: ROC-AUC 0.888 (amyloid), 0.720 (hydrogel); SHAP explanations; strict leakage prevention on 350-sample benchmark"
+  ],
+  "coursework": [
+    "Data Structures and Algorithms",
+    "Machine Learning",
+    "Database Management Systems (SQL)",
+    "Probability and Statistics",
+    "Optimization Techniques",
+    "Artificial Intelligence Fundamentals",
+    "Exploratory Data Analysis (EDA)",
+    "Data Mining and Data Warehousing",
+    "Software Engineering"
+  ],
+  "leadership": [
+    {
+      "role": "President, LEO Club",
+      "organization": "NIT Rourkela",
+      "location": "NIT Rourkela",
+      "description": "Managed club finances, budgeting and supported execution of campus and community events.",
+      "date": "2025 -- Present"
+    },
+    {
+      "role": "NCC, Leading Cadet",
+      "organization": "NIT Rourkela",
+      "location": "NIT Rourkela",
+      "description": "Led squad in drill and camp operations; selected for National Camps, EBSB, and NTAC, Gujarat.",
+      "date": "2024 -- Present"
+    },
+    {
+      "role": "Institute Player, Kho-Kho",
+      "organization": "NIT Rourkela",
+      "location": "NIT Rourkela",
+      "description": "Represented NIT Rourkela; winner of 2x Vriddhi tournaments and reached Inter-NIT semifinals.",
+      "date": "2024 -- Present"
+    },
+    {
+      "role": "Coordinator, National Entrepreneurship Summit 2025",
+      "organization": "NIT Rourkela",
+      "location": "NIT Rourkela",
+      "description": "Handled event setup, logistics, and on-site coordination for NES 2025.",
+      "date": "Jan 2025"
+    }
   ]
 }

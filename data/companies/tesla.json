@@ -1,0 +1,45 @@
+{
+  "name": "Tesla",
+  "website": "https://www.tesla.com",
+  "job_roles": {
+    "Software Engineer": {
+      "resume_type": "software",
+      "required_skills": [
+        "C++",
+        "Python",
+        "DSA",
+        "OOP",
+        "OS",
+        "Linux",
+        "Embedded",
+        "Networking"
+      ],
+      "keywords": [
+        "embedded",
+        "systems programming",
+        "real-time",
+        "autonomous",
+        "C++",
+        "Linux",
+        "concurrency",
+        "OS internals"
+      ],
+      "emphasize_metrics": [
+        "Real-time sensor data processing",
+        "Multi-threaded web server",
+        "C++ ML inference on edge devices",
+        "CAN bus message parsing"
+      ],
+      "section_order": [
+        "Education",
+        "Relevant Coursework",
+        "Internship Experience",
+        "Projects",
+        "Technical Skills",
+        "Leadership / Extracurricular",
+        "Certifications",
+        "Key Achievements"
+      ]
+    }
+  }
+}

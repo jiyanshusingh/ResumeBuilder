@@ -1,32 +1,22 @@
 name: resume-builder
-
-region: us-east-1
-env: production
-
 services:
   - type: web
     name: resume-builder
-    runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: DATA_DIR
         value: /app/data
       - key: OUTPUT_DIR
         value: /app/output
-      - key: PORT
-        value: "7860"
       - key: HOST
         value: "0.0.0.0"
       - key: SHARE
         value: "false"
       - key: DEBUG
         value: "false"
-      # Optional basic auth (set these in Render -> Environment).
+      # Optional basic auth - set in Render -> Environment.
       - key: APP_USERNAME
-        value: "${APP_USERNAME}"
+        sync: false
       - key: APP_PASSWORD
-        value: "${APP_PASSWORD}"
-
-# Note: SQLite (job_applications.db) is ephemeral on the Render free tier and is
-# re-seeded on startup by tracker.py, which also creates the resume_versions table.
+        sync: false

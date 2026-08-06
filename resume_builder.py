@@ -11,6 +11,17 @@ import re
 import subprocess
 
 from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
+from section_renderer import (
+    render_achievements,
+    render_certifications,
+    render_coursework,
+    render_education,
+    render_internship,
+    render_leadership,
+    render_projects,
+    render_skills,
+)
+from utils import latex_escape
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,29 +31,35 @@ def load_json(path):
         return json.load(f)
 
 
+def load_section_data(section_name, company_name=None):
+    """Load section data from data/sections/<section_name>/.
+
+    Tries company-specific file first, then falls back to default.json.
+    Returns the parsed JSON dict or None.
+    """
+    section_dir = os.path.join(DATA_DIR, "sections", section_name)
+    if not os.path.isdir(section_dir):
+        return None
+
+    candidates = []
+    if company_name:
+        candidates.append(
+            f"{section_name}_{company_name.lower().replace(' ', '_')}.json"
+        )
+        candidates.append(f"{company_name.lower().replace(' ', '_')}.json")
+    candidates.append("default.json")
+
+    for fname in candidates:
+        fpath = os.path.join(section_dir, fname)
+        if os.path.exists(fpath):
+            with open(fpath, "r") as f:
+                return json.load(f)
+
+    return None
+
+
 def slugify(s: str) -> str:
     return re.sub(r"[^a-zA-Z0-9]+", "_", s.lower()).strip("_")
-
-
-def latex_escape(s: str) -> str:
-    """Escape special LaTeX characters."""
-    if s is None:
-        return ""
-    s = str(s)
-    # Replace special chars - order matters
-    s = s.replace("\\", "\\textbackslash ")
-    s = s.replace("$", "\\$")
-    s = s.replace("&", "\\&")
-    s = s.replace("%", "\\%")
-    s = s.replace("#", "\\#")
-    s = s.replace("_", "\\_")
-    s = s.replace("{", "\\{")
-    s = s.replace("}", "\\}")
-    s = s.replace("~", "\\textasciitilde ")
-    s = s.replace("^", "\\textasciicircum ")
-    # Replace ₹ with INR if not using unicode
-    # s = s.replace('₹', 'Rs.~')
-    return s
 
 
 def load_company_profile(company_name):
@@ -78,8 +95,14 @@ def load_company_profile(company_name):
 
 
 def rank_projects(projects, keyword_weights):
-    """Rank projects by relevance score based on keyword weights."""
+    """Rank projects by relevance score based on keyword weights.
+
+    When the offline embedding model is available, adds a semantic cosine
+    component (role keywords vs project name + short description) on top of
+    the keyword-based score.
+    """
     scored = []
+    query = " ".join(keyword_weights.keys())
     for proj in projects:
         score = 0
         for kw, weight in keyword_weights.items():
@@ -90,8 +113,31 @@ def rank_projects(projects, keyword_weights):
                 score += weight
             if kw.lower() in proj["name"].lower():
                 score += weight * 0.5
+
+        semantic = _semantic_project_score(query, proj)
+        if semantic is not None:
+            score += semantic * 5
+
         scored.append((score, proj))
     return [p for _, p in sorted(scored, key=lambda x: -x[0])]
+
+
+def _semantic_project_score(query: str, proj: dict):
+    """Cosine similarity of role-keyword query vs project name + description."""
+    try:
+        import embeddings
+    except ImportError:
+        return None
+    if not embeddings.available() or not query.strip():
+        return None
+    desc = " ".join(
+        str(proj.get("name", ""))
+        + " "
+        + str(proj.get("short_description", ""))
+        + " "
+        + " ".join(proj.get("tags", []))
+    )
+    return embeddings.similarity(query, desc)
 
 
 def extract_bullets(proj_data, resume_type):
@@ -102,51 +148,224 @@ def extract_bullets(proj_data, resume_type):
     return bullets[:4] if len(bullets) > 4 else bullets
 
 
-def build_experience_block(experiences):
+_GENERIC_TAGS = {
+    "analytics",
+    "ml",
+    "machine-learning",
+    "software",
+    "finance",
+    "biotech",
+    "freelance",
+    "deployment",
+    "research",
+    "backend",
+    "frontend",
+    "full-stack",
+    "data-science",
+    "data",
+}
+
+
+_TECH_NAMES = {
+    "python": "Python",
+    "sql": "SQL",
+    "postgresql": "PostgreSQL",
+    "mysql": "MySQL",
+    "mongodb": "MongoDB",
+    "fastapi": "FastAPI",
+    "flask": "Flask",
+    "django": "Django",
+    "scipy": "SciPy",
+    "numpy": "NumPy",
+    "pandas": "Pandas",
+    "xgboost": "XGBoost",
+    "lightgbm": "LightGBM",
+    "scikit-learn": "scikit-learn",
+    "scikitlearn": "scikit-learn",
+    "docker": "Docker",
+    "gcp": "GCP",
+    "gcs": "GCS",
+    "aws": "AWS",
+    "terraform": "Terraform",
+    "kubernetes": "Kubernetes",
+    "fastapi": "FastAPI",
+    "shap": "SHAP",
+    "tensorflow": "TensorFlow",
+    "pytorch": "PyTorch",
+}
+
+
+def _project_tech(proj):
+    tech = []
+    for t in proj.get("tags", []):
+        t = t.strip()
+        if not t or t.lower() in _GENERIC_TAGS:
+            continue
+        tech.append(_TECH_NAMES.get(t.lower(), t.title()))
+    return ", ".join(tech[:6])
+
+
+def _project_link_label(url):
+    if not url:
+        return ""
+    label = url.split("://", 1)[-1].lstrip("www.")
+    return label.rstrip("/")
+
+
+def build_experience_block(experiences, jake=False):
     blocks = []
+    if jake:
+        blocks.append("\\resumeSubHeadingListStart")
     for exp in experiences:
-        block = "\\noindent\\textbf{" + latex_escape(exp["title"]) + "}"
-        block += " \\hfill \\textit{" + latex_escape(exp["duration"]) + "}\n\n"
-        block += "\\noindent\\textit{" + latex_escape(exp["company"]) + "}"
-        block += " \\hfill " + latex_escape(exp["location"]) + "\n"
-        block += "\\begin{itemize}\n"
-        for bullet in exp["bullets"]:
-            block += "    \\item " + latex_escape(bullet) + "\n"
-        block += "\\end{itemize}"
+        if jake:
+            block = "    \\resumeSubheading\n"
+            block += (
+                "      {"
+                + latex_escape(exp["company"])
+                + "}{"
+                + latex_escape(exp["location"])
+                + "}\n"
+            )
+            block += (
+                "      {"
+                + latex_escape(exp["title"])
+                + "}{"
+                + latex_escape(exp["duration"])
+                + "}\n"
+            )
+            block += "      \\resumeItemListStart\n"
+            for bullet in exp["bullets"]:
+                block += "        \\resumeItem{" + latex_escape(bullet) + "}\n"
+            block += "      \\resumeItemListEnd"
+        else:
+            block = "\\noindent\\textbf{" + latex_escape(exp["title"]) + "}"
+            block += " \\hfill \\textit{" + latex_escape(exp["duration"]) + "}\n\n"
+            block += "\\noindent\\textit{" + latex_escape(exp["company"]) + "}"
+            block += " \\hfill " + latex_escape(exp["location"]) + "\n"
+            block += "\\begin{itemize}\n"
+            for bullet in exp["bullets"]:
+                block += "    \\item " + latex_escape(bullet) + "\n"
+            block += "\\end{itemize}"
         blocks.append(block)
-    return "\n\n".join(blocks)
+    if jake:
+        blocks.append("\\resumeSubHeadingListEnd")
+    return "\n".join(blocks)
 
 
-def build_projects_block(projects, resume_type):
+def build_projects_block(projects, resume_type, jake=False):
     blocks = []
     for proj in projects:
         bullets = extract_bullets(proj, resume_type)
-        block = "\\noindent\\textbf{" + latex_escape(proj["name"]) + "}"
-        links = []
-        if proj["links"]["live"]:
-            links.append("\\href{" + proj["links"]["live"] + "}{\\faGlobe}")
-        links.append("\\href{" + proj["links"]["code"] + "}{\\faGithub}")
-        block += " \\hfill " + " ".join(links)
-        block += "\n\\begin{itemize}\n"
-        for bullet in bullets:
-            block += "    \\item " + latex_escape(bullet) + "\n"
-        block += "\\end{itemize}"
+        if jake:
+            tech = _project_tech(proj)
+            heading = "{\\textbf{" + latex_escape(proj["name"]) + "}"
+            if tech:
+                heading += " $|$ \\emph{" + latex_escape(tech) + "}"
+            heading += "}"
+            label = _project_link_label(proj.get("links", {}).get("live"))
+            if not label:
+                label = _project_link_label(proj.get("links", {}).get("code"))
+            if label:
+                link_url = (
+                    proj["links"]["live"]
+                    and proj["links"]["live"]
+                    or proj["links"]["code"]
+                )
+                right = "{\\href{" + link_url + "}{" + latex_escape(label) + "}}"
+            else:
+                right = "{}"
+            block = "    \\resumeProjectHeading\n"
+            block += "        " + heading + " " + right + "\n"
+            block += "        \\resumeItemListStart\n"
+            for bullet in bullets:
+                block += "          \\resumeItem{" + latex_escape(bullet) + "}\n"
+            block += "        \\resumeItemListEnd"
+        else:
+            block = "\\noindent\\textbf{" + latex_escape(proj["name"]) + "}"
+            links = []
+            if proj["links"]["live"]:
+                links.append("\\href{" + proj["links"]["live"] + "}{\\faGlobe}")
+            links.append("\\href{" + proj["links"]["code"] + "}{\\faGithub}")
+            block += " \\hfill " + " ".join(links)
+            block += "\n\\begin{itemize}\n"
+            for bullet in bullets:
+                block += "    \\item " + latex_escape(bullet) + "\n"
+            block += "\\end{itemize}"
         blocks.append(block)
-    return "\n\n".join(blocks)
+    return "\n".join(blocks)
 
 
-def build_skills_block(skills_dict):
+def build_skills_block(skills_dict, jake=False):
     lines = []
     for category, skills in skills_dict.items():
         escaped = [latex_escape(s) for s in skills]
-        lines.append(
-            "\\noindent\\textbf{"
-            + latex_escape(category)
-            + ": "
-            + ", ".join(escaped)
-            + "}"
+        if jake:
+            lines.append(
+                "      \\item[]{\\hangindent=1.7em\\hangafter=1 "
+                "\\textbf{"
+                + latex_escape(category)
+                + "}{: "
+                + ", ".join(escaped)
+                + "}}"
+            )
+        else:
+            lines.append(
+                "\\noindent\\textbf{"
+                + latex_escape(category)
+                + ": "
+                + ", ".join(escaped)
+                + "}"
+            )
+    return "\n".join(lines)
+
+
+def build_coursework_block(courses):
+    escaped = [latex_escape(c) for c in courses]
+    return ", ".join(escaped)
+
+
+def build_leadership_block(entries):
+    if not entries:
+        return "\\resumeSubHeadingListStart\n    \\resumeSubheading\n      {}{}\n      {}{}\n\\resumeSubHeadingListEnd"
+
+    blocks = ["\\resumeSubHeadingListStart"]
+    for e in entries:
+        role = e.get("role", "")
+        loc = e.get("location", "")
+        desc = e.get("description", "")
+        date = e.get("date", "")
+        blocks.append(
+            "    \\resumeSubheading\n"
+            "      {" + latex_escape(role) + "}{" + latex_escape(loc) + "}\n"
+            "      {" + latex_escape(desc) + "}{" + latex_escape(date) + "}"
         )
-    return "\n\n".join(lines)
+    blocks.append("\\resumeSubHeadingListEnd")
+    return "\n".join(blocks)
+
+
+def build_education_block(edu, jake=False):
+    if not jake:
+        return (
+            "\\noindent\\textbf{" + latex_escape(edu["degree"]) + "}"
+            " \\hfill \\textbf{" + latex_escape(edu["cgpa"]) + "}"
+            "\n\n\\noindent "
+            + latex_escape(edu["institution"])
+            + " -- "
+            + latex_escape(edu["duration"])
+        )
+    return (
+        "\\resumeSubHeadingListStart\n"
+        "    \\resumeSubheading\n"
+        "      {" + latex_escape(edu["institution"]) + "}{}\n"
+        "      {"
+        + latex_escape(edu["degree"])
+        + " -- "
+        + latex_escape(edu["cgpa"])
+        + "}{"
+        + latex_escape(edu["duration"])
+        + "}\n"
+        "\\resumeSubHeadingListEnd"
+    )
 
 
 def build_certifications_block(certs):
@@ -195,7 +414,7 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         raise ValueError(f"Role '{job_role}' not found. Available: {available}")
 
     role_config = company["job_roles"][job_role]
-    resume_type = role_config["resume_type"]
+    resume_type = role_config.get("resume_type", "analytics")
 
     # Load all projects
     projects_dir = os.path.join(DATA_DIR, "projects")
@@ -264,24 +483,72 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         template = f.read()
 
     github_handle = profile["github"].replace("https://github.com/", "")
+    jake = template_type == "jake"
 
-    # Build blocks
-    experience_block = build_experience_block(profile["experience"])
-    projects_block = build_projects_block(selected_projects, resume_type)
-    skills_block = build_skills_block(ordered_skills)
-    certs_block = build_certifications_block(relevant_certs)
-    achievements_block = build_achievements_block(profile["achievements"])
+    sections_dir = os.path.join(DATA_DIR, "sections")
+    coursework_data = load_section_data("coursework", company_name)
+    internship_data = load_section_data("internship", company_name)
 
-    education_block = (
-        "\\noindent\\textbf{" + latex_escape(profile["education"]["degree"]) + "}"
-        " \\hfill \\textbf{" + latex_escape(profile["education"]["cgpa"]) + "}"
-        "\n\n\\noindent "
-        + latex_escape(profile["education"]["institution"])
-        + " -- "
-        + latex_escape(profile["education"]["duration"])
+    experience_block = build_experience_block(profile["experience"], jake=jake)
+    projects_block = render_projects(selected_projects, resume_type, jake=jake)
+    skills_block = render_skills(ordered_skills, jake=jake)
+    certs_block = render_certifications(relevant_certs, jake=jake)
+    achievements_block = render_achievements(profile["achievements"], jake=jake)
+    coursework_block = (
+        render_coursework(coursework_data, jake=jake) if coursework_data else ""
+    )
+    internship_block = (
+        render_internship(internship_data, jake=jake) if internship_data else ""
+    )
+    leadership_block = render_leadership(profile.get("leadership", []), jake=jake)
+    education_block = render_education(profile["education"], jake=jake)
+
+    section_order = role_config.get(
+        "section_order",
+        [
+            "Education",
+            "Relevant Coursework",
+            "Internship Experience",
+            "Projects",
+            "Technical Skills",
+            "Leadership / Extracurricular",
+            "Certifications",
+            "Key Achievements",
+        ],
     )
 
-    # Replace placeholders
+    section_renderers = {
+        "Education": education_block,
+        "Relevant Coursework": coursework_block,
+        "Internship Experience": internship_block,
+        "Projects": projects_block,
+        "Technical Skills": skills_block,
+        "Leadership / Extracurricular": leadership_block,
+        "Certifications": certs_block,
+        "Key Achievements": achievements_block,
+    }
+
+    section_headers = {
+        "Education": "\\section{Education}",
+        "Relevant Coursework": "\\section{Relevant Coursework}",
+        "Internship Experience": "\\section{Internship Experience}",
+        "Projects": "\\section{Projects}",
+        "Technical Skills": "\\section{Technical Skills}",
+        "Leadership / Extracurricular": "\\section{Leadership / Extracurricular}",
+        "Certifications": "\\section{Certifications}",
+        "Key Achievements": "\\section{Key Achievements}",
+    }
+
+    sections_output = []
+    for section_name in section_order:
+        content = section_renderers.get(section_name, "")
+        if content:
+            if jake:
+                sections_output.append(content)
+            else:
+                header = section_headers.get(section_name, "")
+                sections_output.append(header + "\n" + content)
+
     replacements = {
         "(NAME)": latex_escape(profile["name"]),
         "(PHONE)": latex_escape(profile["phone"]),
@@ -302,6 +569,10 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         "(Education_BLOCK)": education_block,
         "(CERTIFICATIONS_BLOCK)": certs_block,
         "(ACHIEVEMENTS_BLOCK)": achievements_block,
+        "(COURSEWORK_BLOCK)": coursework_block,
+        "(LEADERSHIP_BLOCK)": leadership_block,
+        "(INTERNSHIP_BLOCK)": internship_block,
+        "(SECTIONS)": "\n".join(sections_output),
     }
 
     rendered = template
@@ -339,6 +610,79 @@ def build_resume(company_name, job_role, output_dir=None, template_type=None):
         print("tectonic not found. Install with: brew install tectonic")
 
     return tex_path
+
+
+def propose_company_profile(name: str, role: str, extraction: dict) -> dict:
+    """Build a company profile dict auto-proposed from a JD extraction.
+
+    Wraps the imported required_skills/keywords/metrics/resume_type into the
+    same company JSON shape used across the app (see web_ui.save_company).
+    """
+    name = (name or "").strip() or "New Company"
+    role = (role or "").strip() or "Role"
+    skills = list(dict.fromkeys(extraction.get("required_skills", [])))
+    keywords = list(dict.fromkeys(extraction.get("keywords", [])))
+    metrics = list(dict.fromkeys(extraction.get("emphasize_metrics", [])))
+    resume_type = extraction.get("resume_type", "analytics")
+    return {
+        "name": name,
+        "website": extraction.get("source_url", ""),
+        "resume_type": resume_type,
+        "job_roles": {
+            role: {
+                "resume_type": resume_type,
+                "required_skills": skills,
+                "keywords": keywords,
+                "emphasize_metrics": metrics,
+            }
+        },
+    }
+
+
+def save_company_profile(profile: dict) -> str:
+    """Write a company profile dict to data/companies/<slug>.json. Returns path.
+
+    Merges into an existing file of the same name so multiple roles can be
+    added to one company.
+    """
+    companies_dir = os.path.join(DATA_DIR, "companies")
+    os.makedirs(companies_dir, exist_ok=True)
+    name = profile.get("name", "Company")
+    slug = slugify(name)
+    path = os.path.join(companies_dir, f"{slug}.json")
+    if os.path.exists(path):
+        existing = load_json(path)
+        existing.setdefault("job_roles", {}).update(profile.get("job_roles", {}))
+        profile = existing
+    with open(path, "w") as f:
+        json.dump(profile, f, indent=2)
+    return path
+
+
+PLACEMENT_COMPANIES = {"Tesla", "GEP", "Tredence", "ZS"}
+
+
+def get_placement_companies() -> List[str]:
+    """Return the list of placement company names."""
+    return sorted(PLACEMENT_COMPANIES)
+
+
+def get_placement_projects() -> List[dict]:
+    """Return all placement (non-user) projects from data/projects/."""
+    projects_dir = os.path.join(DATA_DIR, "projects")
+    projects = []
+    for fname in os.listdir(projects_dir):
+        if not fname.endswith(".json"):
+            continue
+        proj = load_json(os.path.join(projects_dir, fname))
+        if not proj.get("is_user_project", False):
+            projects.append(proj)
+    return projects
+
+
+def get_placement_projects_by_company(company_name: str) -> List[dict]:
+    """Return placement projects filtered by company name."""
+    return [p for p in get_placement_projects() if p.get("company") == company_name]
 
 
 def list_companies():

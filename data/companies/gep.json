@@ -1,0 +1,45 @@
+{
+  "name": "GEP",
+  "website": "https://www.gep.com",
+  "job_roles": {
+    "Software Engineer": {
+      "resume_type": "software",
+      "required_skills": [
+        "C#",
+        ".NET",
+        "Node.js",
+        "REST APIs",
+        "SQL",
+        "JavaScript",
+        "Docker",
+        "Scalable Apps"
+      ],
+      "keywords": [
+        ".NET",
+        "C#",
+        "Node.js",
+        "REST APIs",
+        "JavaScript",
+        "Docker",
+        "scalable",
+        "microservices"
+      ],
+      "emphasize_metrics": [
+        "Microservices Order Processing System",
+        "Distributed URL Shortener with Redis caching",
+        "Full-stack Node.js + React application",
+        "C#/.NET Inventory Management API"
+      ],
+      "section_order": [
+        "Education",
+        "Relevant Coursework",
+        "Internship Experience",
+        "Projects",
+        "Technical Skills",
+        "Leadership / Extracurricular",
+        "Certifications",
+        "Key Achievements"
+      ]
+    }
+  }
+}

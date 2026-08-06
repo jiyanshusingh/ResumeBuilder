@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "company": "Digitaaztrans Technologies Pvt. Ltd.",
+      "location": "Raipur (Remote)",
+      "title": "Generative AI Intern",
+      "duration": "May 2026 -- July 2026",
+      "bullets": [
+        "Built an AI trade selection system (XGBoost) turning a -Rs. 225k loss into +Rs. 93k profit at 74% win rate.",
+        "Designed and deployed 6 parallel strategy engines processing 500+ NSE stocks every 5 minutes.",
+        "Implemented 3-way time-split walk-forward validation across 1.2 years of data, holding edge across all regimes.",
+        "Deployed via Docker and Docker Compose on GCP with PostgreSQL, a live dashboard, and Telegram trade alerts."
+      ]
+    }
+  ]
+}

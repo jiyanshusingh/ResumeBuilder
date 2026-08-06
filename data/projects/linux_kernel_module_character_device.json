@@ -1,0 +1,61 @@
+{
+  "name": "Linux Kernel Module \u2014 Character Device",
+  "github": "",
+  "tags": [
+    "C",
+    "Linux Kernel",
+    "Makefiles",
+    "GCC"
+  ],
+  "short_description": "A loadable Linux kernel module that exposes a /proc interface for reading system metrics. Includes module initialization, cleanup, and ioctl operations.",
+  "detailed_description": "A loadable Linux kernel module that exposes a /proc interface for reading system metrics. Includes module initialization, cleanup, and ioctl operations.",
+  "metrics": {
+    "software": [
+      "Built with C, Linux Kernel, Makefiles, GCC",
+      "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+      "Hard difficulty, 1 week",
+      "Demonstrates Linux, OS internals, C, Systems programming"
+    ],
+    "analytics": [
+      "Built with C, Linux Kernel, Makefiles, GCC",
+      "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+      "Hard difficulty, 1 week",
+      "Demonstrates Linux, OS internals, C, Systems programming"
+    ],
+    "finance": [
+      "Built with C, Linux Kernel, Makefiles, GCC",
+      "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+      "Hard difficulty, 1 week",
+      "Demonstrates Linux, OS internals, C, Systems programming"
+    ],
+    "freelance": [
+      "Built with C, Linux Kernel, Makefiles, GCC",
+      "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+      "Hard difficulty, 1 week",
+      "Demonstrates Linux, OS internals, C, Systems programming"
+    ],
+    "biotech": [
+      "Built with C, Linux Kernel, Makefiles, GCC",
+      "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+      "Hard difficulty, 1 week",
+      "Demonstrates Linux, OS internals, C, Systems programming"
+    ]
+  },
+  "highlights": [
+    "Shows deep Linux understanding \u2014 Tesla values OS-level knowledge for embedded and systems roles.",
+    "Tech stack: C, Linux Kernel, Makefiles, GCC",
+    "Skills demonstrated: Linux, OS internals, C, Systems programming"
+  ],
+  "technologies": [
+    "C",
+    "Linux Kernel",
+    "Makefiles",
+    "GCC"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

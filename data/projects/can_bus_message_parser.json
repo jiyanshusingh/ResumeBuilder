@@ -1,0 +1,63 @@
+{
+  "name": "CAN Bus Message Parser",
+  "github": "",
+  "tags": [
+    "C++",
+    "SQLite",
+    "REST API",
+    "Linux",
+    "Docker"
+  ],
+  "short_description": "Parses CAN bus messages, decodes signals using DBC files, stores decoded data in SQLite, and exposes via a REST API for external tools.",
+  "detailed_description": "Parses CAN bus messages, decodes signals using DBC files, stores decoded data in SQLite, and exposes via a REST API for external tools.",
+  "metrics": {
+    "software": [
+      "Built with C++, SQLite, REST API, Linux, Docker",
+      "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+      "Medium difficulty, 1 week",
+      "Demonstrates C++, DBMS, REST APIs, Linux, Embedded"
+    ],
+    "analytics": [
+      "Built with C++, SQLite, REST API, Linux, Docker",
+      "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+      "Medium difficulty, 1 week",
+      "Demonstrates C++, DBMS, REST APIs, Linux, Embedded"
+    ],
+    "finance": [
+      "Built with C++, SQLite, REST API, Linux, Docker",
+      "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+      "Medium difficulty, 1 week",
+      "Demonstrates C++, DBMS, REST APIs, Linux, Embedded"
+    ],
+    "freelance": [
+      "Built with C++, SQLite, REST API, Linux, Docker",
+      "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+      "Medium difficulty, 1 week",
+      "Demonstrates C++, DBMS, REST APIs, Linux, Embedded"
+    ],
+    "biotech": [
+      "Built with C++, SQLite, REST API, Linux, Docker",
+      "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+      "Medium difficulty, 1 week",
+      "Demonstrates C++, DBMS, REST APIs, Linux, Embedded"
+    ]
+  },
+  "highlights": [
+    "Combines embedded + backend skills. Tesla's vehicles use CAN bus extensively \u2014 this shows domain relevance.",
+    "Tech stack: C++, SQLite, REST API, Linux, Docker",
+    "Skills demonstrated: C++, DBMS, REST APIs, Linux, Embedded"
+  ],
+  "technologies": [
+    "C++",
+    "SQLite",
+    "REST API",
+    "Linux",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

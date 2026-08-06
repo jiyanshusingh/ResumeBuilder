@@ -1,15 +1,48 @@
 {
   "name": "Peptide Hydrogel Prediction",
   "github": "https://github.com/jiyanshusingh/hydrogel_project",
-  "tags": ["biotech", "ml", "research", "deployment", "python", "flask", "shap"],
+  "tags": [
+    "biotech",
+    "ml",
+    "research",
+    "deployment",
+    "python",
+    "flask",
+    "shap"
+  ],
   "short_description": "ML system predicting hydrogel formation of short peptides from amino-acid sequence and terminal modifications. ROC-AUC 0.888 for amyloid, 0.720 for hydrogel; SHAP interpretability; strict leakage prevention.",
   "detailed_description": "Machine-learning models predicting hydrogel formation of short peptides from their amino-acid sequence and terminal modifications. Trained on a reconstructed SAPdb benchmark with rigorous leakage prevention, evaluated on a sealed test set and an expanded curated external literature set. Includes a multi-page Flask web application portal for authorized users.",
   "metrics": {
-    "biotech": ["ROC-AUC 0.888 (amyloid classification)", "ROC-AUC 0.720 (hydrogel classification)", "43 hand-crafted chemistry + AAindex + ESM2 representations", "364-sample benchmark with leakage prevention", "Multi-page Flask portal with researcher auth"],
-    "analytics": ["Statistical validation with 350-sample benchmark", "SHAP-based model interpretability", "Cross-validation and sealed holdout testing", "Feature engineering: 3 representation levels"],
-    "ml": ["RandomForest, LogisticRegression + ESM2 embeddings", "SHAP cross-phenotype analysis", "De-novo candidate scoring", "Out-of-fold evaluation"],
-    "software": ["Multi-page Flask application", "Background training jobs", "Dataset browsing/search", "Model persistence and download"],
-    "freelance": ["Research ML project from benchmarking through deployment", "Model interpretability with SHAP", "Full web application portal"]
+    "biotech": [
+      "ROC-AUC 0.888 (amyloid classification)",
+      "ROC-AUC 0.720 (hydrogel classification)",
+      "43 hand-crafted chemistry + AAindex + ESM2 representations",
+      "364-sample benchmark with leakage prevention",
+      "Multi-page Flask portal with researcher auth"
+    ],
+    "analytics": [
+      "Statistical validation with 350-sample benchmark",
+      "SHAP-based model interpretability",
+      "Cross-validation and sealed holdout testing",
+      "Feature engineering: 3 representation levels"
+    ],
+    "ml": [
+      "RandomForest, LogisticRegression + ESM2 embeddings",
+      "SHAP cross-phenotype analysis",
+      "De-novo candidate scoring",
+      "Out-of-fold evaluation"
+    ],
+    "software": [
+      "Multi-page Flask application",
+      "Background training jobs",
+      "Dataset browsing/search",
+      "Model persistence and download"
+    ],
+    "freelance": [
+      "Research ML project from benchmarking through deployment",
+      "Model interpretability with SHAP",
+      "Full web application portal"
+    ]
   },
   "highlights": [
     "ROC-AUC 0.888 for amyloid classification (WALTZ-DB, 1,415 samples)",
@@ -18,9 +51,22 @@
     "SHAP-based interpretability and cross-phenotype analysis",
     "Multi-page Flask portal with training, prediction, and de-novo design scoring"
   ],
-  "technologies": ["Python", "scikit-learn", "XGBoost", "ESM2", "SHAP", "Flask", "pandas", "NumPy", "Docker", "Render"],
+  "technologies": [
+    "Python",
+    "scikit-learn",
+    "XGBoost",
+    "ESM2",
+    "SHAP",
+    "Flask",
+    "pandas",
+    "NumPy",
+    "Docker",
+    "Render"
+  ],
   "links": {
     "code": "https://github.com/jiyanshusingh/hydrogel_project",
     "live": "https://peptide-hydrogel-portal.onrender.com"
-  }
+  },
+  "company": "User Projects",
+  "is_user_project": true
 }

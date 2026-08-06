@@ -28,15 +28,15 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest tests/ -v
+        RESUME_EMBEDDINGS=0 pytest tests/ -v
 
     - name: Check code formatting (black)
       run: |
-        black --check resume_builder.py web_ui.py resume_analyzer.py ats_scorer.py jd_importer.py parse_preview.py compare.py bullet_enhancer.py tracker.py config.py app.py generate_resume.py
+        black --check resume_builder.py web_ui.py resume_analyzer.py ats_scorer.py jd_importer.py parse_preview.py compare.py bullet_enhancer.py tracker.py config.py app.py generate_resume.py embeddings.py
 
     - name: Check import sorting (isort)
       run: |
-        isort --check-only resume_builder.py web_ui.py resume_analyzer.py ats_scorer.py jd_importer.py parse_preview.py compare.py bullet_enhancer.py tracker.py config.py app.py generate_resume.py
+        isort --check-only resume_builder.py web_ui.py resume_analyzer.py ats_scorer.py jd_importer.py parse_preview.py compare.py bullet_enhancer.py tracker.py config.py app.py generate_resume.py embeddings.py
 
   deploy:
     name: Deploy to Render

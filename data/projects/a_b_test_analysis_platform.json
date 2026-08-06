@@ -1,0 +1,65 @@
+{
+  "name": "A/B Test Analysis Platform",
+  "github": "",
+  "tags": [
+    "Python",
+    "SQL",
+    "Plotly",
+    "FastAPI",
+    "Docker",
+    "SciPy"
+  ],
+  "short_description": "Platform for designing and analyzing A/B tests. Includes statistical significance testing, Bayesian analysis, sample size calculation, and automated report generation.",
+  "detailed_description": "Platform for designing and analyzing A/B tests. Includes statistical significance testing, Bayesian analysis, sample size calculation, and automated report generation.",
+  "metrics": {
+    "software": [
+      "Built with Python, SQL, Plotly, FastAPI, Docker, SciPy",
+      "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Statistics, ML, Python, SQL, APIs, Data visualization"
+    ],
+    "analytics": [
+      "Built with Python, SQL, Plotly, FastAPI, Docker, SciPy",
+      "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Statistics, ML, Python, SQL, APIs, Data visualization"
+    ],
+    "finance": [
+      "Built with Python, SQL, Plotly, FastAPI, Docker, SciPy",
+      "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Statistics, ML, Python, SQL, APIs, Data visualization"
+    ],
+    "freelance": [
+      "Built with Python, SQL, Plotly, FastAPI, Docker, SciPy",
+      "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Statistics, ML, Python, SQL, APIs, Data visualization"
+    ],
+    "biotech": [
+      "Built with Python, SQL, Plotly, FastAPI, Docker, SciPy",
+      "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Statistics, ML, Python, SQL, APIs, Data visualization"
+    ]
+  },
+  "highlights": [
+    "Leverages your existing A/B testing project. ZS does heavy experimentation and statistical analysis.",
+    "Tech stack: Python, SQL, Plotly, FastAPI, Docker, SciPy",
+    "Skills demonstrated: Statistics, ML, Python, SQL, APIs, Data visualization"
+  ],
+  "technologies": [
+    "Python",
+    "SQL",
+    "Plotly",
+    "FastAPI",
+    "Docker",
+    "SciPy"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "ZS",
+  "is_user_project": false
+}

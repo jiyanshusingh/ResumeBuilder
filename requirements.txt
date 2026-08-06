@@ -7,5 +7,7 @@ spacy>=3.7.0
 requests>=2.31.0
 beautifulsoup4>=4.12.0
 rake-nltk>=1.0.0
+torch>=2.2.0
+sentence-transformers>=2.7.0
 
 # Run after install: python -m spacy download en_core_web_sm

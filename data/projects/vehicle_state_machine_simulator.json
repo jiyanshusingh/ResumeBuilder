@@ -1,0 +1,61 @@
+{
+  "name": "Vehicle State Machine Simulator",
+  "github": "",
+  "tags": [
+    "C++",
+    "OOP",
+    "Design Patterns",
+    "Google Test"
+  ],
+  "short_description": "Finite state machine for vehicle modes (park, drive, charge, error) with event-driven transitions. Implemented with OOP design patterns and unit tested with Google Test.",
+  "detailed_description": "Finite state machine for vehicle modes (park, drive, charge, error) with event-driven transitions. Implemented with OOP design patterns and unit tested with Google Test.",
+  "metrics": {
+    "software": [
+      "Built with C++, OOP, Design Patterns, Google Test",
+      "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+      "Medium difficulty, 1 week",
+      "Demonstrates OOP, C++, Design patterns, Testing"
+    ],
+    "analytics": [
+      "Built with C++, OOP, Design Patterns, Google Test",
+      "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+      "Medium difficulty, 1 week",
+      "Demonstrates OOP, C++, Design patterns, Testing"
+    ],
+    "finance": [
+      "Built with C++, OOP, Design Patterns, Google Test",
+      "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+      "Medium difficulty, 1 week",
+      "Demonstrates OOP, C++, Design patterns, Testing"
+    ],
+    "freelance": [
+      "Built with C++, OOP, Design Patterns, Google Test",
+      "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+      "Medium difficulty, 1 week",
+      "Demonstrates OOP, C++, Design patterns, Testing"
+    ],
+    "biotech": [
+      "Built with C++, OOP, Design Patterns, Google Test",
+      "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+      "Medium difficulty, 1 week",
+      "Demonstrates OOP, C++, Design patterns, Testing"
+    ]
+  },
+  "highlights": [
+    "Demonstrates OOP + C++ + systems thinking \u2014 Tesla values clean architecture and testable code.",
+    "Tech stack: C++, OOP, Design Patterns, Google Test",
+    "Skills demonstrated: OOP, C++, Design patterns, Testing"
+  ],
+  "technologies": [
+    "C++",
+    "OOP",
+    "Design Patterns",
+    "Google Test"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

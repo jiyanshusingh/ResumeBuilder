@@ -1,0 +1,63 @@
+{
+  "name": "C#/.NET Inventory Management API",
+  "github": "",
+  "tags": [
+    "C#",
+    ".NET 8",
+    "SQL Server",
+    "JWT",
+    "Docker"
+  ],
+  "short_description": "REST API for inventory management with CRUD operations, SQL Server, JWT authentication, and Docker deployment. Covers products, categories, and stock transactions.",
+  "detailed_description": "REST API for inventory management with CRUD operations, SQL Server, JWT authentication, and Docker deployment. Covers products, categories, and stock transactions.",
+  "metrics": {
+    "software": [
+      "Built with C#, .NET 8, SQL Server, JWT, Docker",
+      "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates C#, .NET, SQL, REST APIs, OOP, Docker"
+    ],
+    "analytics": [
+      "Built with C#, .NET 8, SQL Server, JWT, Docker",
+      "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates C#, .NET, SQL, REST APIs, OOP, Docker"
+    ],
+    "finance": [
+      "Built with C#, .NET 8, SQL Server, JWT, Docker",
+      "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates C#, .NET, SQL, REST APIs, OOP, Docker"
+    ],
+    "freelance": [
+      "Built with C#, .NET 8, SQL Server, JWT, Docker",
+      "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates C#, .NET, SQL, REST APIs, OOP, Docker"
+    ],
+    "biotech": [
+      "Built with C#, .NET 8, SQL Server, JWT, Docker",
+      "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates C#, .NET, SQL, REST APIs, OOP, Docker"
+    ]
+  },
+  "highlights": [
+    "Directly uses GEP's preferred stack (.NET, C#, SQL, REST APIs, Docker). Shows you can work in their ecosystem.",
+    "Tech stack: C#, .NET 8, SQL Server, JWT, Docker",
+    "Skills demonstrated: C#, .NET, SQL, REST APIs, OOP, Docker"
+  ],
+  "technologies": [
+    "C#",
+    ".NET 8",
+    "SQL Server",
+    "JWT",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "GEP",
+  "is_user_project": false
+}

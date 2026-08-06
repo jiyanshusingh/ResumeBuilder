@@ -1,0 +1,61 @@
+{
+  "name": "Distributed Task Queue in C++",
+  "github": "",
+  "tags": [
+    "C++",
+    "Linux",
+    "POSIX",
+    "Design Patterns"
+  ],
+  "short_description": "Producer-consumer pattern with thread-safe queue, priority scheduling, task persistence to SQLite, and worker pool management.",
+  "detailed_description": "Producer-consumer pattern with thread-safe queue, priority scheduling, task persistence to SQLite, and worker pool management.",
+  "metrics": {
+    "software": [
+      "Built with C++, Linux, POSIX, Design Patterns",
+      "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (queues, priority queues), OOP, Concurrency, Linux"
+    ],
+    "analytics": [
+      "Built with C++, Linux, POSIX, Design Patterns",
+      "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (queues, priority queues), OOP, Concurrency, Linux"
+    ],
+    "finance": [
+      "Built with C++, Linux, POSIX, Design Patterns",
+      "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (queues, priority queues), OOP, Concurrency, Linux"
+    ],
+    "freelance": [
+      "Built with C++, Linux, POSIX, Design Patterns",
+      "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (queues, priority queues), OOP, Concurrency, Linux"
+    ],
+    "biotech": [
+      "Built with C++, Linux, POSIX, Design Patterns",
+      "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (queues, priority queues), OOP, Concurrency, Linux"
+    ]
+  },
+  "highlights": [
+    "Demonstrates advanced DSA + systems programming \u2014 Tesla's core screening criteria for Software Engineer roles.",
+    "Tech stack: C++, Linux, POSIX, Design Patterns",
+    "Skills demonstrated: DSA (queues, priority queues), OOP, Concurrency, Linux"
+  ],
+  "technologies": [
+    "C++",
+    "Linux",
+    "POSIX",
+    "Design Patterns"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

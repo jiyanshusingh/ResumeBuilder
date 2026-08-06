@@ -1,0 +1,63 @@
+{
+  "name": "Customer Churn Prediction with Explanation",
+  "github": "",
+  "tags": [
+    "Python",
+    "Scikit-learn",
+    "FastAPI",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "short_description": "ML model for predicting customer churn with SHAP-based explanations. FastAPI backend serves predictions, PostgreSQL stores data, dashboard shows feature importance.",
+  "detailed_description": "ML model for predicting customer churn with SHAP-based explanations. FastAPI backend serves predictions, PostgreSQL stores data, dashboard shows feature importance.",
+  "metrics": {
+    "software": [
+      "Built with Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+      "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates ML, SQL, APIs, Cloud, Explainable AI"
+    ],
+    "analytics": [
+      "Built with Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+      "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates ML, SQL, APIs, Cloud, Explainable AI"
+    ],
+    "finance": [
+      "Built with Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+      "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates ML, SQL, APIs, Cloud, Explainable AI"
+    ],
+    "freelance": [
+      "Built with Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+      "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates ML, SQL, APIs, Cloud, Explainable AI"
+    ],
+    "biotech": [
+      "Built with Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+      "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates ML, SQL, APIs, Cloud, Explainable AI"
+    ]
+  },
+  "highlights": [
+    "Combines ML + SQL + APIs. ZS values models that are explainable and business-facing.",
+    "Tech stack: Python, Scikit-learn, FastAPI, PostgreSQL, Docker",
+    "Skills demonstrated: ML, SQL, APIs, Cloud, Explainable AI"
+  ],
+  "technologies": [
+    "Python",
+    "Scikit-learn",
+    "FastAPI",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "ZS",
+  "is_user_project": false
+}

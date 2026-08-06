@@ -1,0 +1,63 @@
+{
+  "name": "Personal Finance Dashboard",
+  "github": "",
+  "tags": [
+    "Node.js",
+    "React",
+    "PostgreSQL",
+    "Chart.js",
+    "REST APIs"
+  ],
+  "short_description": "Full-stack finance dashboard with Node.js backend, React frontend, PostgreSQL storage, and Chart.js visualization for expense tracking and budgeting.",
+  "detailed_description": "Full-stack finance dashboard with Node.js backend, React frontend, PostgreSQL storage, and Chart.js visualization for expense tracking and budgeting.",
+  "metrics": {
+    "software": [
+      "Built with Node.js, React, PostgreSQL, Chart.js, REST APIs",
+      "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, React, SQL, REST APIs, Data visualization"
+    ],
+    "analytics": [
+      "Built with Node.js, React, PostgreSQL, Chart.js, REST APIs",
+      "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, React, SQL, REST APIs, Data visualization"
+    ],
+    "finance": [
+      "Built with Node.js, React, PostgreSQL, Chart.js, REST APIs",
+      "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, React, SQL, REST APIs, Data visualization"
+    ],
+    "freelance": [
+      "Built with Node.js, React, PostgreSQL, Chart.js, REST APIs",
+      "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, React, SQL, REST APIs, Data visualization"
+    ],
+    "biotech": [
+      "Built with Node.js, React, PostgreSQL, Chart.js, REST APIs",
+      "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, React, SQL, REST APIs, Data visualization"
+    ]
+  },
+  "highlights": [
+    "Demonstrates web development breadth (JS frameworks, SQL, APIs, data viz). Covers GEP's 'basic web development' requirement.",
+    "Tech stack: Node.js, React, PostgreSQL, Chart.js, REST APIs",
+    "Skills demonstrated: JavaScript, React, SQL, REST APIs, Data visualization"
+  ],
+  "technologies": [
+    "Node.js",
+    "React",
+    "PostgreSQL",
+    "Chart.js",
+    "REST APIs"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "GEP",
+  "is_user_project": false
+}

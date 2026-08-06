@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "company": "Test Corp",
+      "location": "Remote",
+      "title": "Test Intern",
+      "duration": "2026",
+      "bullets": [
+        "Test bullet"
+      ]
+    }
+  ]
+}

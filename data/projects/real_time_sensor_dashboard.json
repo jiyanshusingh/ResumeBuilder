@@ -1,0 +1,63 @@
+{
+  "name": "Real-Time Sensor Dashboard",
+  "github": "",
+  "tags": [
+    "C++",
+    "Python (bridge)",
+    "React",
+    "Plotly.js",
+    "WebSocket"
+  ],
+  "short_description": "C++ backend streams sensor data via WebSocket, React frontend visualizes with Plotly.js in real-time. Includes filtering, zoom, and alert thresholds.",
+  "detailed_description": "C++ backend streams sensor data via WebSocket, React frontend visualizes with Plotly.js in real-time. Includes filtering, zoom, and alert thresholds.",
+  "metrics": {
+    "software": [
+      "Built with C++, Python (bridge), React, Plotly.js, WebSocket",
+      "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Full-stack, C++, JavaScript, React, Data visualization"
+    ],
+    "analytics": [
+      "Built with C++, Python (bridge), React, Plotly.js, WebSocket",
+      "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Full-stack, C++, JavaScript, React, Data visualization"
+    ],
+    "finance": [
+      "Built with C++, Python (bridge), React, Plotly.js, WebSocket",
+      "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Full-stack, C++, JavaScript, React, Data visualization"
+    ],
+    "freelance": [
+      "Built with C++, Python (bridge), React, Plotly.js, WebSocket",
+      "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Full-stack, C++, JavaScript, React, Data visualization"
+    ],
+    "biotech": [
+      "Built with C++, Python (bridge), React, Plotly.js, WebSocket",
+      "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Full-stack, C++, JavaScript, React, Data visualization"
+    ]
+  },
+  "highlights": [
+    "Shows Tesla that you can build end-to-end systems from embedded C++ to React dashboard.",
+    "Tech stack: C++, Python (bridge), React, Plotly.js, WebSocket",
+    "Skills demonstrated: Full-stack, C++, JavaScript, React, Data visualization"
+  ],
+  "technologies": [
+    "C++",
+    "Python (bridge)",
+    "React",
+    "Plotly.js",
+    "WebSocket"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

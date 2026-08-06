@@ -1,0 +1,63 @@
+{
+  "name": "Microservices Order Processing System",
+  "github": "",
+  "tags": [
+    "C#",
+    ".NET",
+    "RabbitMQ",
+    "SQL Server",
+    "Docker"
+  ],
+  "short_description": "Multi-service architecture with C#/.NET microservices communicating via RabbitMQ. Includes order, payment, and notification services with SQL Server backend.",
+  "detailed_description": "Multi-service architecture with C#/.NET microservices communicating via RabbitMQ. Includes order, payment, and notification services with SQL Server backend.",
+  "metrics": {
+    "software": [
+      "Built with C#, .NET, RabbitMQ, SQL Server, Docker",
+      "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+      "Hard difficulty, 3 weeks",
+      "Demonstrates OOP, C#, .NET, Architecture, SQL, Docker"
+    ],
+    "analytics": [
+      "Built with C#, .NET, RabbitMQ, SQL Server, Docker",
+      "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+      "Hard difficulty, 3 weeks",
+      "Demonstrates OOP, C#, .NET, Architecture, SQL, Docker"
+    ],
+    "finance": [
+      "Built with C#, .NET, RabbitMQ, SQL Server, Docker",
+      "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+      "Hard difficulty, 3 weeks",
+      "Demonstrates OOP, C#, .NET, Architecture, SQL, Docker"
+    ],
+    "freelance": [
+      "Built with C#, .NET, RabbitMQ, SQL Server, Docker",
+      "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+      "Hard difficulty, 3 weeks",
+      "Demonstrates OOP, C#, .NET, Architecture, SQL, Docker"
+    ],
+    "biotech": [
+      "Built with C#, .NET, RabbitMQ, SQL Server, Docker",
+      "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+      "Hard difficulty, 3 weeks",
+      "Demonstrates OOP, C#, .NET, Architecture, SQL, Docker"
+    ]
+  },
+  "highlights": [
+    "Shows architectural thinking. GEP prefers candidates who understand scalable, distributed systems.",
+    "Tech stack: C#, .NET, RabbitMQ, SQL Server, Docker",
+    "Skills demonstrated: OOP, C#, .NET, Architecture, SQL, Docker"
+  ],
+  "technologies": [
+    "C#",
+    ".NET",
+    "RabbitMQ",
+    "SQL Server",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "GEP",
+  "is_user_project": false
+}

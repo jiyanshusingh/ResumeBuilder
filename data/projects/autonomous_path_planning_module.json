@@ -1,0 +1,61 @@
+{
+  "name": "Autonomous Path Planning Module",
+  "github": "",
+  "tags": [
+    "C++",
+    "Python",
+    "Geometry",
+    "Matplotlib"
+  ],
+  "short_description": "Implements A* and Dijkstra pathfinding algorithms on a grid map with obstacle avoidance. Visualizes paths using Matplotlib. Supports dynamic obstacle insertion.",
+  "detailed_description": "Implements A* and Dijkstra pathfinding algorithms on a grid map with obstacle avoidance. Visualizes paths using Matplotlib. Supports dynamic obstacle insertion.",
+  "metrics": {
+    "software": [
+      "Built with C++, Python, Geometry, Matplotlib",
+      "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (graphs, pathfinding), OOP, C++, Python"
+    ],
+    "analytics": [
+      "Built with C++, Python, Geometry, Matplotlib",
+      "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (graphs, pathfinding), OOP, C++, Python"
+    ],
+    "finance": [
+      "Built with C++, Python, Geometry, Matplotlib",
+      "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (graphs, pathfinding), OOP, C++, Python"
+    ],
+    "freelance": [
+      "Built with C++, Python, Geometry, Matplotlib",
+      "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (graphs, pathfinding), OOP, C++, Python"
+    ],
+    "biotech": [
+      "Built with C++, Python, Geometry, Matplotlib",
+      "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates DSA (graphs, pathfinding), OOP, C++, Python"
+    ]
+  },
+  "highlights": [
+    "Tesla specifically tests pathfinding in interviews. This project demonstrates domain knowledge in autonomous systems and advanced DSA.",
+    "Tech stack: C++, Python, Geometry, Matplotlib",
+    "Skills demonstrated: DSA (graphs, pathfinding), OOP, C++, Python"
+  ],
+  "technologies": [
+    "C++",
+    "Python",
+    "Geometry",
+    "Matplotlib"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

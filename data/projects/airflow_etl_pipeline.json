@@ -1,0 +1,67 @@
+{
+  "name": "Airflow ETL Pipeline",
+  "github": "",
+  "tags": [
+    "Python",
+    "SQL",
+    "Apache Airflow",
+    "AWS S3",
+    "Redshift",
+    "Docker",
+    "GitHub Actions"
+  ],
+  "short_description": "Production ETL pipeline using Apache Airflow with Python operators. Extracts from APIs, transforms with Pandas, loads to AWS Redshift. Includes CI/CD with GitHub Actions.",
+  "detailed_description": "Production ETL pipeline using Apache Airflow with Python operators. Extracts from APIs, transforms with Pandas, loads to AWS Redshift. Includes CI/CD with GitHub Actions.",
+  "metrics": {
+    "software": [
+      "Built with Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+      "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+    ],
+    "analytics": [
+      "Built with Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+      "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+    ],
+    "finance": [
+      "Built with Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+      "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+    ],
+    "freelance": [
+      "Built with Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+      "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+    ],
+    "biotech": [
+      "Built with Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+      "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+    ]
+  },
+  "highlights": [
+    "Directly targets Tredence's data engineering stack. Shows production-grade ETL with cloud + CI/CD.",
+    "Tech stack: Python, SQL, Apache Airflow, AWS S3, Redshift, Docker, GitHub Actions",
+    "Skills demonstrated: Python, SQL, Data Engineering, Cloud, CI/CD, Git"
+  ],
+  "technologies": [
+    "Python",
+    "SQL",
+    "Apache Airflow",
+    "AWS S3",
+    "Redshift",
+    "Docker",
+    "GitHub Actions"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tredence",
+  "is_user_project": false
+}

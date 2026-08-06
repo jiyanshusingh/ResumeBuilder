@@ -1,12 +1,29 @@
 {
   "name": "Invoice Generator",
   "github": "https://github.com/jiyanshusingh/invoice-generator",
-  "tags": ["software", "deployment", "python", "fastapi", "docker", "sqlalchemy", "pdf"],
+  "tags": [
+    "software",
+    "deployment",
+    "python",
+    "fastapi",
+    "docker",
+    "sqlalchemy",
+    "pdf"
+  ],
   "short_description": "SaaS-ready invoice generation service with PDF export, SQLAlchemy backend, template-based rendering, and Docker deployment.",
   "detailed_description": "A production-ready invoice generation service built with FastAPI and SQLAlchemy. Features PDF export using ReportLab, template-based invoice rendering, and Dockerized deployment.",
   "metrics": {
-    "software": ["FastAPI backend with SQLAlchemy ORM", "PDF generation with ReportLab", "Template-based rendering", "Dockerized with automated deployment"],
-    "freelance": ["SaaS-ready invoice generation service", "PDF export for client deliverables", "Full deployment pipeline"]
+    "software": [
+      "FastAPI backend with SQLAlchemy ORM",
+      "PDF generation with ReportLab",
+      "Template-based rendering",
+      "Dockerized with automated deployment"
+    ],
+    "freelance": [
+      "SaaS-ready invoice generation service",
+      "PDF export for client deliverables",
+      "Full deployment pipeline"
+    ]
   },
   "highlights": [
     "Production-ready invoice generation with PDF export",
@@ -14,9 +31,18 @@
     "SQLAlchemy ORM for structured data management",
     "Dockerized deployment ready for scaling"
   ],
-  "technologies": ["FastAPI", "SQLAlchemy", "ReportLab", "Docker", "Render", "Python"],
+  "technologies": [
+    "FastAPI",
+    "SQLAlchemy",
+    "ReportLab",
+    "Docker",
+    "Render",
+    "Python"
+  ],
   "links": {
     "code": "https://github.com/jiyanshusingh/invoice-generator",
     "live": null
-  }
+  },
+  "company": "User Projects",
+  "is_user_project": true
 }

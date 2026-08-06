@@ -44,11 +44,19 @@ from resume_builder import (
     build_experience_block,
     build_resume,
     extract_bullets,
+    get_placement_companies,
+    get_placement_projects,
+    get_placement_projects_by_company,
     get_template_path,
-    latex_escape,
     load_company_profile,
+    load_section_data,
     rank_projects,
 )
+from section_renderer import (
+    render_coursework,
+    render_internship,
+)
+from utils import latex_escape
 
 try:
     from jd_importer import extract_from_jd_text, extract_from_jd_url, format_jd_result
@@ -66,8 +74,14 @@ from compare import (
     list_company_roles,
     list_company_slugs,
 )
+from jd_store import get_jd_store
 from parse_preview import format_parse_preview, parse_resume_for_ats
-from tracker import APPLICATION_STATUSES, JobTracker, get_tracker
+from tracker import (
+    APPLICATION_STATUSES,
+    JobTracker,
+    format_insights,
+    get_tracker,
+)
 from tracker import init_db as init_tracker_db
 
 # Seed tracker DB schema on startup (safe to call multiple times)
@@ -85,7 +99,7 @@ os.makedirs(OUTPUT_DIR_STR, exist_ok=True)
 
 RESUME_TYPES = ["analytics", "software", "biotech", "finance", "freelance"]
 
-TEMPLATE_TYPES = ["default", "modern", "minimalist", "academic"]
+TEMPLATE_TYPES = ["default", "modern", "minimalist", "academic", "jake"]
 
 # ─── Utility Functions ────────────────────────────────────────────────
 
@@ -244,7 +258,7 @@ def list_all_companies() -> str:
             data = json.load(f)
         result.append(f"**{data['name']}** ({data.get('website', 'N/A')})")
         for role, cfg in data.get("job_roles", {}).items():
-            result.append(f"  - {role} [{cfg['resume_type']}]")
+            result.append(f"  - {role} [{cfg.get('resume_type', 'analytics')}]")
         result.append("")
 
     return "\n".join(result) if result else "No companies saved yet."
@@ -386,7 +400,7 @@ def analyze_resume_skills(
     lines.append("=" * 60)
     lines.append(f"\nCompany: {company['name']}")
     lines.append(f"Role: {role}")
-    lines.append(f"Resume Type: {role_cfg['resume_type']}")
+    lines.append(f"Resume Type: {role_cfg.get('resume_type', 'analytics')}")
     lines.append("\n" + "-" * 60)
     lines.append("SKILLS MATCH")
     lines.append("-" * 60)
@@ -598,6 +612,44 @@ def get_optimization_suggestions(
     return summary, project_order
 
 
+def _validate_all_profiles() -> str:
+    """Validate all saved company profiles and return a report."""
+    if not os.path.exists(COMPANY_DIR):
+        return "No companies directory found."
+    results = []
+    for fname in sorted(os.listdir(COMPANY_DIR)):
+        if not fname.endswith(".json"):
+            continue
+        try:
+            with open(os.path.join(COMPANY_DIR, fname)) as f:
+                data = json.load(f)
+            name = data.get("name", fname.replace(".json", ""))
+            roles = data.get("job_roles", {})
+            if not roles:
+                results.append(f"⚠️ {name}: no roles defined")
+            for role, cfg in roles.items():
+                issues = []
+                if not cfg.get("resume_type"):
+                    issues.append("missing resume_type")
+                if not cfg.get("required_skills"):
+                    issues.append("missing required_skills")
+                if issues:
+                    results.append(f"⚠️ {name} / {role}: {', '.join(issues)}")
+                else:
+                    results.append(f"✅ {name} / {role}: OK")
+        except Exception as e:
+            results.append(f"❌ {fname}: {str(e)}")
+    return "\n".join(results) if results else "All profiles valid."
+
+
+def _safe_list_all_companies() -> str:
+    """Wrapper for list_all_companies that never crashes."""
+    try:
+        return list_all_companies()
+    except Exception as e:
+        return f"Error listing companies: {str(e)}"
+
+
 # ─── Gradio Interface ───────────────────────────────────────────────────
 
 with gr.Blocks(title="Resume Builder Pro") as demo:
@@ -680,9 +732,21 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                     extract_btn = gr.Button(
                         "🔍 Extract Skills & Keywords", variant="primary"
                     )
+            jd_result_state = gr.State(value=None)
             jd_output = gr.Textbox(
                 label="Extracted Results", lines=15, interactive=False
             )
+
+            gr.Markdown("### Save Extracted Data to a Company Profile")
+            with gr.Row():
+                save_company_name = gr.Textbox(
+                    label="Company Name", placeholder="e.g. Acme Corp"
+                )
+                save_role_name = gr.Textbox(
+                    label="Role Name", placeholder="e.g. Data Engineer"
+                )
+            save_jd_btn = gr.Button("💾 Save to Profile", variant="secondary")
+            save_jd_status = gr.Textbox(label="Save Status", interactive=False)
 
             if HAS_JD_IMPORTER:
 
@@ -690,21 +754,123 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                     try:
                         if url and url.strip():
                             if not extract_from_jd_url:
-                                return "Error: requests/beautifulsoup4 not installed. pip install requests beautifulsoup4"
+                                return (
+                                    "Error: requests/beautifulsoup4 not installed. pip install requests beautifulsoup4",
+                                    None,
+                                )
                             result = extract_from_jd_url(url.strip())
                         elif text and text.strip():
                             result = extract_from_jd_text(text)
                         else:
-                            return "Please provide job description text or a URL."
-                        return format_jd_result(result)
+                            return "Please provide job description text or a URL.", None
+                        return format_jd_result(result), result
                     except Exception as e:
-                        return f"Extraction error: {str(e)}"
+                        return f"Extraction error: {str(e)}", None
+
+                def save_jd_result(jd_result, company_name, role_name):
+                    if jd_result is None:
+                        return "No extraction result to save. Run extraction first."
+                    if not company_name or not role_name:
+                        return "Company name and role name are required."
+                    return save_company(
+                        company_name,
+                        "",
+                        role_name,
+                        jd_result.get("resume_type", "analytics"),
+                        ", ".join(jd_result.get("required_skills", [])),
+                        ", ".join(jd_result.get("keywords", [])),
+                        ", ".join(jd_result.get("emphasize_metrics", [])),
+                    )
 
                 extract_btn.click(
                     fn=jd_extract_wrapper,
                     inputs=[jd_text_input, jd_url_input],
-                    outputs=jd_output,
+                    outputs=[jd_output, jd_result_state],
                 )
+
+                save_jd_btn.click(
+                    fn=save_jd_result,
+                    inputs=[jd_result_state, save_company_name, save_role_name],
+                    outputs=save_jd_status,
+                )
+
+                # ── Tier B: JD Library + auto-propose ────────────
+                gr.Markdown("### JD Library & Auto-Propose (Tier B)")
+                with gr.Row():
+                    jd_lib_btn = gr.Button("📦 Save to JD Library", variant="secondary")
+                    jd_propose_btn = gr.Button(
+                        "📝 Propose Company Profile", variant="secondary"
+                    )
+                jd_propose_preview = gr.Textbox(
+                    label="Proposed Profile (JSON preview)",
+                    lines=10,
+                    interactive=False,
+                )
+                jd_lib_status = gr.Textbox(label="JD Library Status", interactive=False)
+                jd_propose_save_btn = gr.Button("💾 Save Proposed Profile")
+                jd_propose_save_status = gr.Textbox(
+                    label="Save Proposed Status", interactive=False
+                )
+
+                def jd_library_save(text, url, jd_result):
+                    raw = url.strip() if (url or "").strip() else (text or "")
+                    if not raw.strip():
+                        return "Provide JD text or a URL before saving to the library."
+                    if jd_result is None:
+                        return "No extraction to save. Run extraction first."
+                    store = get_jd_store()
+                    slug = store.save_jd(
+                        company="", role="", raw_text=raw, extraction=jd_result
+                    )
+                    return f"Saved JD → {slug}. Total in library: {store.count()}"
+
+                def jd_propose(company, role, jd_result):
+                    if jd_result is None:
+                        return "Run extraction first."
+                    from resume_builder import propose_company_profile
+
+                    profile = propose_company_profile(
+                        company or "New Company", role or "Role", jd_result
+                    )
+                    return json.dumps(profile, ensure_ascii=False, indent=2)
+
+                def jd_propose_save(company, role, jd_result):
+                    if jd_result is None:
+                        return "Run extraction first."
+                    from resume_builder import (
+                        propose_company_profile,
+                        save_company_profile,
+                    )
+
+                    profile = propose_company_profile(
+                        company or "New Company", role or "Role", jd_result
+                    )
+                    path = save_company_profile(profile)
+                    store = get_jd_store()
+                    store.save_jd(
+                        company or "New Company",
+                        role or "Role",
+                        "",
+                        jd_result,
+                    )
+                    return f"Saved profile → {path}"
+
+                jd_lib_btn.click(
+                    fn=jd_library_save,
+                    inputs=[jd_text_input, jd_url_input, jd_result_state],
+                    outputs=jd_lib_status,
+                )
+                jd_propose_btn.click(
+                    fn=jd_propose,
+                    inputs=[save_company_name, save_role_name, jd_result_state],
+                    outputs=jd_propose_preview,
+                )
+                jd_propose_save_btn.click(
+                    fn=jd_propose_save,
+                    inputs=[save_company_name, save_role_name, jd_result_state],
+                    outputs=jd_propose_save_status,
+                )
+
             else:
                 jd_output.value = "JD Importer unavailable. Install dependencies: pip install spacy requests beautifulsoup4 rake-nltk"
 
@@ -1356,13 +1522,38 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                 fn=_delete_app, inputs=[trk_delete_id], outputs=trk_update_out
             )
 
+            gr.Markdown("---")
+            gr.Markdown("### Insights (Tier B)")
+            insights_btn = gr.Button("📊 Show Insights", variant="primary")
+            insights_text = gr.Textbox(label="Insights", lines=8, interactive=False)
+            insights_chart = gr.Image(label="Avg ATS by Status", interactive=False)
+            jd_library_info = gr.Textbox(
+                label="JD Library",
+                value=f"Saved JDs: {get_jd_store().count()}",
+                interactive=False,
+            )
+
+            def _show_insights():
+                ins = _tracker.analyze_insights()
+                return (
+                    format_insights(ins),
+                    ins.get("chart_path") or None,
+                    f"Saved JDs: {get_jd_store().count()}",
+                )
+
+            insights_btn.click(
+                fn=_show_insights,
+                inputs=[],
+                outputs=[insights_text, insights_chart, jd_library_info],
+            )
+
         # ── Tab 5: Manage Companies ───────────────────────
         with gr.Tab("📋 Manage Companies"):
             gr.Markdown("### Saved Company Profiles")
             refresh_list_btn = gr.Button("🔄 Refresh List")
             company_list_display = gr.Textbox(
                 label="Companies",
-                value=list_all_companies(),
+                value=_safe_list_all_companies(),
                 lines=25,
                 interactive=False,
             )
@@ -1377,6 +1568,217 @@ with gr.Blocks(title="Resume Builder Pro") as demo:
                 delete_btn.click(
                     fn=delete_company, inputs=delete_input, outputs=delete_status
                 )
+
+            validate_all_btn = gr.Button(
+                "✅ Validate All Profiles", variant="secondary"
+            )
+            validate_all_out = gr.Textbox(
+                label="Validation Results", lines=10, interactive=False
+            )
+
+            validate_all_btn.click(
+                fn=_validate_all_profiles, inputs=None, outputs=validate_all_out
+            )
+
+        # ── Tab: Placement Projects ──────────────────
+        with gr.Tab("🏢 Placement Projects"):
+            gr.Markdown("### Placement & Projects — Tesla, GEP, Tredence, ZS")
+            gr.Markdown(
+                "Browse all placement company projects. Select a company to see its projects, then generate a tailored resume."
+            )
+
+            placement_company = gr.Dropdown(
+                choices=get_placement_companies(),
+                label="Placement Company",
+                value=get_placement_companies()[0] if get_placement_companies() else "",
+            )
+            placement_projects_display = gr.Textbox(
+                label="Projects for Selected Company",
+                lines=25,
+                interactive=False,
+            )
+            placement_role = gr.Dropdown(
+                choices=[],
+                label="Job Role (for resume generation)",
+            )
+            placement_template = gr.Dropdown(
+                choices=TEMPLATE_TYPES,
+                label="Resume Template",
+                value="default",
+            )
+
+            def _placement_projects(company_name):
+                projects = get_placement_projects_by_company(company_name)
+                if not projects:
+                    return "No projects found for this company."
+                lines = []
+                for p in projects:
+                    lines.append(f"📌 {p.get('name', 'Untitled')}")
+                    lines.append(
+                        f"   Tech: {', '.join(p.get('technologies', p.get('tags', [])))}"
+                    )
+                    lines.append(f"   {p.get('short_description', '')[:200]}")
+                    lines.append("")
+                return "\n".join(lines)
+
+            def _placement_roles(company_name):
+                try:
+                    from resume_builder import load_company_profile
+
+                    profile = load_company_profile(company_name)
+                except Exception:
+                    return gr.update(choices=[], value="")
+                roles = list(profile.get("job_roles", {}).keys())
+                return gr.update(choices=roles, value=roles[0] if roles else "")
+
+            placement_company.change(
+                fn=_placement_projects,
+                inputs=placement_company,
+                outputs=placement_projects_display,
+            )
+            placement_company.change(
+                fn=_placement_roles,
+                inputs=placement_company,
+                outputs=placement_role,
+            )
+
+            placement_gen_btn = gr.Button(
+                "🚀 Generate Resume for Placement", variant="primary"
+            )
+            placement_tex = gr.Textbox(label=".tex Source", lines=15, interactive=False)
+            placement_status = gr.Textbox(label="Status", interactive=False)
+            placement_pdf = gr.File(label="📥 Download PDF", visible=False)
+            placement_tex_file = gr.File(label="📥 Download .tex", visible=False)
+
+            def _placement_generate(company, role, template_type):
+                from resume_builder import build_resume as _build
+                from resume_builder import slugify
+
+                effective_role = (role or "").strip()
+                if not effective_role:
+                    return (
+                        "",
+                        "Please select a role.",
+                        gr.update(visible=False),
+                        gr.update(visible=False),
+                    )
+                try:
+                    tex_content, pdf_path, status = _build(
+                        company, effective_role, template_type=template_type
+                    )
+                except Exception as e:
+                    return (
+                        "",
+                        f"Error: {str(e)}",
+                        gr.update(visible=False),
+                        gr.update(visible=False),
+                    )
+
+                safe_company = slugify(company)
+                safe_role = slugify(effective_role)
+                tex_path = os.path.join(
+                    OUTPUT_DIR_STR,
+                    f"resume_{safe_company}_{safe_role}.tex",
+                )
+
+                outputs = [
+                    gr.update(value=tex_content or "No output"),
+                    gr.update(value=status),
+                ]
+                if pdf_path and os.path.exists(pdf_path):
+                    outputs.append(gr.update(value=pdf_path, visible=True))
+                else:
+                    outputs.append(gr.update(visible=False))
+                if os.path.exists(tex_path):
+                    outputs.append(gr.update(value=tex_path, visible=True))
+                else:
+                    outputs.append(gr.update(visible=False))
+                return outputs
+
+            placement_gen_btn.click(
+                fn=_placement_generate,
+                inputs=[placement_company, placement_role, placement_template],
+                outputs=[
+                    placement_tex,
+                    placement_status,
+                    placement_pdf,
+                    placement_tex_file,
+                ],
+            )
+
+    # ─── Section Management ──────────────────────────────────────────
+
+    SECTIONS_DIR = os.path.join(DATA_DIR, "sections")
+
+    def save_section_data(section_name, company_display, json_data):
+        """Save section data to data/sections/<section_name>/<company>.json."""
+        company_key = slugify(company_display)
+        section_dir = os.path.join(SECTIONS_DIR, section_name)
+        os.makedirs(section_dir, exist_ok=True)
+        path = os.path.join(section_dir, f"{company_key}.json")
+        try:
+            data = json.loads(json_data)
+            with open(path, "w") as f:
+                json.dump(data, f, indent=2)
+            return f"Saved {section_name} data for {company_display}"
+        except json.JSONDecodeError as e:
+            return f"JSON parse error: {e}"
+
+    def load_section_data_for_ui(section_name, company_display):
+        """Load section data for editing in a textbox."""
+        company_key = slugify(company_display)
+        path = os.path.join(SECTIONS_DIR, section_name, f"{company_key}.json")
+        if os.path.exists(path):
+            with open(path) as f:
+                return json.dumps(json.load(f), indent=2)
+        # Return default empty structure
+        if section_name == "coursework":
+            return json.dumps({"items": []}, indent=2)
+        elif section_name == "internship":
+            return json.dumps({"items": []}, indent=2)
+        return "{}"
+
+    with gr.Tab("📝 Sections"):
+        gr.Markdown("### Manage per-company section data (coursework, internship)")
+
+        with gr.Row():
+            sec_company = gr.Dropdown(
+                choices=get_company_names(),
+                label="Company",
+                value=get_company_names()[0] if get_company_names() else "",
+            )
+            sec_section = gr.Dropdown(
+                choices=["coursework", "internship"],
+                label="Section",
+                value="coursework",
+            )
+
+        sec_json = gr.Code(
+            label="Section Data (JSON)",
+            language="json",
+            lines=20,
+        )
+
+        sec_load_btn = gr.Button("📂 Load", variant="secondary")
+        sec_save_btn = gr.Button("💾 Save", variant="primary")
+        sec_status = gr.Textbox(label="Status", interactive=False)
+
+        def _sec_load(company, section):
+            return load_section_data_for_ui(section, company)
+
+        def _sec_save(company, section, json_data):
+            return save_section_data(section, company, json_data)
+
+        sec_load_btn.click(
+            fn=_sec_load,
+            inputs=[sec_company, sec_section],
+            outputs=sec_json,
+        )
+        sec_save_btn.click(
+            fn=_sec_save,
+            inputs=[sec_company, sec_section, sec_json],
+            outputs=sec_status,
+        )
 
 
 if __name__ == "__main__":

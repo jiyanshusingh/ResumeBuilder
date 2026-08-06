@@ -1,0 +1,65 @@
+{
+  "name": "Automated Report Generator with LLMs",
+  "github": "",
+  "tags": [
+    "Python",
+    "LangChain",
+    "SQL",
+    "ReportLab",
+    "FastAPI",
+    "Docker"
+  ],
+  "short_description": "Automates business report generation using LLMs. Pulls data from SQL, generates insights with LangChain, creates PDF reports with ReportLab.",
+  "detailed_description": "Automates business report generation using LLMs. Pulls data from SQL, generates insights with LangChain, creates PDF reports with ReportLab.",
+  "metrics": {
+    "software": [
+      "Built with Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+      "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, LLMs, SQL, PDF generation, APIs, Python"
+    ],
+    "analytics": [
+      "Built with Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+      "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, LLMs, SQL, PDF generation, APIs, Python"
+    ],
+    "finance": [
+      "Built with Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+      "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, LLMs, SQL, PDF generation, APIs, Python"
+    ],
+    "freelance": [
+      "Built with Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+      "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, LLMs, SQL, PDF generation, APIs, Python"
+    ],
+    "biotech": [
+      "Built with Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+      "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+      "Medium difficulty, 1 week",
+      "Demonstrates GenAI, LLMs, SQL, PDF generation, APIs, Python"
+    ]
+  },
+  "highlights": [
+    "Shows you can automate business reporting with AI. ZS values candidates who bridge AI and business decisions.",
+    "Tech stack: Python, LangChain, SQL, ReportLab, FastAPI, Docker",
+    "Skills demonstrated: GenAI, LLMs, SQL, PDF generation, APIs, Python"
+  ],
+  "technologies": [
+    "Python",
+    "LangChain",
+    "SQL",
+    "ReportLab",
+    "FastAPI",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "ZS",
+  "is_user_project": false
+}

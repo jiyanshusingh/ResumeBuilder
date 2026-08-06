@@ -1,0 +1,65 @@
+{
+  "name": "Data Catalog & Lineage Tracker",
+  "github": "",
+  "tags": [
+    "Python",
+    "SQL",
+    "PostgreSQL/Neo4j",
+    "FastAPI",
+    "Docker",
+    "React"
+  ],
+  "short_description": "Tracks data lineage across pipelines using a graph database or PostgreSQL. Provides a web UI for exploring data assets, lineage, and quality metrics.",
+  "detailed_description": "Tracks data lineage across pipelines using a graph database or PostgreSQL. Provides a web UI for exploring data assets, lineage, and quality metrics.",
+  "metrics": {
+    "software": [
+      "Built with Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+      "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Metadata Management, Full-Stack, Cloud"
+    ],
+    "analytics": [
+      "Built with Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+      "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Metadata Management, Full-Stack, Cloud"
+    ],
+    "finance": [
+      "Built with Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+      "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Metadata Management, Full-Stack, Cloud"
+    ],
+    "freelance": [
+      "Built with Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+      "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Metadata Management, Full-Stack, Cloud"
+    ],
+    "biotech": [
+      "Built with Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+      "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Metadata Management, Full-Stack, Cloud"
+    ]
+  },
+  "highlights": [
+    "Demonstrates metadata management skills. Tredence values candidates who understand data governance and lineage.",
+    "Tech stack: Python, SQL, PostgreSQL/Neo4j, FastAPI, Docker, React",
+    "Skills demonstrated: Data Engineering, Metadata Management, Full-Stack, Cloud"
+  ],
+  "technologies": [
+    "Python",
+    "SQL",
+    "PostgreSQL/Neo4j",
+    "FastAPI",
+    "Docker",
+    "React"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tredence",
+  "is_user_project": false
+}

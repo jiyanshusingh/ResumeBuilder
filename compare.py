@@ -104,7 +104,7 @@ def compare_resume(
     return results
 
 
-def comparison_header(results: List[Dict[str, Any]]) -> List[list]:
+def comparison_header(results: List[Dict[str, Any]]) -> Tuple[List[str], List[list]]:
     """Produce a dataframe-friendly matrix."""
     headers = ["Company", "Role", "ATS Score", "Rules Passed", "Top Suggestions"]
     rows = []

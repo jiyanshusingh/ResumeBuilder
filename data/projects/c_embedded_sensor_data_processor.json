@@ -1,0 +1,63 @@
+{
+  "name": "C++ Embedded Sensor Data Processor",
+  "github": "",
+  "tags": [
+    "C++",
+    "Linux",
+    "POSIX Threads",
+    "Mutex",
+    "Serial I/O"
+  ],
+  "short_description": "Reads simulated sensor data via serial/socket communication, processes it in real-time using POSIX threads and mutexes, and outputs processed data to a terminal dashboard. Implements circular buffers ",
+  "detailed_description": "Reads simulated sensor data via serial/socket communication, processes it in real-time using POSIX threads and mutexes, and outputs processed data to a terminal dashboard. Implements circular buffers for efficient data handling.",
+  "metrics": {
+    "software": [
+      "Built with C++, Linux, POSIX Threads, Mutex, Serial I/O",
+      "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+    ],
+    "analytics": [
+      "Built with C++, Linux, POSIX Threads, Mutex, Serial I/O",
+      "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+    ],
+    "finance": [
+      "Built with C++, Linux, POSIX Threads, Mutex, Serial I/O",
+      "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+    ],
+    "freelance": [
+      "Built with C++, Linux, POSIX Threads, Mutex, Serial I/O",
+      "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+    ],
+    "biotech": [
+      "Built with C++, Linux, POSIX Threads, Mutex, Serial I/O",
+      "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+    ]
+  },
+  "highlights": [
+    "Directly targets Tesla's embedded C++ + Linux requirements. Shows you can write production C++ on Linux with real-time data processing.",
+    "Tech stack: C++, Linux, POSIX Threads, Mutex, Serial I/O",
+    "Skills demonstrated: C++, OS, Linux, Embedded basics, DSA (circular buffers)"
+  ],
+  "technologies": [
+    "C++",
+    "Linux",
+    "POSIX Threads",
+    "Mutex",
+    "Serial I/O"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

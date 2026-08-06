@@ -1,0 +1,65 @@
+{
+  "name": "ML Feature Store",
+  "github": "",
+  "tags": [
+    "Python",
+    "SQL",
+    "PostgreSQL",
+    "FastAPI",
+    "Docker",
+    "AWS"
+  ],
+  "short_description": "Centralized feature store for ML models. Stores, retrieves, and version-controls features using Python, SQL, and PostgreSQL. Includes a FastAPI endpoint for model serving.",
+  "detailed_description": "Centralized feature store for ML models. Stores, retrieves, and version-controls features using Python, SQL, and PostgreSQL. Includes a FastAPI endpoint for model serving.",
+  "metrics": {
+    "software": [
+      "Built with Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+      "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates ML Engineering, SQL, APIs, Cloud, Docker"
+    ],
+    "analytics": [
+      "Built with Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+      "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates ML Engineering, SQL, APIs, Cloud, Docker"
+    ],
+    "finance": [
+      "Built with Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+      "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates ML Engineering, SQL, APIs, Cloud, Docker"
+    ],
+    "freelance": [
+      "Built with Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+      "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates ML Engineering, SQL, APIs, Cloud, Docker"
+    ],
+    "biotech": [
+      "Built with Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+      "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates ML Engineering, SQL, APIs, Cloud, Docker"
+    ]
+  },
+  "highlights": [
+    "Combines ML strengths with data engineering fundamentals. Shows you can build ML infrastructure at scale.",
+    "Tech stack: Python, SQL, PostgreSQL, FastAPI, Docker, AWS",
+    "Skills demonstrated: ML Engineering, SQL, APIs, Cloud, Docker"
+  ],
+  "technologies": [
+    "Python",
+    "SQL",
+    "PostgreSQL",
+    "FastAPI",
+    "Docker",
+    "AWS"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tredence",
+  "is_user_project": false
+}

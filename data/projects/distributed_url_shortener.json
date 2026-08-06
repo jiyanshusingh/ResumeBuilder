@@ -1,0 +1,63 @@
+{
+  "name": "Distributed URL Shortener",
+  "github": "",
+  "tags": [
+    "Node.js",
+    "Redis",
+    "PostgreSQL",
+    "Docker",
+    "AWS"
+  ],
+  "short_description": "URL shortener with Redis caching, PostgreSQL persistence, Docker deployment, and AWS EC2 hosting. Includes analytics dashboard with click tracking.",
+  "detailed_description": "URL shortener with Redis caching, PostgreSQL persistence, Docker deployment, and AWS EC2 hosting. Includes analytics dashboard with click tracking.",
+  "metrics": {
+    "software": [
+      "Built with Node.js, Redis, PostgreSQL, Docker, AWS",
+      "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+      "Medium difficulty, 1 week",
+      "Demonstrates DSA (hashing, caching), Scalability, Cloud, REST APIs"
+    ],
+    "analytics": [
+      "Built with Node.js, Redis, PostgreSQL, Docker, AWS",
+      "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+      "Medium difficulty, 1 week",
+      "Demonstrates DSA (hashing, caching), Scalability, Cloud, REST APIs"
+    ],
+    "finance": [
+      "Built with Node.js, Redis, PostgreSQL, Docker, AWS",
+      "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+      "Medium difficulty, 1 week",
+      "Demonstrates DSA (hashing, caching), Scalability, Cloud, REST APIs"
+    ],
+    "freelance": [
+      "Built with Node.js, Redis, PostgreSQL, Docker, AWS",
+      "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+      "Medium difficulty, 1 week",
+      "Demonstrates DSA (hashing, caching), Scalability, Cloud, REST APIs"
+    ],
+    "biotech": [
+      "Built with Node.js, Redis, PostgreSQL, Docker, AWS",
+      "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+      "Medium difficulty, 1 week",
+      "Demonstrates DSA (hashing, caching), Scalability, Cloud, REST APIs"
+    ]
+  },
+  "highlights": [
+    "Proves scalability knowledge. GEP explicitly mentions 'scalable applications' in their JD.",
+    "Tech stack: Node.js, Redis, PostgreSQL, Docker, AWS",
+    "Skills demonstrated: DSA (hashing, caching), Scalability, Cloud, REST APIs"
+  ],
+  "technologies": [
+    "Node.js",
+    "Redis",
+    "PostgreSQL",
+    "Docker",
+    "AWS"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "GEP",
+  "is_user_project": false
+}

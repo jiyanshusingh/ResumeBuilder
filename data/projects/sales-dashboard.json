@@ -1,13 +1,34 @@
 {
   "name": "Sales CRM Dashboard",
   "github": "https://github.com/jiyanshusingh/sales_dashboard",
-  "tags": ["software", "deployment", "python", "fastapi", "docker", "sqlalchemy", "bootstrap"],
+  "tags": [
+    "software",
+    "deployment",
+    "python",
+    "fastapi",
+    "docker",
+    "sqlalchemy",
+    "bootstrap"
+  ],
   "short_description": "Full-stack CRM for managing sales leads with a dashboard featuring KPIs, funnel analysis, revenue charts, CSV export, and basic auth.",
   "detailed_description": "A full-stack sales CRM application built with FastAPI backend and Bootstrap 5 + Plotly.js frontend. Features include lead management, KPI dashboard with funnel analysis, revenue charts, CSV export, and basic authentication.",
   "metrics": {
-    "software": ["FastAPI backend with SQLAlchemy ORM", "Bootstrap 5 + Plotly.js frontend", "Dockerized with Render deployment", "CSV export and basic authentication"],
-    "analytics": ["Interactive KPI dashboard", "Funnel analysis with revenue charts", "Data visualization with Plotly.js"],
-    "freelance": ["Full-stack CRM from design to deployment", "Docker + Render hosting", "Data visualization and export features"]
+    "software": [
+      "FastAPI backend with SQLAlchemy ORM",
+      "Bootstrap 5 + Plotly.js frontend",
+      "Dockerized with Render deployment",
+      "CSV export and basic authentication"
+    ],
+    "analytics": [
+      "Interactive KPI dashboard",
+      "Funnel analysis with revenue charts",
+      "Data visualization with Plotly.js"
+    ],
+    "freelance": [
+      "Full-stack CRM from design to deployment",
+      "Docker + Render hosting",
+      "Data visualization and export features"
+    ]
   },
   "highlights": [
     "End-to-end full-stack development (FastAPI backend + Bootstrap frontend)",
@@ -15,9 +36,19 @@
     "Production deployment with Docker + Render",
     "CSV export functionality for data analysis"
   ],
-  "technologies": ["FastAPI", "Bootstrap 5", "Plotly.js", "SQLAlchemy", "Docker", "Render", "SQLite"],
+  "technologies": [
+    "FastAPI",
+    "Bootstrap 5",
+    "Plotly.js",
+    "SQLAlchemy",
+    "Docker",
+    "Render",
+    "SQLite"
+  ],
   "links": {
     "code": "https://github.com/jiyanshusingh/sales_dashboard",
     "live": "https://sales-dashboard-x5nm.onrender.com"
-  }
+  },
+  "company": "User Projects",
+  "is_user_project": true
 }

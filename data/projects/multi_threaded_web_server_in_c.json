@@ -1,0 +1,61 @@
+{
+  "name": "Multi-Threaded Web Server in C++",
+  "github": "",
+  "tags": [
+    "C++",
+    "Linux sockets",
+    "pthreads",
+    "HTTP"
+  ],
+  "short_description": "HTTP/1.1 parser with thread pool, mutex-protected shared state, and connection handling. Supports GET requests, static file serving, and basic routing.",
+  "detailed_description": "HTTP/1.1 parser with thread pool, mutex-protected shared state, and connection handling. Supports GET requests, static file serving, and basic routing.",
+  "metrics": {
+    "software": [
+      "Built with C++, Linux sockets, pthreads, HTTP",
+      "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Concurrency (OS), C++, Networking, DSA"
+    ],
+    "analytics": [
+      "Built with C++, Linux sockets, pthreads, HTTP",
+      "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Concurrency (OS), C++, Networking, DSA"
+    ],
+    "finance": [
+      "Built with C++, Linux sockets, pthreads, HTTP",
+      "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Concurrency (OS), C++, Networking, DSA"
+    ],
+    "freelance": [
+      "Built with C++, Linux sockets, pthreads, HTTP",
+      "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Concurrency (OS), C++, Networking, DSA"
+    ],
+    "biotech": [
+      "Built with C++, Linux sockets, pthreads, HTTP",
+      "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Concurrency (OS), C++, Networking, DSA"
+    ]
+  },
+  "highlights": [
+    "Covers Tesla's top 3 screening areas: C++, OS, and Networking in a single impressive project.",
+    "Tech stack: C++, Linux sockets, pthreads, HTTP",
+    "Skills demonstrated: Concurrency (OS), C++, Networking, DSA"
+  ],
+  "technologies": [
+    "C++",
+    "Linux sockets",
+    "pthreads",
+    "HTTP"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

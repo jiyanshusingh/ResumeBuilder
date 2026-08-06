@@ -1,0 +1,44 @@
+{
+  "name": "Tredence",
+  "website": "https://www.tredence.com",
+  "job_roles": {
+    "Data Engineer": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "Data Engineering",
+        "Cloud",
+        "AI/ML",
+        "CI/CD",
+        "Git"
+      ],
+      "keywords": [
+        "data engineering",
+        "Python",
+        "SQL",
+        "cloud",
+        "ETL",
+        "Airflow",
+        "streaming",
+        "data quality"
+      ],
+      "emphasize_metrics": [
+        "Production ETL pipeline with Airflow",
+        "Real-time streaming with Kafka/PubSub",
+        "ML Feature Store with FastAPI",
+        "Data Quality Monitoring with Great Expectations"
+      ],
+      "section_order": [
+        "Education",
+        "Relevant Coursework",
+        "Internship Experience",
+        "Projects",
+        "Technical Skills",
+        "Leadership / Extracurricular",
+        "Certifications",
+        "Key Achievements"
+      ]
+    }
+  }
+}

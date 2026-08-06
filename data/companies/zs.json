@@ -1,0 +1,45 @@
+{
+  "name": "ZS",
+  "website": "https://www.zs.com",
+  "job_roles": {
+    "BTSA / Decision Analytics": {
+      "resume_type": "analytics",
+      "required_skills": [
+        "Python",
+        "SQL",
+        "Statistics",
+        "ML",
+        "AI/GenAI",
+        "LLMs",
+        "Cloud",
+        "Communication"
+      ],
+      "keywords": [
+        "analytics",
+        "ML",
+        "AI",
+        "GenAI",
+        "LLMs",
+        "cloud",
+        "statistics",
+        "A/B testing"
+      ],
+      "emphasize_metrics": [
+        "LLM-Powered Business Analytics Dashboard",
+        "Customer Churn Prediction with SHAP explanations",
+        "Prompt Engineering Toolkit with LangChain",
+        "Automated Report Generation with LLMs"
+      ],
+      "section_order": [
+        "Education",
+        "Relevant Coursework",
+        "Internship Experience",
+        "Projects",
+        "Technical Skills",
+        "Leadership / Extracurricular",
+        "Certifications",
+        "Key Achievements"
+      ]
+    }
+  }
+}

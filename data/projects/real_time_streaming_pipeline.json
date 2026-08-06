@@ -1,0 +1,65 @@
+{
+  "name": "Real-Time Streaming Pipeline",
+  "github": "",
+  "tags": [
+    "Python",
+    "Kafka/PubSub",
+    "PostgreSQL",
+    "FastAPI",
+    "Docker",
+    "AWS"
+  ],
+  "short_description": "Real-time data streaming pipeline using Apache Kafka/PubSub. Python consumers process streaming data, store in PostgreSQL, and expose via REST API.",
+  "detailed_description": "Real-time data streaming pipeline using Apache Kafka/PubSub. Python consumers process streaming data, store in PostgreSQL, and expose via REST API.",
+  "metrics": {
+    "software": [
+      "Built with Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+      "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Streaming, Python, SQL, Cloud"
+    ],
+    "analytics": [
+      "Built with Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+      "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Streaming, Python, SQL, Cloud"
+    ],
+    "finance": [
+      "Built with Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+      "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Streaming, Python, SQL, Cloud"
+    ],
+    "freelance": [
+      "Built with Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+      "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Streaming, Python, SQL, Cloud"
+    ],
+    "biotech": [
+      "Built with Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+      "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates Data Engineering, Streaming, Python, SQL, Cloud"
+    ]
+  },
+  "highlights": [
+    "Tredence works with real-time data. Shows you understand streaming architectures and cloud deployment.",
+    "Tech stack: Python, Kafka/PubSub, PostgreSQL, FastAPI, Docker, AWS",
+    "Skills demonstrated: Data Engineering, Streaming, Python, SQL, Cloud"
+  ],
+  "technologies": [
+    "Python",
+    "Kafka/PubSub",
+    "PostgreSQL",
+    "FastAPI",
+    "Docker",
+    "AWS"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tredence",
+  "is_user_project": false
+}

@@ -3,10 +3,11 @@
 Generate all 4 generic resume types (Analytics, Software, Biotech, Freelance).
 Uses the resume_builder core engine.
 """
+
 import json
 import os
-import subprocess
 import re
+import subprocess
 
 from config import DATA_DIR, OUTPUT_DIR, TEMPLATE_DIR
 
@@ -20,7 +21,7 @@ def load_json(path):
 
 
 def slugify(s: str) -> str:
-    return re.sub(r'[^a-zA-Z0-9]+', '_', s.lower()).strip('_')
+    return re.sub(r"[^a-zA-Z0-9]+", "_", s.lower()).strip("_")
 
 
 def latex_escape(s: str) -> str:
@@ -28,16 +29,16 @@ def latex_escape(s: str) -> str:
     if s is None:
         return ""
     s = str(s)
-    s = s.replace('\\', '\\textbackslash ')
-    s = s.replace('$', '\\$')
-    s = s.replace('&', '\\&')
-    s = s.replace('%', '\\%')
-    s = s.replace('#', '\\#')
-    s = s.replace('_', '\\_')
-    s = s.replace('{', '\\{')
-    s = s.replace('}', '\\}')
-    s = s.replace('~', '\\textasciitilde ')
-    s = s.replace('^', '\\textasciicircum ')
+    s = s.replace("\\", "\\textbackslash ")
+    s = s.replace("$", "\\$")
+    s = s.replace("&", "\\&")
+    s = s.replace("%", "\\%")
+    s = s.replace("#", "\\#")
+    s = s.replace("_", "\\_")
+    s = s.replace("{", "\\{")
+    s = s.replace("}", "\\}")
+    s = s.replace("~", "\\textasciitilde ")
+    s = s.replace("^", "\\textasciicircum ")
     return s
 
 
@@ -88,7 +89,14 @@ def get_relevant_certs(resume_type):
         return all_certs[:4]  # Top 4
     elif resume_type in ("analytics", "finance"):
         # Show data/analytics-related certs
-        return [c for c in all_certs if any(t in " ".join(c.get("relevance", [])).lower() for t in ["ml", "analytics", "data", "healthcare", "biotech"])]
+        return [
+            c
+            for c in all_certs
+            if any(
+                t in " ".join(c.get("relevance", [])).lower()
+                for t in ["ml", "analytics", "data", "healthcare", "biotech"]
+            )
+        ]
     else:  # freelance
         return all_certs[:4]
 
@@ -107,7 +115,8 @@ def build_skills_block(resume_type):
         }
     elif resume_type == "biotech":
         ordered = {
-            "ML & Bioinformatics": skills.get("ml_data_science", []) + skills.get("biotech", []),
+            "ML & Bioinformatics": skills.get("ml_data_science", [])
+            + skills.get("biotech", []),
             "Programming": skills.get("programming", []),
             "Web & Deployment": skills.get("backend", []) + skills.get("devops", []),
             "Data Tools": skills.get("databases", []),
@@ -131,7 +140,13 @@ def build_skills_block(resume_type):
     lines = []
     for category, skill_list in ordered.items():
         escaped = [latex_escape(s) for s in skill_list]
-        lines.append("\\noindent\\textbf{" + latex_escape(category) + ": " + ", ".join(escaped) + "}")
+        lines.append(
+            "\\noindent\\textbf{"
+            + latex_escape(category)
+            + ": "
+            + ", ".join(escaped)
+            + "}"
+        )
     return "\n\n".join(lines)
 
 
@@ -188,7 +203,12 @@ def build_certifications_block(certs):
     block = "\\begin{itemize}\n"
     for cert in certs:
         block += "    \\item " + latex_escape(cert["name"]) + ", "
-        block += latex_escape(cert["organization"]) + " (" + latex_escape(str(cert["date"])) + ")\n"
+        block += (
+            latex_escape(cert["organization"])
+            + " ("
+            + latex_escape(str(cert["date"]))
+            + ")\n"
+        )
     block += "\\end{itemize}"
     return block
 
@@ -201,8 +221,7 @@ def build_education_block(education):
     return (
         "\\noindent\\textbf{" + latex_escape(degree) + "}"
         " \\hfill \\textbf{" + latex_escape(cgpa) + "}"
-        "\n\n\\noindent " + latex_escape(institution)
-        + " -- " + latex_escape(duration)
+        "\n\n\\noindent " + latex_escape(institution) + " -- " + latex_escape(duration)
     )
 
 
@@ -245,8 +264,12 @@ def generate_resume(resume_type, output_dir=None):
         "(GITHUB_HANDLE)": github_handle,
         "(LINKEDIN_URL)": profile["linkedin"],
         "(LOCATION)": latex_escape(profile["location"]),
-        "(HEADLINE)": latex_escape(profile["headlines"].get(resume_type, profile["headlines"]["analytics"])),
-        "(SUMMARY)": latex_escape(profile["summaries"].get(resume_type, profile["summaries"]["analytics"])),
+        "(HEADLINE)": latex_escape(
+            profile["headlines"].get(resume_type, profile["headlines"]["analytics"])
+        ),
+        "(SUMMARY)": latex_escape(
+            profile["summaries"].get(resume_type, profile["summaries"]["analytics"])
+        ),
         "(EXPERIENCE_BLOCK)": experience_block,
         "(PROJECTS_BLOCK)": projects_block,
         "(SKILLS_BLOCK)": skills_block,
@@ -260,7 +283,11 @@ def generate_resume(resume_type, output_dir=None):
         rendered = rendered.replace(placeholder, value)
 
     # Remove empty sections
-    rendered = re.sub(r'\\section\*\{Certifications\}\n\\begin\{itemize\}\n\\end\{itemize\}', '', rendered)
+    rendered = re.sub(
+        r"\\section\*\{Certifications\}\n\\begin\{itemize\}\n\\end\{itemize\}",
+        "",
+        rendered,
+    )
 
     # Save output
     if output_dir is None:
@@ -280,7 +307,9 @@ def generate_resume(resume_type, output_dir=None):
     try:
         result = subprocess.run(
             ["tectonic", "--outdir", output_dir, tex_path],
-            capture_output=True, text=True, cwd=BASE_DIR
+            capture_output=True,
+            text=True,
+            cwd=BASE_DIR,
         )
         if result.returncode == 0 and os.path.exists(pdf_path):
             print(f"PDF saved to: {pdf_path}")
@@ -294,9 +323,14 @@ def generate_resume(resume_type, output_dir=None):
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Resume Generator (generic types)")
-    parser.add_argument("--type", "-t", choices=["analytics", "software", "biotech", "finance", "freelance"],
-                       help="Resume type to generate")
+    parser.add_argument(
+        "--type",
+        "-t",
+        choices=["analytics", "software", "biotech", "finance", "freelance"],
+        help="Resume type to generate",
+    )
     parser.add_argument("--all", action="store_true", help="Generate all resume types")
     parser.add_argument("--output-dir", "-o", default=None, help="Output directory")
 

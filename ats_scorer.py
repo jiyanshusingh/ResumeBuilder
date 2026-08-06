@@ -256,13 +256,13 @@ class ATSScorer:
         self._rule_resume_length()
 
         # Rule 9: Company name match
-        self._rule_company_name_match(company_data["name"])
+        self._rule_company_name_match(company_data.get("name", ""))
 
         # Rule 10: Role title match
         self._rule_role_match(role)
 
         # Rule 11: Education relevance
-        self._rule_education_relevance(company)
+        self._rule_education_relevance(company, role)
 
         # Rule 12: Certification match
         self._rule_certification_match(keywords)
@@ -278,6 +278,9 @@ class ATSScorer:
 
         # Rule 16: Contact info completeness
         self._rule_contact_info()
+
+        # Rule 17: Semantic keyword/skill match (embeddings, when available)
+        self._rule_semantic_match(required_skills, keywords)
 
         return self._compile_results()
 
@@ -557,10 +560,10 @@ class ATSScorer:
             )
         )
 
-    def _rule_education_relevance(self, company: str):
+    def _rule_education_relevance(self, company: str, role: str):
         """Rule 11: Check for relevant education keywords (e.g., CS, Statistics, Biotech)."""
         company_data = load_company_profile(company)
-        role_cfg = company_data.get("job_roles", {}).get(company, {})
+        role_cfg = company_data.get("job_roles", {}).get(role, {})
         resume_type = role_cfg.get("resume_type", "analytics")
 
         education_keywords = {
@@ -783,6 +786,59 @@ class ATSScorer:
                 weight=0.03,
                 feedback=feedback,
                 details=checks,
+            )
+        )
+
+    def _rule_semantic_match(self, required_skills: List[str], keywords: List[str]):
+        """Rule 17: Semantic keyword/skill coverage via embeddings (optional).
+
+        Runs only when the offline embedding model is available; otherwise the
+        rule is skipped entirely so the ATS score reflects the rule-based rules.
+        """
+        try:
+            import embeddings
+        except ImportError:
+            return
+        if not embeddings.available():
+            return
+
+        terms = [t for t in list(required_skills) + list(keywords) if str(t).strip()]
+        if not terms:
+            return
+
+        exact = [t for t in terms if str(t).lower() in self.text_lower]
+        missing = [t for t in terms if str(t).lower() not in self.text_lower]
+
+        semantic = []
+        for t in missing:
+            sim = embeddings.similarity(str(t), self.text)
+            if sim is not None and sim >= 0.45:
+                semantic.append(t)
+
+        combined = exact + semantic
+        ratio = len(combined) / max(len(terms), 1)
+        score = ratio * 100
+        passed = ratio >= 0.5
+
+        unmatched = [t for t in missing if t not in semantic]
+        feedback = (
+            f"Semantically covered {len(combined)}/{len(terms)} "
+            f"skills+keywords ({len(exact)} exact, {len(semantic)} semantic)"
+        )
+        if unmatched:
+            feedback += f". Unmatched: {', '.join(unmatched[:5])}"
+        self.rules.append(
+            ATSRuleResult(
+                rule_name="Semantic Match",
+                passed=passed,
+                score=score,
+                weight=0.08,
+                feedback=feedback,
+                details={
+                    "exact": exact,
+                    "semantic": semantic,
+                    "unmatched": unmatched,
+                },
             )
         )
 

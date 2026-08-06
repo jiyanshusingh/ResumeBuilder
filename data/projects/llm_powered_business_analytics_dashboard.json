@@ -1,0 +1,65 @@
+{
+  "name": "LLM-Powered Business Analytics Dashboard",
+  "github": "",
+  "tags": [
+    "Python",
+    "FastAPI",
+    "Plotly",
+    "OpenAI API",
+    "AWS",
+    "Docker"
+  ],
+  "short_description": "Analytics dashboard that uses LLM APIs to answer business questions in natural language. Visualizes data with Plotly, supports drill-down, and generates insights.",
+  "detailed_description": "Analytics dashboard that uses LLM APIs to answer business questions in natural language. Visualizes data with Plotly, supports drill-down, and generates insights.",
+  "metrics": {
+    "software": [
+      "Built with Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+      "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+    ],
+    "analytics": [
+      "Built with Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+      "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+    ],
+    "finance": [
+      "Built with Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+      "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+    ],
+    "freelance": [
+      "Built with Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+      "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+    ],
+    "biotech": [
+      "Built with Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+      "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+    ]
+  },
+  "highlights": [
+    "Directly targets ZS's AI/GenAI + LLM + cloud + communication needs. Shows you can deliver AI solutions for business.",
+    "Tech stack: Python, FastAPI, Plotly, OpenAI API, AWS, Docker",
+    "Skills demonstrated: AI/GenAI, Python, SQL, Cloud, APIs, Data visualization"
+  ],
+  "technologies": [
+    "Python",
+    "FastAPI",
+    "Plotly",
+    "OpenAI API",
+    "AWS",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "ZS",
+  "is_user_project": false
+}

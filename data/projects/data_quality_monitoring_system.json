@@ -1,0 +1,65 @@
+{
+  "name": "Data Quality Monitoring System",
+  "github": "",
+  "tags": [
+    "Python",
+    "SQL",
+    "Great Expectations",
+    "PostgreSQL",
+    "AWS",
+    "Docker"
+  ],
+  "short_description": "Monitors data pipelines for quality issues using Great Expectations. Sends Slack alerts on anomalies, tracks data lineage, and generates quality reports.",
+  "detailed_description": "Monitors data pipelines for quality issues using Great Expectations. Sends Slack alerts on anomalies, tracks data lineage, and generates quality reports.",
+  "metrics": {
+    "software": [
+      "Built with Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+      "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Data Engineering, Testing, Cloud, Python, SQL"
+    ],
+    "analytics": [
+      "Built with Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+      "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Data Engineering, Testing, Cloud, Python, SQL"
+    ],
+    "finance": [
+      "Built with Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+      "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Data Engineering, Testing, Cloud, Python, SQL"
+    ],
+    "freelance": [
+      "Built with Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+      "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Data Engineering, Testing, Cloud, Python, SQL"
+    ],
+    "biotech": [
+      "Built with Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+      "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+      "Medium difficulty, 1 week",
+      "Demonstrates Data Engineering, Testing, Cloud, Python, SQL"
+    ]
+  },
+  "highlights": [
+    "Demonstrates data engineering best practices. Tredence values data quality and monitoring heavily.",
+    "Tech stack: Python, SQL, Great Expectations, PostgreSQL, AWS, Docker",
+    "Skills demonstrated: Data Engineering, Testing, Cloud, Python, SQL"
+  ],
+  "technologies": [
+    "Python",
+    "SQL",
+    "Great Expectations",
+    "PostgreSQL",
+    "AWS",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tredence",
+  "is_user_project": false
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Real-Time Vehicle Telemetry Pipeline",
+  "github": "",
+  "tags": [
+    "C++",
+    "Python",
+    "ZeroMQ",
+    "PostgreSQL",
+    "Linux"
+  ],
+  "short_description": "C++ producer sends simulated vehicle telemetry data via ZeroMQ, Python consumer processes and stores it in PostgreSQL. Includes anomaly detection and alerting.",
+  "detailed_description": "C++ producer sends simulated vehicle telemetry data via ZeroMQ, Python consumer processes and stores it in PostgreSQL. Includes anomaly detection and alerting.",
+  "metrics": {
+    "software": [
+      "Built with C++, Python, ZeroMQ, PostgreSQL, Linux",
+      "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, Python, OS (concurrency), Networking, DSA (queues)"
+    ],
+    "analytics": [
+      "Built with C++, Python, ZeroMQ, PostgreSQL, Linux",
+      "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, Python, OS (concurrency), Networking, DSA (queues)"
+    ],
+    "finance": [
+      "Built with C++, Python, ZeroMQ, PostgreSQL, Linux",
+      "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, Python, OS (concurrency), Networking, DSA (queues)"
+    ],
+    "freelance": [
+      "Built with C++, Python, ZeroMQ, PostgreSQL, Linux",
+      "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, Python, OS (concurrency), Networking, DSA (queues)"
+    ],
+    "biotech": [
+      "Built with C++, Python, ZeroMQ, PostgreSQL, Linux",
+      "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+      "Hard difficulty, 2 weeks",
+      "Demonstrates C++, Python, OS (concurrency), Networking, DSA (queues)"
+    ]
+  },
+  "highlights": [
+    "Combines Tesla's C++ + Python + real-time data needs. Shows you can build end-to-end data pipelines across languages.",
+    "Tech stack: C++, Python, ZeroMQ, PostgreSQL, Linux",
+    "Skills demonstrated: C++, Python, OS (concurrency), Networking, DSA (queues)"
+  ],
+  "technologies": [
+    "C++",
+    "Python",
+    "ZeroMQ",
+    "PostgreSQL",
+    "Linux"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "Tesla",
+  "is_user_project": false
+}

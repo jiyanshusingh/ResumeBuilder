@@ -261,6 +261,95 @@ class JobTracker:
         finally:
             conn.close()
 
+    # ── Insights (Tier B) ──────────────────────────────
+    def analyze_insights(self) -> Dict[str, Any]:
+        """Compute descriptive insights over tracked applications.
+
+        Returns a dict with status counts, average ATS per status, best
+        application per company, and a chart path (best-effort).
+        """
+        apps = self.list_applications()
+        insights: Dict[str, Any] = {"total": len(apps)}
+        insights["status_counts"] = self.get_status_counts()
+
+        ats_by_status: Dict[str, List[float]] = {}
+        for a in apps:
+            score = a.get("ats_score")
+            if score is None:
+                continue
+            ats_by_status.setdefault(a.get("status") or "?", []).append(float(score))
+        insights["avg_ats_by_status"] = {
+            k: round(sum(v) / len(v), 1) for k, v in ats_by_status.items()
+        }
+
+        best: Dict[str, Dict[str, Any]] = {}
+        for a in apps:
+            score = a.get("ats_score") or 0.0
+            cur = best.get(a["company"])
+            if cur is None or score > cur.get("ats_score", -1.0):
+                best[a["company"]] = {
+                    "role": a.get("role", ""),
+                    "ats_score": score,
+                    "status": a.get("status", ""),
+                }
+        insights["best_per_company"] = best
+
+        insights["chart_path"] = self._insights_chart(ats_by_status)
+        return insights
+
+    def _insights_chart(self, ats_by_status: Dict[str, List[float]]) -> Optional[str]:
+        """Bar chart of avg ATS by status. Returns path or None."""
+        try:
+            import matplotlib
+
+            matplotlib.use("Agg")
+            import matplotlib.pyplot as plt
+        except Exception:
+            return None
+        if not ats_by_status:
+            return None
+        labels = list(ats_by_status.keys())
+        values = [round(sum(v) / len(v), 1) for v in ats_by_status.values()]
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.bar(labels, values, color="#2c2c4a")
+        ax.set_ylabel("Avg ATS Score")
+        ax.set_title("Average ATS Score by Application Status")
+        for i, v in enumerate(values):
+            ax.text(i, v + 1, str(v), ha="center")
+        out_dir = DATA_DIR / "comparisons"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        path = str(out_dir / "job_insights.png")
+        fig.savefig(path, bbox_inches="tight")
+        plt.close(fig)
+        return path
+
+
+def format_insights(insights: Dict[str, Any]) -> str:
+    """Human-readable summary of analyze_insights() output."""
+    lines = [f"Total applications tracked: {insights.get('total', 0)}"]
+    status_counts = insights.get("status_counts") or {}
+    if status_counts:
+        lines.append(
+            "By status: " + " | ".join(f"{k}: {v}" for k, v in status_counts.items())
+        )
+
+    avg_ats = insights.get("avg_ats_by_status") or {}
+    if avg_ats:
+        lines.append(
+            "Avg ATS by status: " + " | ".join(f"{k}: {v}" for k, v in avg_ats.items())
+        )
+
+    best = insights.get("best_per_company") or {}
+    if best:
+        lines.append("Highest-scoring application per company:")
+        for company, info in best.items():
+            lines.append(
+                f"  • {company} — {info['role']} (ATS {info['ats_score']}, {info['status']})"
+            )
+    else:
+        lines.append("No applications yet — add some to unlock insights.")
+    return "\n".join(lines)
+
 
 # Convenience module-level singleton (lazy)
 _tracker = None

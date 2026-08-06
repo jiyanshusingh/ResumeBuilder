@@ -1,0 +1,63 @@
+{
+  "name": "Node.js + React Task Tracker",
+  "github": "",
+  "tags": [
+    "Node.js",
+    "Express",
+    "React",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "short_description": "Full-stack task tracker with Node.js/Express backend, React frontend, PostgreSQL database, and Git-based CI/CD pipeline.",
+  "detailed_description": "Full-stack task tracker with Node.js/Express backend, React frontend, PostgreSQL database, and Git-based CI/CD pipeline.",
+  "metrics": {
+    "software": [
+      "Built with Node.js, Express, React, PostgreSQL, Docker",
+      "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, REST APIs, Frontend, DBMS, Git"
+    ],
+    "analytics": [
+      "Built with Node.js, Express, React, PostgreSQL, Docker",
+      "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, REST APIs, Frontend, DBMS, Git"
+    ],
+    "finance": [
+      "Built with Node.js, Express, React, PostgreSQL, Docker",
+      "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, REST APIs, Frontend, DBMS, Git"
+    ],
+    "freelance": [
+      "Built with Node.js, Express, React, PostgreSQL, Docker",
+      "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, REST APIs, Frontend, DBMS, Git"
+    ],
+    "biotech": [
+      "Built with Node.js, Express, React, PostgreSQL, Docker",
+      "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+      "Medium difficulty, 2 weeks",
+      "Demonstrates JavaScript, REST APIs, Frontend, DBMS, Git"
+    ]
+  },
+  "highlights": [
+    "Demonstrates JavaScript fluency + scalable full-stack architecture. GEP values candidates who can work across the stack.",
+    "Tech stack: Node.js, Express, React, PostgreSQL, Docker",
+    "Skills demonstrated: JavaScript, REST APIs, Frontend, DBMS, Git"
+  ],
+  "technologies": [
+    "Node.js",
+    "Express",
+    "React",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "links": {
+    "code": "",
+    "live": ""
+  },
+  "company": "GEP",
+  "is_user_project": false
+}
