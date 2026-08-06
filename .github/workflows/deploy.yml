@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        pip install black isort
+        pip install pytest black isort
         python -m spacy download en_core_web_sm || true
 
     - name: Run tests
