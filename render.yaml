@@ -15,6 +15,10 @@ services:
         value: "false"
       - key: DEBUG
         value: "false"
+      # Disable torch/sentence-transformers to avoid OOM on free tier.
+      # Semantic ranking falls back to keyword scoring.
+      - key: RESUME_EMBEDDINGS
+        value: "0"
       # Optional basic auth - set in Render -> Environment.
       - key: APP_USERNAME
         sync: false
